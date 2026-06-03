@@ -4,6 +4,8 @@ Usage:  ai <command> [options]
 
 Commands:
   install <app>      Install an AI application (comfyui, ollama)
+  comfyui            Launch ComfyUI
+  ollama             Start or check Ollama service
   status             Check system health
   models list        List installed models
   clean cache        Clear temporary files
@@ -34,12 +36,36 @@ function Show-Help {
     Write-Host "Commands:"
     Write-Host "  install comfyui     Install or update ComfyUI"
     Write-Host "  install ollama      Install Ollama via winget"
+    Write-Host "  comfyui             Launch ComfyUI"
+    Write-Host "  ollama              Start or check Ollama service"
     Write-Host "  status              Check system health"
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
     Write-Host "  help                Show this message"
     Write-Host ""
     Write-Host "Root: $Root"
+}
+
+function Launch-ComfyUI {
+    $launcher = "${Root}\AI_TOOLS\launch_comfyui.ps1"
+    if (!(Test-Path $launcher)) {
+        Write-Host "ComfyUI not installed. Run: ai install comfyui"
+        exit 1
+    }
+    Write-Host "Starting ComfyUI..."
+    & $launcher
+}
+
+function Start-Ollama {
+    $process = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
+    if ($process) {
+        Write-Host "Ollama is already running (PID $($process.Id))"
+        Write-Host "API: http://localhost:11434"
+    } else {
+        Write-Host "Starting Ollama service..."
+        Start-Process -NoNewWindow -FilePath "ollama" -ArgumentList "serve"
+        Write-Host "Ollama started. API: http://localhost:11434"
+    }
 }
 
 function Get-GPUType {
@@ -283,6 +309,8 @@ switch ($Command) {
             default   { Write-Host "Usage: ai install <comfyui|ollama>" }
         }
     }
+    "comfyui"    { Launch-ComfyUI }
+    "ollama"     { Start-Ollama }
     "status"     { Show-Status }
     "models"     {
         if ($SubCommand -eq "list") { Show-Models }
