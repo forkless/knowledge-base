@@ -58,3 +58,7 @@ Reference docs for development practices and standards.
 ## Prompts
 
 - **[Prompts](prompts/index.md)** — Prompt collections and templates
+
+## Help
+
+- **[FAQ](faq.md)** — Common problems and solutions
