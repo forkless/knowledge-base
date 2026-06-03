@@ -85,6 +85,8 @@ If something seems off later, run `ai setup env` to check and fix them.
 - **Safe to re-run**: Running a script again won't break anything. It skips what's already there, creates what's missing.
 - **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from a config file — no need to type it again.
 
+**Note:** The scripts install and configure everything, but don't start the services. You need to launch them manually when you want to use them.
+
 ## After Everything Runs
 
 Open a fresh PowerShell window and try:
