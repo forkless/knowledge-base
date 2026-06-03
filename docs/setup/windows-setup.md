@@ -47,10 +47,8 @@ py -0
 
 Expected output:
 
-```
- - 3.11
- - 3.10
-```
+>  - 3.11
+>  - 3.10
 
 ## 4. Ollama (no Python required)
 
