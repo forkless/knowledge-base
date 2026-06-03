@@ -535,7 +535,7 @@ function Show-Models {
         }
     })
     if ($ollamaModels) {
-        $maxNameLen = [Math]::Max(6, ($ollamaModels | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum)
+        $maxNameLen = [Math]::Max(5, ($ollamaModels | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum) + 8
         $maxSizeLen = [Math]::Max(4, ($ollamaModels | ForEach-Object { ($_.Size -replace '[^\w. ]','').Length } | Measure-Object -Maximum).Maximum) + 2
         $top = "┌" + ("─" * ($maxNameLen + 2)) + "┬" + ("─" * ($maxSizeLen + 2)) + "┐"
         $header = "│ " + "Model".PadRight($maxNameLen) + " │ " + "Size".PadRight($maxSizeLen) + " │"
