@@ -45,7 +45,7 @@ Run that once, then you're good.
 | Script | What it does |
 |--------|-------------|
 | **[1-init.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/1-init.ps1)** | Creates all the folders, links, and config files. Detects your GPU type. Does not install anything. |
-| **[2-deps.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/2-deps.ps1)** | Installs Git, Python, and Ollama. Sets up environment variables so models go to the right place. |
+| **[2-deps.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/2-deps.ps1)** | Installs Git, Python, Ollama, and FFmpeg. Sets up environment variables so models go to the right place. |
 | **[3-comfyui.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/3-comfyui.ps1)** | Downloads ComfyUI, creates a Python environment, sets up model paths, and creates a launcher. |
 | **[ai.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/ai.ps1)** | Your daily driver — start/stop services, check status, list models, clean cache, fix settings. |
 
@@ -86,6 +86,18 @@ If something seems off later, run `ai setup env` to check and fix them.
 - **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from a config file — no need to type it again.
 
 **Pip notice:** You may see `[notice] A new release of pip is available` during ComfyUI setup. That's just pip telling you a newer version exists. The version that comes with Python 3.11 works fine — you can ignore it.
+
+## Launcher Scripts
+
+After setup, `AI_TOOLS\` contains launcher scripts for each service:
+
+| Script | Starts |
+|--------|--------|
+| `launch_ollama.ps1` | Ollama in background |
+| `launch_comfyui.ps1` | ComfyUI with correct GPU backend |
+| `launch_openwebui.ps1` | Open Web UI |
+
+These are auto-generated when you run `ai start <service>` for the first time. You can also run them directly from `AI_TOOLS\`.
 
 **Note:** The scripts install and configure everything, but don't start the services. You need to launch them manually when you want to use them.
 

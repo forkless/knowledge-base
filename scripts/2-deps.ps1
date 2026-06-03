@@ -39,6 +39,12 @@ $results += @{Name="Ollama"; Status=if ($LASTEXITCODE -eq 0) {"OK"} else {"FAILE
 if ($LASTEXITCODE -ne 0) { Write-Host "$result" }
 Write-Host ""
 
+Write-Host "--- FFmpeg ---"
+$result = winget install FFmpeg --accept-source-agreements 2>&1
+$results += @{Name="FFmpeg"; Status=if ($LASTEXITCODE -eq 0) {"OK"} else {"FAILED or already installed"}}
+if ($LASTEXITCODE -ne 0) { Write-Host "$result" }
+Write-Host ""
+
 Write-Host "========================="
 Write-Host " Ai, ai, ai! Bootstrap v1.1"
 Write-Host "========================="
