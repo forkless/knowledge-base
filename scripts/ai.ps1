@@ -463,16 +463,18 @@ function Show-Status {
     Write-Host "CPU:  $cpu%"
     Write-Host "RAM:  $ramUsed/$ramTotal GB ($ramPct%)"
 
-    # GPU — works for any WDDM driver (NVIDIA, AMD, Intel)
+    # GPU — try WDDM counters first, fall back to nvidia-smi, then WMI
     $gpuUtil = Get-Counter "\GPU(*)\Utilization Percentage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total|engine" } | Measure-Object -Property CookedValue -Average | Select-Object -ExpandProperty Average
-    $gpuVramTotal = (Get-Counter "\GPU Adapter Memory\Dedicated Usage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total" } | Measure-Object -Property CookedValue -Sum).Sum
-    $gpuVramUsed = (Get-Counter "\GPU Process Memory\Dedicated Usage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total" } | Measure-Object -Property CookedValue -Sum).Sum
-    if ($gpuUtil -and $gpuVramTotal) {
-        $gpuVramTotalGB = [math]::Round($gpuVramTotal / 1GB, 1)
-        $gpuVramUsedGB = [math]::Round($gpuVramUsed / 1GB, 1)
-        Write-Host "GPU:  $([math]::Round($gpuUtil))% | VRAM: ${gpuVramUsedGB}/${gpuVramTotalGB} GB"
+    if (-not $gpuUtil) {
+        $gpuUtil = nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>$null
+    }
+    $gpuVram = Get-Counter "\GPU Adapter Memory\Dedicated Usage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total" } | Measure-Object -Property CookedValue -Sum | Select-Object -ExpandProperty Sum
+    if ($gpuUtil) {
+        Write-Host "GPU:  $([math]::Round([double]$gpuUtil))%"
+        if ($gpuVram) { Write-Host "VRAM: $([math]::Round($gpuVram / 1GB, 1)) GB used" }
     } else {
-        Write-Host "GPU:  n/a (no GPU counter data)"
+        $gpuName = (Get-WmiObject Win32_VideoController | Select-Object -First 1).Name
+        if ($gpuName) { Write-Host "GPU:  $gpuName" } else { Write-Host "GPU:  not detected" }
     }
     Write-Host ""
 
@@ -700,7 +702,7 @@ function Doctor-Check {
 
     # Git
     $g = git --version 2>$null
-    if ($g) { Write-Host ("│ {0,-20} │ {1,-28} │" -f "Git", ($g -replace '^git version (\S+).*', '$1')) } else { Write-Host ("│ {0,-20} │ {1,-28} │" -f "Git", "FAIL") }
+    if ($g) { Write-Host ("│ {0,-20} │ {1,-28} │" -f "Git", ($g -replace '^git version ([\d.]+).*', '$1')) } else { Write-Host ("│ {0,-20} │ {1,-28} │" -f "Git", "FAIL") }
 
     # Python
     $py10 = if (py -3.10 --version 2>$null) { (py -3.10 --version 2>$null) -replace '^Python (\S+).*', '$1' } else { "WARN" }
@@ -725,7 +727,7 @@ function Doctor-Check {
 
     # FFmpeg
     $ff = ffmpeg -version 2>$null
-    if ($ff) { $ff = ($ff -split "`n")[0] -replace '^ffmpeg version (\S+).*', '$1'; Write-Host ("│ {0,-20} │ {1,-28} │" -f "FFmpeg", $ff) } else { Write-Host ("│ {0,-20} │ {1,-28} │" -f "FFmpeg", "not found") }
+    if ($ff) { $ff = ($ff -split "`n")[0] -replace '^ffmpeg version ([\d.]+).*', '$1'; Write-Host ("│ {0,-20} │ {1,-28} │" -f "FFmpeg", $ff) } else { Write-Host ("│ {0,-20} │ {1,-28} │" -f "FFmpeg", "not found") }
     Write-Host "├──────────────────────┼──────────────────────────────┤"
 
     # Bindings
