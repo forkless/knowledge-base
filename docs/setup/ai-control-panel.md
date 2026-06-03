@@ -166,7 +166,7 @@ Configure which ports each service uses:
 ai setup ports
 ```
 
-Prompts for each service's port. Defaults are created during initialization: Ollama 11434, ComfyUI 8188, Open Web UI 3000. Settings save to `AI_CONFIG\ports.json`. Restart services after changing.
+Prompts for each service's port. Defaults are created during initialization: Ollama 11434, ComfyUI 8188, Open Web UI 8080. Settings save to `AI_CONFIG\ports.json`. Restart services after changing.
 
 The port config is created automatically by `1-init.ps1` with the defaults. You only need `ai setup ports` if you want different ports — for example, if 8188 is already in use by another application.
 

@@ -68,7 +68,7 @@ function Show-Help {
 
 function Get-PortConfig {
     $portFile = "${Root}\AI_CONFIG\ports.json"
-    $defaults = @{ollama=11434; comfyui=8188; openwebui=3000}
+    $defaults = @{ollama=11434; comfyui=8188; openwebui=8080}
     if (Test-Path $portFile) {
         $saved = Get-Content $portFile | ConvertFrom-Json
         foreach ($key in $defaults.Keys) {
@@ -403,6 +403,9 @@ open-webui serve
     Write-Host "  Location: $webuiPath"
     Write-Host "  Launch: ${Root}\AI_TOOLS\launch_openwebui.ps1"
     Write-Host "  URL: http://127.0.0.1:$defaultPort"
+    if ($defaultPort -ne 8080) {
+        Write-Host "  Port set via AI_CONFIG\ports.json (default is 8080)"
+    }
 }
 
 function Show-Status {
@@ -641,7 +644,7 @@ function Setup-Path {
 
 function Setup-Ports {
     $portFile = "${Root}\AI_CONFIG\ports.json"
-    $defaults = @{ollama=11434; comfyui=8188; openwebui=3000}
+    $defaults = @{ollama=11434; comfyui=8188; openwebui=8080}
     $current = @{}
     if (Test-Path $portFile) {
         $saved = Get-Content $portFile | ConvertFrom-Json

@@ -154,7 +154,7 @@ if (!(Test-Path $registryPath)) {
 # -------------------------
 
 # PORTS CONFIG
-$portConfig = @{ollama=11434; comfyui=8188; openwebui=3000}
+$portConfig = @{ollama=11434; comfyui=8188; openwebui=8080}
 $portConfig | ConvertTo-Json | Out-File "${BasePath}\AI_CONFIG\ports.json" -Encoding utf8
 Write-Host "Port config: ports.json (defaults)"
 
