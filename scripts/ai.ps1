@@ -386,12 +386,18 @@ function Install-OpenWebUI {
     pip install open-webui 2>&1 | Out-Null
     deactivate
 
-    # Launcher
+    # Launcher that reads port from config
     $launcher = @"
 `$webuiPath = "$webuiPath"
+`$portFile = "`${webuiPath}\..\..\AI_CONFIG\ports.json"
+`$port = 8080
+if (Test-Path `$portFile) {
+    `$cfg = Get-Content `$portFile | ConvertFrom-Json
+    if (`$cfg.openwebui -and `$cfg.openwebui -gt 0) { `$port = `$cfg.openwebui }
+}
 Set-Location "`$webuiPath"
 .\venv\Scripts\Activate.ps1
-open-webui serve
+open-webui serve --port `$port
 "@
 
     $toolsDir = "${Root}\AI_TOOLS"
