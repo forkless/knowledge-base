@@ -2,9 +2,9 @@
 
 You know what forking is, right? Grabbing someone else's project, tweaking a few things, and calling it your own. It's how most of the internet gets built — and there's nothing wrong with that.
 
-This is the opposite.
+So naturally, this site is called **Forkless**. And yes, most of these guides will tell you to clone someone else's repo. The irony is not lost on me.
 
-**Forkless** means picking a path and sticking to it. Building things from scratch, understanding what you're running, and keeping it yours. No copies, no detours, no "it worked on my machine" — just practical howtos for people who actually want to set things up, not just clone them.
+Think of it this way: the *guides* are forkless — written from experience, not copied from somewhere else. The tools you install? Go ahead, fork away. I won't tell.
 
 Hey there. This is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
