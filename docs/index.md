@@ -22,9 +22,6 @@ Guides for setting up and running a local AI stack on Windows with AMD GPUs. Eve
 - **[Organize Your AI Folders](setup/organize-your-ai-folders.md)** — How the folder structure works and why.
 - **[Windows Setup Guide](setup/windows-setup.md)** — Manual install steps (what the scripts automate).
 - **[Ollama](ai/ollama.md)** — Running local LLMs with Ollama.
-- **[Docker](docker/index.md)** — Running AI tools in containers.
-- **[ComfyUI](ai/comfyui.md)** — Image generation with ComfyUI.
-- **[Stable Diffusion](ai/stable-diffusion.md)** — Text-to-image model setup.
 
 ## Tools
 
