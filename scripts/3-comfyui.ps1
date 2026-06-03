@@ -112,8 +112,11 @@ try {
         # Reinstall torchaudio from CPU index, then nuke stale CUDA DLLs
         Write-Host "  Replacing CUDA torchaudio with CPU version..."
         pip install torchaudio --force-reinstall --no-deps --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
+        # Stub out the extension module (DLL mismatches cause hard crashes)
         $extDir = "${ComfyPath}\venv\Lib\site-packages\torchaudio\_extension"
-        if (Test-Path $extDir) { Remove-Item -Recurse -Force $extDir; Write-Host "  Cleared stale extension DLLs" }
+        if (Test-Path $extDir) { Remove-Item -Recurse -Force $extDir }
+        New-Item -Path "${ComfyPath}\venv\Lib\site-packages\torchaudio\_extension" -ItemType Directory -Force | Out-Null
+        Set-Content -Path "${ComfyPath}\venv\Lib\site-packages\torchaudio\_extension\__init__.py" -Value "_IS_TORCHAUDIO_EXT_AVAILABLE = False"
         Write-Host "  DirectML and CPU torchaudio ready"
     } else {
         pip install -r requirements.txt 2>&1 | Out-Null
