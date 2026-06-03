@@ -77,6 +77,20 @@ winget install Ollama.Ollama
 
 Then follow the **[Organize Your AI Folders](organize-your-ai-folders.md)** guide to create the folder structure by hand.
 
+## Reading the Install Summary
+
+The script prints a summary after installing:
+
+```
+Install Summary
+  Git: Skipped (already up to date)
+  Python 3.10: Skipped (already up to date)
+  Ollama: Skipped (already up to date)
+  FFmpeg: Skipped (already up to date)
+```
+
+**"Skipped (already up to date)" is not an error.** It means the tool was already installed and no newer version was available. Only the first install shows "Installed" — re-runs will always show "Skipped."
+
 ## After Deps Install: Restart PowerShell
 
 After `2-deps.ps1` installs Git, Python, Ollama, and FFmpeg, **restart PowerShell**. Existing windows won't see the new tools in PATH.

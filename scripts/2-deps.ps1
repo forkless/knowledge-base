@@ -17,7 +17,7 @@ $results = @()
 
 Write-Host "--- Git ---"
 $result = winget install Git.Git --accept-source-agreements 2>&1
-$results += @{Name="Git"; Status=if ($LASTEXITCODE -eq 0) {"OK"} else {"FAILED or already installed"}}
+$results += @{Name="Git"; Status=if ($LASTEXITCODE -eq 0) {"Installed"} else {"Skipped (already up to date)"}}
 if ($LASTEXITCODE -ne 0) { Write-Host "$result" }
 Write-Host ""
 

@@ -97,6 +97,20 @@ Each service has a default port set during initialization:
 
 Change them anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json`. Restart the service after changing.
 
+## Install Summary
+
+When `2-deps.ps1` finishes, it prints a summary like this:
+
+```
+Install Summary
+  Git: Skipped (already up to date)
+  Python 3.10: Skipped (already up to date)
+  Ollama: Skipped (already up to date)
+  FFmpeg: Skipped (already up to date)
+```
+
+**"Skipped" is normal** — it means the tool was already installed and no newer version was available. You only see "Installed" on the very first run.
+
 **Pip notice:** You may see `[notice] A new release of pip is available` during ComfyUI setup. That's just pip telling you a newer version exists. The version that comes with Python 3.11 works fine — you can ignore it.
 
 ## Launcher Scripts
