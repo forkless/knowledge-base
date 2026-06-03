@@ -1,72 +1,56 @@
 ← [Setup](../)
 
-# Ai Control Panel v1.1
+# Ai, ai, ai! Control Panel v1.1
 
-The `ai` command is a unified CLI for managing the entire AI architecture. Instead of running individual bootstrap scripts, you use one entry point.
+The `ai` command is your daily driver for managing services, checking status, and keeping things clean.
 
 ## Setup
 
-The script is at `scripts/ai.ps1` in this repository. Two ways to use it:
-
-**From the repo folder:**
-
 ```powershell
+# From the repo folder
 .\scripts\ai.ps1 status
-```
 
-**Add to your PATH (recommended):**
-
-```powershell
-# Add AI_TOOLS to your PATH so 'ai' is always available
-$env:Path += ";D:\AI\AI_TOOLS"
-# Then copy the script there
+# Or copy to AI_TOOLS and add to PATH
 copy scripts\ai.ps1 D:\AI\AI_TOOLS\ai.ps1
-# Now from any folder:
+$env:Path += ";D:\AI\AI_TOOLS"
 ai status
 ```
 
 ## Commands
 
-### ai install comfyui
+### ai start &lt;service&gt;
 
-Installs or updates ComfyUI into `AI_CORE\Apps`. If the folder already exists, it pulls the latest changes instead of re-cloning.
-
-```powershell
-ai install comfyui
-```
-
-Detects your GPU and installs the correct backend:
-
-- **NVIDIA** — standard CUDA PyTorch from requirements.txt
-- **AMD** — uninstalls CUDA torch, installs `torch-directml` instead
-
-Also updates `system_config.json` with the detected GPU type so other tools can reference it.
-
-Creates:
-- Python 3.11 virtual environment
-- `extra_model_paths.yaml` pointing to AI_VAULT
-- Launcher script at `AI_TOOLS\launch_comfyui.ps1`
-
-### ai install ollama
-
-Installs Ollama via winget. After installation, the script reminds you to restart PowerShell and set the `OLLAMA_MODELS` environment variable.
+Start a service in the background (no window):
 
 ```powershell
-ai install ollama
+ai start ollama
+ai start comfyui
 ```
 
-### ai status
+Ollama runs as a hidden process. ComfyUI launches in a hidden PowerShell window. Both detach from your terminal.
 
-Health check for the entire architecture. Reports:
+### ai stop &lt;service&gt;
 
-- Whether each layer folder exists (CONFIG, CORE, VAULT, WORKSPACE, TOOLS, CACHE)
-- Architecture version and GPU type from system_config.json
-- Whether ComfyUI is installed
-- Whether Ollama is currently running
-- Whether symbolic links are intact and where they point
+Stop a running service:
+
+```powershell
+ai stop ollama
+ai stop comfyui
+```
+
+### ai status [service]
+
+Full system health check:
 
 ```powershell
 ai status
+```
+
+Or check a specific service:
+
+```powershell
+ai status ollama
+ai status comfyui
 ```
 
 Example output:
@@ -81,19 +65,44 @@ System Status: D:\AI
   [OK]  AI_TOOLS
   [OK]  AI_CACHE
 
-  Config: v1.1 — unknown GPU
+  Config: v1.1 — amd GPU
 
   [OK]  ComfyUI
-  [--]  Ollama (not running)
+  [OK]  Ollama (running)
 
   [OK]  _bindings\llm -> D:\AI\AI_VAULT\models\llm
   [OK]  _bindings\diffusion -> D:\AI\AI_VAULT\models\diffusion
   [OK]  _bindings\embeddings -> D:\AI\AI_VAULT\models\embeddings
 ```
 
+### ai install &lt;app&gt;
+
+Install or update an application:
+
+```powershell
+ai install comfyui
+ai install ollama
+ai install openwebui
+```
+
+Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
+
+ComfyUI detected your GPU and sets up the right backend. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically.
+
+### ai remove &lt;app&gt;
+
+Remove an installed application:
+
+```powershell
+ai remove comfyui
+ai remove ollama
+```
+
+This removes the application folder, its venv, and config. Models in AI_VAULT are preserved.
+
 ### ai models list
 
-Scans all model directories and counts files by type. Also reads the model registry if it has entries.
+Counts all models by type using file scans:
 
 ```powershell
 ai models list
@@ -101,7 +110,7 @@ ai models list
 
 ### ai clean cache
 
-Empties all temporary data in AI_CACHE — Hugging Face cache, PyTorch cache, ComfyUI temp files, and Ollama temp data.
+Empties all temporary data from AI_CACHE:
 
 ```powershell
 ai clean cache
@@ -111,7 +120,7 @@ Shows how much space was freed.
 
 ### ai setup env
 
-Checks and fixes environment variables. Run this if `3-comfyui.ps1` warns about misconfigured paths, or after changing the AI root.
+Checks and fixes environment variables. Run this if paths seem wrong:
 
 ```powershell
 ai setup env
@@ -123,23 +132,12 @@ Checks:
 - `HF_HOME` — should point to `AI_CACHE\huggingface`
 - `TORCH_HOME` — should point to `AI_CACHE\torch`
 
-If any variable is missing or wrong, it offers to fix it. Skipping any variable causes the check to fail with a non-zero exit code.
+If any variable is missing or wrong, it offers to fix it. Skipping any variable causes the check to fail — this prevents accidental misconfiguration.
 
 ### ai help
 
-Displays the full command list.
+Shows the full command list:
 
 ```powershell
 ai help
 ```
-
-## Design
-
-The control panel follows the same architecture principles:
-
-- Each command has one responsibility
-- Commands are idempotent where possible (re-running install updates rather than replacing)
-- Status and models list are read-only
-- Cache cleanup is explicitly named — no accidental data loss
-
-As new tools are added to the architecture, new subcommands follow the same pattern: `ai install <name>`, `ai status` auto-detects, `ai models list` scans new directories.
