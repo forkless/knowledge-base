@@ -714,8 +714,8 @@ function Doctor-Check {
 
     # FFmpeg
     $ffmpegVer = ffmpeg -version 2>$null
-    $ffmpegLine = if ($ffmpegVer) { ($ffmpegVer -split "`n")[0] } else { "" }
-    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — $ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
+    $ffmpegLine = if ($ffmpegVer) { ($ffmpegVer -split "`n")[0] -replace '^ffmpeg version (\S+).*', '$1' } else { "" }
+    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — v$ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
 
     # Arch config check (verifies file is readable, banner already shown above)
     $archCheck = Get-Content "$Root\AI_CONFIG\system_config.json" -ErrorAction SilentlyContinue
