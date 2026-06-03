@@ -16,6 +16,7 @@ Guides for setting up and running a local AI stack on Windows with AMD GPUs. Eve
 
 - **[Ai, ai, ai! Bootstrap Guide](setup/bootstrap-scripts.md)** — Three scripts that set up the entire stack in minutes.
 - **[Ai Control Panel](setup/ai-control-panel.md)** — Daily management: start services, check status, clean cache.
+- **[FAQ](faq.md)** — Common problems and solutions
 
 **Reference:**
 
@@ -59,6 +60,4 @@ Reference docs for development practices and standards.
 
 - **[Prompts](prompts/index.md)** — Prompt collections and templates
 
-## Help
 
-- **[FAQ](faq.md)** — Common problems and solutions
