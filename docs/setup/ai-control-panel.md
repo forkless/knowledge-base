@@ -53,6 +53,8 @@ ai status ollama
 ai status comfyui
 ```
 
+The status dashboard only tracks tools installed through `ai install <app>`. Manually installed tools outside the AI stack folder won't show up — which is intentional, no false positives from random processes on your machine.
+
 Example output:
 
 ```
