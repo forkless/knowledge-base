@@ -70,8 +70,18 @@ if (!(Test-Path $ComfyPath)) {
 
 Set-Location "$ComfyPath"
 
-# Venv — create if missing, reuse if exists (idempotent)
-if (!(Test-Path ".\venv")) {
+# Venv — create if missing or GPU type changed
+$recreateVenv = $false
+if ((Test-Path ".\venv") -and $gpuType -eq "amd") {
+    # Check if venv has CUDA torch (wrong for AMD)
+    $torchCheck = & ".\venv\Scripts\python.exe" -c "import torch; print(torch.__version__)" 2>$null
+    if ($torchCheck -and $torchCheck -notmatch "directml") {
+        Write-Host "AMD GPU detected with CUDA torch — recreating venv"
+        $recreateVenv = $true
+    }
+}
+if ($recreateVenv -or !(Test-Path ".\venv")) {
+    if ($recreateVenv) { Remove-Item -Recurse -Force ".\venv" }
     Write-Host "Creating Python 3.11 environment..."
     $venvResult = py -3.11 -m venv venv 2>&1
     if ($LASTEXITCODE -ne 0) {
