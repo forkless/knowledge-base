@@ -343,6 +343,20 @@ function Show-Status {
         Write-Host "  [--]  Ollama (not running)"
     }
 
+    # Open Web UI — check install and port 3000
+    $webuiPath = "$Root\AI_CORE\Apps\open-webui"
+    $webuiPort = 3000
+    $webuiRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${webuiPort} "
+    if (Test-Path $webuiPath) {
+        if ($webuiRunning) {
+            Write-Host "  [OK]  Open Web UI (port $webuiPort)"
+        } else {
+            Write-Host "  [--]  Open Web UI (not running)"
+        }
+    } else {
+        Write-Host "  [--]  Open Web UI (not installed)"
+    }
+
     Write-Host ""
 
     # Symlinks
