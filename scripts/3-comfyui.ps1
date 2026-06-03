@@ -117,6 +117,26 @@ vault_config:
 "@
 $yaml | Out-File "${ComfyPath}\extra_model_paths.yaml" -Encoding utf8
 
+# Validate the YAML file by parsing it with Python
+Write-Host "Validating extra_model_paths.yaml..."
+$validateResult = py -3.11 -c "
+import yaml, sys
+try:
+    with open('${ComfyPath}/extra_model_paths.yaml'.replace('\\', '/')) as f:
+        data = yaml.safe_load(f)
+    if not isinstance(data, dict):
+        print('ERROR: YAML is not a dictionary — format is wrong')
+        sys.exit(1)
+    print('OK: found top-level config:', ', '.join(data.keys()))
+except yaml.YAMLError as e:
+    print(f'ERROR: Invalid YAML — {e}')
+    sys.exit(1)
+except Exception as e:
+    print(f'ERROR: {e}')
+    sys.exit(1)
+" 2>&1
+Write-Host "  $validateResult"
+
 # Launcher with GPU flag
 Write-Host "Creating launcher..."
 $gpuFlag = if ($gpuType -eq "amd") { " --directml" } else { "" }

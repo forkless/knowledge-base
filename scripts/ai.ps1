@@ -212,6 +212,23 @@ vault_config:
 "@
     $yaml | Out-File "$ComfyPath\extra_model_paths.yaml" -Encoding utf8
 
+    # Validate the YAML file
+    Write-Host "Validating extra_model_paths.yaml..."
+    $result = py -3.11 -c "
+import yaml, sys
+try:
+    with open('$ComfyPath/extra_model_paths.yaml'.replace('\\', '/')) as f:
+        data = yaml.safe_load(f)
+    if not isinstance(data, dict):
+        print('ERROR: YAML format is wrong')
+        sys.exit(1)
+    print('OK: top-level:', ', '.join(data.keys()))
+except Exception as e:
+    print(f'ERROR: {e}')
+    sys.exit(1)
+" 2>&1
+    Write-Host "  $result"
+
     # Launcher with GPU flag
     $gpuFlag = if ($gpu -eq "amd") { " --directml" } else { "" }
     $launcher = @"
