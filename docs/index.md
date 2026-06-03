@@ -1,36 +1,64 @@
-# AI Knowledge Base
+# Knowledge Base
 
-Hey there. This little site is a collection of guides for people like you — hobbyists, tinkerers, folks who just want to run cool AI stuff on their own computer without needing a degree in computer science.
+Hey there. This is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
-Most of what's out there assumes you already know the tools, or it's scattered across a dozen forum posts. This is my attempt to write down what actually works, in plain language, for Windows machines — especially AMD ones, because that's still surprisingly hard to find in one place.
-
-Think of it as a friendly notebook. Pick a guide, follow along, and if something breaks? You're not alone. That's the whole point of sharing this.
+Think of it as a friendly notebook. Pick a topic, follow along, and if something breaks? You're not alone.
 
 ---
 
-## What's Here
+## AI
 
-## Getting Started
+Guides for running local AI: image generation, LLMs, and creative workflows.
+
+- **[ComfyUI](ai/comfyui.md)** — Node-based image generation engine
+- **[Ollama](ai/ollama.md)** — Local LLM runtime
+- **[Stable Diffusion](ai/stable-diffusion.md)** — Text-to-image model setup
+- **[Krita + AI Workflow](ai/krita-ai-workflow.md)** — In-painting and editing with ComfyUI
+
+## Docker
+
+- **[Docker](docker/index.md)** — Setup, compose, and usage guides
+
+## Setup
+
+Environment prep that spans across topics.
 
 - **[Windows Setup Guide](setup/windows-setup.md)** — Install Git, Python, Ollama, and verify your environment
 - **[Organize Your AI Folders](setup/organize-your-ai-folders.md)** — Set up the D:\AI\ layout (CORE / VAULT / WORKSPACE / TOOLS)
+- **[Python Environment](setup/python.md)** — Virtual environments and dependency management
 
-## AI Tools
+## Tools
 
-- **[ComfyUI](ai/comfyui.md)** — Image generation engine and node-based workflow editor
-- **[Ollama](ai/ollama.md)** — Local LLM runtime for running models on your own hardware
-- **[Stable Diffusion](ai/stable-diffusion.md)** — Text-to-image model setup and usage
-
-## Setup & Configuration
-
-- **[Python Environment](setup/python.md)** — Virtual environments, dependency management, version selection
-- **[Windows Environment](setup/windows-setup.md)** — Full Windows host setup from scratch
-
-## Pipelines & Workflows
-
-- **[Krita + AI Workflow](pipelines/krita-ai-workflow.md)** — Using ComfyUI alongside Krita for in-painting and editing
-
-## Tools & Version Control
-
-- **[Git](tools/git.md)** — Source management for AI projects
+- **[Git](tools/git.md)** — Source management
 - **[GitHub Pages](tools/github-pages.md)** — Hosting this documentation
+
+## Backup
+
+- **[Backup](backup/index.md)** — Model storage, drive management, sync tips
+
+## Networking
+
+- **[Networking](networking/index.md)** — Exposing services on LAN, Tailscale, port forwarding
+
+## Skills
+
+Reference docs for development practices and standards.
+
+- **[Bash Standards](skills/bash-standards.md)**
+- **[CI/CD Pipeline](skills/ci-cd-pipeline.md)**
+- **[Documentation](skills/documentation.md)**
+- **[Home Assistant Integration](skills/homeassistant-integration.md)**
+- **[Markdown Styling](skills/markdown-styling.md)**
+- **[PHP Standards](skills/php-standards.md)**
+- **[Privacy & Security](skills/privacy-security.md)**
+- **[Python Standards](skills/python-standards.md)**
+- **[Release Workflow](skills/release-workflow.md)**
+- **[Rust Standards](skills/rust-standards.md)**
+- **[Session Protocol](skills/session-protocol.md)**
+- **[SQL Standards](skills/sql-standards.md)**
+- **[Testing & Fuzzing](skills/testing-fuzzing.md)**
+- **[WordPress Plugins](skills/wordpress-plugins.md)**
+
+## Prompts
+
+- **[Prompts](prompts/index.md)** — Prompt collections and templates
