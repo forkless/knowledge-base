@@ -183,15 +183,13 @@ function Install-ComfyUI {
 
     .\venv\Scripts\Activate.ps1
 
-    # Install full requirements (includes torch — needed for non-torch deps)
-    pip install -r requirements.txt 2>&1 | Out-Null
     if ($gpu -eq "amd") {
-        Write-Host "AMD GPU — adding DirectML backend and fixing audio deps..."
-        pip install torch-directml 2>&1 | Out-Null
-        # Remove CUDA torchaudio extension that crashes on AMD
-        $torchaudioExts = Get-ChildItem "$ComfyPath\venv\Lib\site-packages\torchaudio\_extension\*.pyd" -ErrorAction SilentlyContinue
-        foreach ($ext in $torchaudioExts) { Remove-Item $ext.FullName -Force }
-        Write-Host "  Removed CUDA torchaudio extension (audio VAE unavailable)"
+        Write-Host "AMD GPU — installing DirectML stack..."
+        pip install torch-directml torchaudio --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
+        Write-Host "  DirectML and CPU torchaudio installed"
+        pip install -r requirements.txt 2>&1 | Out-Null
+    } else {
+        pip install -r requirements.txt 2>&1 | Out-Null
     }
 
     deactivate
