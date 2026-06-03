@@ -47,4 +47,36 @@ Write-Host ""
 Write-Host "IMPORTANT: Close ALL PowerShell windows, open a new one."
 Write-Host "Then verify with: py -0, git --version, ollama --version"
 Write-Host ""
+Write-Host ""
+
+# Auto-configure environment variables to prevent misdirected storage
+Write-Host "Configuring environment variables..."
+Write-Host ""
+
+# Detect root path
+$rootCandidates = @("D:\AI", "$env:AI_ROOT")
+$detectedRoot = $null
+foreach ($c in $rootCandidates) { if (Test-Path "$c\AI_CONFIG") { $detectedRoot = $c; break } }
+
+if ($detectedRoot) {
+    # OLLAMA_MODELS — redirects model storage to vault
+    [Environment]::SetEnvironmentVariable("OLLAMA_MODELS", "$detectedRoot\AI_VAULT\models\llm", "User")
+    Write-Host "  OLLAMA_MODELS = $detectedRoot\AI_VAULT\models\llm"
+
+    # HF_HOME — keeps huggingface cache out of vault
+    [Environment]::SetEnvironmentVariable("HF_HOME", "$detectedRoot\AI_CACHE\huggingface", "User")
+    Write-Host "  HF_HOME       = $detectedRoot\AI_CACHE\huggingface"
+
+    # TORCH_HOME — keeps torch cache out of vault
+    [Environment]::SetEnvironmentVariable("TORCH_HOME", "$detectedRoot\AI_CACHE\torch", "User")
+    Write-Host "  TORCH_HOME    = $detectedRoot\AI_CACHE\torch"
+
+    Write-Host ""
+    Write-Host "Environment variables set. Restart PowerShell and Ollama for them to take effect."
+} else {
+    Write-Host "  AI architecture not detected (run 1-init.ps1 first). Env vars not set."
+    Write-Host "  Run 'ai setup env' after initializing the architecture."
+}
+
+Write-Host ""
 Write-Host "Next step: Restart PowerShell, then run 3-comfyui.ps1"

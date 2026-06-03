@@ -18,6 +18,31 @@ if (-not $Root) {
 }
 $Root = $Root.TrimEnd("\")
 
+# Guard: verify critical environment variables
+Write-Host "Checking environment variables..."
+$envChecks = @(
+    @{Var="OLLAMA_MODELS"; Expect="${Root}\AI_VAULT\models\llm"; Desc="Ollama model storage"}
+)
+$envOk = $true
+foreach ($check in $envChecks) {
+    $val = [Environment]::GetEnvironmentVariable($check.Var, "User")
+    if ($val -ne $check.Expect) {
+        Write-Host "  [MIS] $($check.Var) — $($check.Desc)"
+        Write-Host "        Expected: $($check.Expect)"
+        Write-Host "        Current:  $(if ($val) {$val} else {'(not set)'})"
+        Write-Host "        Run 'ai setup env' to fix, then restart PowerShell and try again."
+        $envOk = $false
+    } else {
+        Write-Host "  [OK]  $($check.Var)"
+    }
+}
+if (-not $envOk) {
+    Write-Host ""
+    Write-Host "Environment check failed. Fix with 'ai setup env', restart PowerShell, then re-run this script."
+    exit 1
+}
+Write-Host ""
+
 $ComfyPath = "${Root}\AI_CORE\Apps\ComfyUI"
 
 # Execution policy check
