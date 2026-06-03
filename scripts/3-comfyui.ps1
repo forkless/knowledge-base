@@ -108,7 +108,7 @@ try {
         Write-Host "AMD GPU — installing DirectML stack..."
         pip install torch-directml 2>&1 | Out-Null
         # Force reinstall torchaudio from CPU index — CUDA version crashes
-        pip install torchaudio --force-reinstall --no-deps --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
+        pip install torchaudio --force-reinstall --no-deps --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
         Write-Host "  DirectML and CPU torchaudio ready"
         pip install -r requirements.txt 2>&1 | Out-Null
     } else {
