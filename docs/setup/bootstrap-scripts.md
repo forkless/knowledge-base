@@ -119,11 +119,11 @@ Open a fresh PowerShell window and try:
 
 | Command | What it does |
 |---------|-------------|
-| `ai start ollama` | Starts Ollama |
-| `ai start comfyui` | Starts ComfyUI |
-| `ai start openwebui` | Starts Open Web UI |
-| `ai status` | Shows what's running and on which ports |
-| `ai models list` | Shows what models you have |
+| `ai start all` | Starts all services |
+| `ai stop all` | Stops all services |
+| `ai restart all` | Restarts all services |
+| `ai status` | Compact dashboard — running services, ports, model counts |
+| `ai models list` | Lists every model, grouped by category |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
 | `ai install openwebui` | Installs Open Web UI for Ollama |
 | `ai setup ports` | Change service ports |

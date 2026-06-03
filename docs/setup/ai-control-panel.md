@@ -20,12 +20,16 @@ ai status
 
 ### ai start &lt;service&gt;
 
-Start a service in the background (no window):
+Start a service in the background:
 
 ```powershell
+ai start all
 ai start ollama
 ai start comfyui
+ai start openwebui
 ```
+
+`ai start all` starts every installed service at once.
 
 Ollama runs as a hidden process. ComfyUI launches in a hidden PowerShell window. Both detach from your terminal.
 
@@ -34,6 +38,7 @@ Ollama runs as a hidden process. ComfyUI launches in a hidden PowerShell window.
 Stop a running service:
 
 ```powershell
+ai stop all
 ai stop ollama
 ai stop comfyui
 ```
@@ -43,8 +48,10 @@ ai stop comfyui
 Stop and start a service in one command:
 
 ```powershell
+ai restart all
 ai restart ollama
 ai restart comfyui
+ai restart openwebui
 ```
 
 Useful after config changes or if a service becomes unresponsive.
@@ -69,23 +76,20 @@ The status dashboard only tracks tools installed through `ai install <app>`. Man
 Example output:
 
 ```
-System Status: D:\AI
+AI Platform Status
+────────────────────────────────
+Ollama      Running   Port 11434
+ComfyUI     Running   Port 8188
+OpenWebUI   Running   Port 3000
 
-  [OK]  AI_CONFIG
-  [OK]  AI_CORE
-  [OK]  AI_VAULT
-  [OK]  AI_WORKSPACE
-  [OK]  AI_TOOLS
-  [OK]  AI_CACHE
+  Models:
+    LLMs:        5
+    Diffusion:   12
+    VAEs:        4
 
-  Config: v1.1 — amd GPU
-
-  [OK]  ComfyUI
-  [OK]  Ollama (running)
-
-  [OK]  _bindings\llm -> D:\AI\AI_VAULT\models\llm
-  [OK]  _bindings\diffusion -> D:\AI\AI_VAULT\models\diffusion
-  [OK]  _bindings\embeddings -> D:\AI\AI_VAULT\models\embeddings
+Root:
+  D:\AI
+  v1.1 — AMD GPU
 ```
 
 ### ai install &lt;app&gt;
@@ -116,7 +120,7 @@ This removes the application folder, its venv, and config. Models in AI_VAULT ar
 
 ### ai models list
 
-Counts all models by type using file scans:
+Lists all installed models grouped by category (LLM, Diffusion, VAE, LoRAs, etc.):
 
 ```powershell
 ai models list
