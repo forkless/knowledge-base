@@ -458,7 +458,8 @@ function Show-Status {
     $llmDir = "$Root\AI_VAULT\models\llm"
     $diffDir = "$Root\AI_VAULT\models\diffusion"
     $embedDir = "$Root\AI_VAULT\models\embeddings"
-    $llmCount = if (Test-Path $llmDir) { @(Get-ChildItem $llmDir -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
+    $ollamaModels = @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+")
+    $llmCount = $ollamaModels.Count
     $diffCount = if (Test-Path $diffDir) { @(Get-ChildItem $diffDir -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
     $vaeCount = if (Test-Path "$diffDir\vae") { @(Get-ChildItem "$diffDir\vae" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
     Write-Host ""
@@ -504,7 +505,18 @@ function Show-Models {
         Write-Host ""
     }
 
-    List-Files $llmDir "LLM" @("*")
+    $ollamaModels = @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+(\S+)\s+(\S+)\s+" | ForEach-Object {
+        $parts = $_ -split '\s+'
+        [PSCustomObject]@{Name=$parts[1]; Size=$parts[3]}
+    })
+    if ($ollamaModels) {
+        Write-Host "LLM"
+        Write-Host "────────────────────────"
+        foreach ($m in $ollamaModels) {
+            Write-Host "  $($m.Name)  ($($m.Size))"
+        }
+        Write-Host ""
+    }
     List-Files "$diffDir\checkpoints" "Diffusion (checkpoints)" @("*.safetensors","*.ckpt")
     List-Files "$diffDir\loras" "Diffusion (LoRAs)" @("*.safetensors")
     List-Files "$diffDir\vae" "VAE" @("*.safetensors","*.ckpt")
@@ -730,7 +742,8 @@ function Doctor-Check {
     if ($allLinks) { Write-Host "PASS  Model bindings" }
 
     # Models
-    $llmCount = @(Get-ChildItem "$Root\AI_VAULT\models\llm" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
+    $ollamaModels = if ($ollamaVer) { @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+") } else { @() }
+    $llmCount = $ollamaModels.Count
     $diffCount = @(Get-ChildItem "$Root\AI_VAULT\models\diffusion" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
     if ($llmCount -gt 0) { Write-Host "PASS  Models — $llmCount LLM(s), $diffCount diffusion file(s)" }
     elseif ($diffCount -gt 0) { Write-Host "WARN  Models — no LLMs found, $diffCount diffusion file(s)" }
