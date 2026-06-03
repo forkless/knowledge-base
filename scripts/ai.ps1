@@ -64,12 +64,13 @@ function Show-Help {
 function Manage-ComfyUI {
     param([string]$Action)
     $launcher = "${Root}\AI_TOOLS\launch_comfyui.ps1"
-    $process = Get-Process -Name "python" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match "ComfyUI" }
-    
+    $comfyPort = 8188
+    $comfyRunning = netstat -ano 2>$null | Select-String "LISTENING" | Select-String ":${comfyPort} "
+
     switch ($Action) {
         "start" {
-            if ($process) {
-                Write-Host "ComfyUI is already running (PID $($process.Id))"
+            if ($comfyRunning) {
+                Write-Host "ComfyUI is already running (port $comfyPort)"
                 Write-Host "URL: http://127.0.0.1:8188"
                 return
             }
@@ -83,16 +84,23 @@ function Manage-ComfyUI {
             Write-Host "ComfyUI started. URL: http://127.0.0.1:8188"
         }
         "stop" {
-            if (-not $process) {
+            if (-not $comfyRunning) {
                 Write-Host "ComfyUI is not running."
                 return
             }
-            $process | Stop-Process -Force
-            Write-Host "ComfyUI stopped."
+            # Find PID listening on port 8188
+            $line = netstat -ano | Select-String "LISTENING" | Select-String ":${comfyPort} "
+            $pid = $line -replace '.*\s+(\d+)\s*$', '$1'
+            if ($pid) {
+                Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+                Write-Host "ComfyUI stopped."
+            } else {
+                Write-Host "Could not find ComfyUI process."
+            }
         }
         "status" {
-            if ($process) {
-                Write-Host "ComfyUI: running (PID $($process.Id)) — http://127.0.0.1:8188"
+            if ($comfyRunning) {
+                Write-Host "ComfyUI: running (port $comfyPort) — http://127.0.0.1:8188"
             } else {
                 Write-Host "ComfyUI: not running"
             }
@@ -313,15 +321,21 @@ function Show-Status {
 
     Write-Host ""
 
-    # Apps
+    # ComfyUI — check install and whether port 8188 is listening
     $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
+    $comfyPort = 8188
+    $comfyRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${comfyPort} "
     if (Test-Path $comfyPath) {
-        Write-Host "  [OK]  ComfyUI"
+        if ($comfyRunning) {
+            Write-Host "  [OK]  ComfyUI (port $comfyPort)"
+        } else {
+            Write-Host "  [OK]  ComfyUI (not running)"
+        }
     } else {
         Write-Host "  [--]  ComfyUI (not installed)"
     }
 
-    # Ollama service
+    # Ollama service — check process and port
     $ollamaProcess = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
     if ($ollamaProcess) {
         Write-Host "  [OK]  Ollama (running)"
