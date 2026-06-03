@@ -45,7 +45,7 @@ winget install Python.Python.3.11
 py -0
 ```
 
-Expected:
+Expected output:
 
 ```
  - 3.11
