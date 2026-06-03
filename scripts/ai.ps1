@@ -434,8 +434,9 @@ function Show-Status {
         $gpu = if ($detected -ne "unknown") { $detected.ToUpper() } else { $cfg.gpu.ToUpper() }
     }
 
-    Write-Host "AI Platform Status"
-    Write-Host "────────────────────────────────"
+    Write-Host "┌──────────┬─────────┬────────┐"
+    Write-Host "│ Service  │ Status  │ Port   │"
+    Write-Host "├──────────┼─────────┼────────┤"
 
     $services = @(
         @{Name="Ollama";    Port=$ports.ollama;    Path="$Root\AI_VAULT\models\llm"},
@@ -445,14 +446,11 @@ function Show-Status {
     foreach ($svc in $services) {
         $running = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($svc.Port) "
         $installed = Test-Path $svc.Path
-        if ($installed -and $running) {
-            Write-Host ("{0,-12} Running   Port {1}" -f $svc.Name, $svc.Port)
-        } elseif ($installed) {
-            Write-Host ("{0,-12} Stopped   Port {1}" -f $svc.Name, $svc.Port)
-        } else {
-            Write-Host ("{0,-12} --        (not installed)" -f $svc.Name)
-        }
+        $status = if ($installed -and $running) { "Running" } elseif ($installed) { "Stopped" } else { "──" }
+        $portTxt = if ($installed) { $svc.Port.ToString() } else { "──" }
+        Write-Host ("│ {0,-8} │ {1,-7} │ {2,-6} │" -f $svc.Name, $status, $portTxt)
     }
+    Write-Host "└──────────┴─────────┴────────┘"
 
     # Models summary
     $llmDir = "$Root\AI_VAULT\models\llm"
