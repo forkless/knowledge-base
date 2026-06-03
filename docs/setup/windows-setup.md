@@ -67,8 +67,8 @@ After installing tools like Python, Git, or Ollama:
 - Windows updates PATH immediately
 - BUT existing terminals do **not** reload it
 
-> You do **not** need to reboot or log out in most cases.
-> ▪ **You MUST close PowerShell and open a new one after installs.**
+> - You do **not** need to reboot or log out in most cases.
+> - **You MUST close PowerShell and open a new one after installs.**
 
 ## 6. REQUIRED STEP: Refresh your terminal
 
