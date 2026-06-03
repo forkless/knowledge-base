@@ -241,6 +241,7 @@ function Get-GPUType {
 }
 
 function Install-ComfyUI {
+    Push-Location
     $ComfyPath = "$Root\AI_CORE\Apps\ComfyUI"
     $gpu = Get-GPUType
 
