@@ -661,7 +661,8 @@ function Doctor-Check {
     $configPath = "$Root\AI_CONFIG\system_config.json"
     if (Test-Path $configPath) {
         $cfg = Get-Content $configPath | ConvertFrom-Json
-        Write-Host "PASS  Stack — Ai, ai, ai! v$($cfg.architecture_version) ($($cfg.gpu)) Path — $Root"
+        Write-Host "PASS  Stack — Ai, ai, ai! v$($cfg.architecture_version) ($($cfg.gpu))"
+    Write-Host "       Path — $Root"
     } else {
         Write-Host "FAIL  Platform — not initialized (run 1-init.ps1)"
         return
