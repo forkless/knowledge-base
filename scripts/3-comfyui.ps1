@@ -108,7 +108,10 @@ try {
     if ($gpuType -eq "amd") {
         Write-Host "AMD GPU — adding DirectML backend and fixing audio deps..."
         pip install torch-directml 2>&1 | Out-Null
-        pip install torchaudio --force-reinstall --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
+        # Remove CUDA torchaudio extension that crashes on AMD
+        $torchaudioExts = Get-ChildItem "${ComfyPath}\venv\Lib\site-packages\torchaudio\_extension\*.pyd" -ErrorAction SilentlyContinue
+        foreach ($ext in $torchaudioExts) { Remove-Item $ext.FullName -Force }
+        Write-Host "  Removed CUDA torchaudio extension (audio VAE unavailable)"
     }
 } catch {
     Write-Host "ERROR: pip install failed — $_"
