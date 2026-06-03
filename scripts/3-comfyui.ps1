@@ -108,7 +108,7 @@ try {
     if ($gpuType -eq "amd") {
         Write-Host "AMD GPU — adding DirectML backend and fixing audio deps..."
         pip install torch-directml 2>&1 | Out-Null
-        pip install torchaudio --force-reinstall 2>&1 | Out-Null
+        pip install torchaudio --force-reinstall --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
     }
 } catch {
     Write-Host "ERROR: pip install failed — $_"
