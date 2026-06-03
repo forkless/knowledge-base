@@ -2,7 +2,7 @@
 
 Three scripts automate the whole setup — folders, software, and ComfyUI. A fourth script (`ai`) handles daily tasks like starting services and checking what's running.
 
-You can find them in the `scripts/` folder of this repo, or grab the [latest release zip](https://github.com/forkless/knowledge-base/releases/tag/v0.1.0).
+You can find them in the `scripts/` folder of this repo, or grab the [latest release zip](https://github.com/forkless/knowledge-base/releases/tag/v1.1).
 
 ## What You'll Need
 

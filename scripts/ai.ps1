@@ -1,5 +1,5 @@
 <#
-Ai Control Panel v1.1 — daily driver for the Ai Bootstrap system
+Ai, ai, ai! Control Panel v1.1 — daily driver for the Ai Bootstrap system
 Usage:  ai <command> [options]
 
 Commands:
