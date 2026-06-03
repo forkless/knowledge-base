@@ -81,13 +81,14 @@ Install or update an application:
 
 ```powershell
 ai install comfyui
+ai install comfyui-manager
 ai install ollama
 ai install openwebui
 ```
 
 Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
 
-ComfyUI detected your GPU and sets up the right backend. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically.
+ComfyUI detected your GPU and sets up the right backend. ComfyUI-Manager adds a UI for browsing and installing custom nodes. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically.
 
 ### ai remove &lt;app&gt;
 
