@@ -681,17 +681,17 @@ function Doctor-Check {
 
     # Git
     $gitVer = git --version 2>$null
-    if ($gitVer) { Write-Host "PASS  Git — $gitVer" } else { Write-Host "FAIL  Git — not found" }
+    if ($gitVer) { $gitVer = ($gitVer -replace '^git version (\S+).*', '$1'); Write-Host "PASS  Git — $gitVer" } else { Write-Host "FAIL  Git — not found" }
 
     # Python versions
     $py10 = py -3.10 --version 2>$null
     $py11 = py -3.11 --version 2>$null
-    if ($py10) { Write-Host "PASS  Python 3.10 — $py10" } else { Write-Host "WARN  Python 3.10 — not found (legacy fallback)" }
-    if ($py11) { Write-Host "PASS  Python 3.11 — $py11" } else { Write-Host "FAIL  Python 3.11 — not found" }
+    if ($py10) { $py10 = ($py10 -replace '^Python (\S+).*', '$1'); Write-Host "PASS  Python 3.10 — $py10" } else { Write-Host "WARN  Python 3.10 — not found (legacy fallback)" }
+    if ($py11) { $py11 = ($py11 -replace '^Python (\S+).*', '$1'); Write-Host "PASS  Python 3.11 — $py11" } else { Write-Host "FAIL  Python 3.11 — not found" }
 
     # Ollama
     $ollamaVer = ollama --version 2>$null
-    if ($ollamaVer) { Write-Host "PASS  Ollama — $ollamaVer" } else { Write-Host "FAIL  Ollama — not found" }
+    if ($ollamaVer) { $ollamaVer = ($ollamaVer -replace '^ollama version is (\S+).*', '$1'); Write-Host "PASS  Ollama — $ollamaVer" } else { Write-Host "FAIL  Ollama — not found" }
 
     # ComfyUI
     $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
@@ -705,9 +705,9 @@ function Doctor-Check {
 
     # Open Web UI
     $webuiPath = "$Root\AI_CORE\Apps\open-webui"
-    $webuiVer = if (Test-Path "$webuiPath\venv") { & "$webuiPath\venv\Scripts\python.exe" -c "import open_webui; print(open_webui.__version__)" 2>$null } else { $null }
+    $webuiVer = if (Test-Path "$webuiPath") { & "$webuiPath\venv\Scripts\pip.exe" show open-webui 2>$null | Select-String "^Version:" | ForEach-Object { $_ -replace ".*:\s*", "" } } else { $null }
     if (Test-Path $webuiPath) {
-        if ($webuiVer) { Write-Host "PASS  Open Web UI — $webuiVer" } else { Write-Host "PASS  Open Web UI" }
+        if ($webuiVer) { Write-Host "PASS  Open Web UI — $webuiVer" } else { Write-Host "PASS  Open Web UI — ?" }
     } else {
         Write-Host "WARN  Open Web UI — not installed"
     }
@@ -715,7 +715,7 @@ function Doctor-Check {
     # FFmpeg
     $ffmpegVer = ffmpeg -version 2>$null
     $ffmpegLine = if ($ffmpegVer) { ($ffmpegVer -split "`n")[0] -replace '^ffmpeg version (\S+).*', '$1' } else { "" }
-    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — v$ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
+    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — $ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
 
     # Arch config check (verifies file is readable, banner already shown above)
     $archCheck = Get-Content "$Root\AI_CONFIG\system_config.json" -ErrorAction SilentlyContinue
