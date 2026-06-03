@@ -10,11 +10,19 @@ Commands:
   help               Show this message
 #>
 
-$Root = if (Test-Path "D:\AI") { "D:\AI" } else { $env:AI_ROOT }
+$Root = if (Test-Path "D:\AI") { "D:\AI" } elseif ($env:AI_ROOT) { $env:AI_ROOT } else { $null }
 
 if (-not $Root) {
-    Write-Host "ERROR: AI root not found. Set AI_ROOT or run Initialize-AIArchitecture.ps1 first."
-    exit 1
+    $input = Read-Host "AI root not found. Enter path (e.g. D:\AI)"
+    if ([string]::IsNullOrWhiteSpace($input)) {
+        Write-Host "Aborted."
+        exit 1
+    }
+    $Root = $input.TrimEnd("\")
+}
+
+if (!(Test-Path $Root)) {
+    Write-Host "WARNING: $Root does not exist yet. Run Initialize-AIArchitecture.ps1 first, then try again."
 }
 
 $Command = $args[0]
