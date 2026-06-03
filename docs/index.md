@@ -1,4 +1,4 @@
-# [Howtos for The Rest of Us](#)
+# Howtos for The Rest of Us
 
 This site is called **forkless**. Every guide on it starts with `git clone`. I see the problem.
 
