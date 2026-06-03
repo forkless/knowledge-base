@@ -189,6 +189,8 @@ function Install-ComfyUI {
         pip install -r requirements.txt 2>&1 | Out-Null
         Write-Host "  Replacing CUDA torchaudio with CPU version..."
         pip install torchaudio --force-reinstall --no-deps --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
+        $extDir = "$ComfyPath\venv\Lib\site-packages\torchaudio\_extension"
+        if (Test-Path $extDir) { Remove-Item -Recurse -Force $extDir }
         Write-Host "  DirectML and CPU torchaudio ready"
     } else {
         pip install -r requirements.txt 2>&1 | Out-Null
