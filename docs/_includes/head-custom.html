@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
   /* Warm light background — "For Dummies" feel */
   body {
@@ -138,16 +139,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var btn = document.createElement("button");
     btn.className = "copy-btn";
-    btn.textContent = "Copy";
+    btn.innerHTML = '<span class="material-icons" style="font-size:14px">content_copy</span>';
     wrap.appendChild(btn);
 
     btn.addEventListener("click", function() {
       var text = pre.textContent;
       navigator.clipboard.writeText(text).then(function() {
-        btn.textContent = "Copied!";
+        btn.innerHTML = '<span class="material-icons" style="font-size:14px">check</span>';
         btn.classList.add("copied");
         setTimeout(function() {
-          btn.textContent = "Copy";
+          btn.innerHTML = '<span class="material-icons" style="font-size:14px">content_copy</span>';
           btn.classList.remove("copied");
         }, 2000);
       });
