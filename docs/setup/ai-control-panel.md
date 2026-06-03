@@ -158,6 +158,16 @@ ai setup path
 
 Copies itself to `AI_TOOLS\ai.ps1` and adds the folder to PATH. Works immediately in the current window and persists for all future windows.
 
+### ai setup ports
+
+Configure which ports each service uses:
+
+```powershell
+ai setup ports
+```
+
+Prompts for each service's port. Defaults: Ollama 11434, ComfyUI 8188, Open Web UI 3000. Settings save to `AI_CONFIG\ports.json`. Restart services after changing.
+
 ### ai help
 
 Shows the full command list:

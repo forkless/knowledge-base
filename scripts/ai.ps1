@@ -12,6 +12,7 @@ Commands:
   clean cache        Clear temporary files
   setup env          Check and fix environment variables
   setup path         Add AI_TOOLS to PATH for 'ai' from anywhere
+  setup ports        Configure service ports
   help               Show this message
 #>
 
@@ -59,22 +60,36 @@ function Show-Help {
     Write-Host "  clean cache         Delete all temporary files"
     Write-Host "  setup env           Check and fix environment variables"
     Write-Host "  setup path          Add AI_TOOLS to PATH for 'ai' from anywhere"
+    Write-Host "  setup ports         Configure service ports"
     Write-Host "  help                Show this message"
     Write-Host ""
     Write-Host "Root: $Root"
 }
 
+function Get-PortConfig {
+    $portFile = "${Root}\AI_CONFIG\ports.json"
+    $defaults = @{ollama=11434; comfyui=8188; openwebui=3000}
+    if (Test-Path $portFile) {
+        $saved = Get-Content $portFile | ConvertFrom-Json
+        foreach ($key in $defaults.Keys) {
+            if ($saved.$key -and $saved.$key -gt 0) { $defaults.$key = $saved.$key }
+        }
+    }
+    return $defaults
+}
+
 function Manage-ComfyUI {
     param([string]$Action)
+    $ports = Get-PortConfig
     $launcher = "${Root}\AI_TOOLS\launch_comfyui.ps1"
-    $comfyPort = 8188
+    $comfyPort = $ports.comfyui
     $comfyRunning = netstat -ano 2>$null | Select-String "LISTENING" | Select-String ":${comfyPort} "
 
     switch ($Action) {
         "start" {
             if ($comfyRunning) {
                 Write-Host "ComfyUI: Running on port $comfyPort"
-                Write-Host "URL: http://127.0.0.1:8188"
+                Write-Host "URL: http://127.0.0.1:$comfyPort"
                 return
             }
             if (!(Test-Path $launcher)) {
@@ -84,7 +99,7 @@ function Manage-ComfyUI {
             Write-Host "Starting ComfyUI..."
             Start-Process -WindowStyle Hidden -FilePath "powershell" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$launcher`""
             Start-Sleep -Seconds 3
-            Write-Host "ComfyUI started. URL: http://127.0.0.1:8188"
+            Write-Host "ComfyUI started. URL: http://127.0.0.1:$comfyPort"
         }
         "stop" {
             if (-not $comfyRunning) {
@@ -103,7 +118,7 @@ function Manage-ComfyUI {
         }
         "status" {
             if ($comfyRunning) {
-                Write-Host "ComfyUI: Running on port $comfyPort — http://127.0.0.1:8188"
+                Write-Host "ComfyUI: Running on port $comfyPort — http://127.0.0.1:$comfyPort"
             } else {
                 Write-Host "ComfyUI: not running"
             }
@@ -113,7 +128,8 @@ function Manage-ComfyUI {
 
 function Manage-Ollama {
     param([string]$Action)
-    $ollamaPort = 11434
+    $ports = Get-PortConfig
+    $ollamaPort = $ports.ollama
     $ollamaRunning = netstat -ano 2>$null | Select-String "LISTENING" | Select-String ":${ollamaPort} "
 
     switch ($Action) {
@@ -154,9 +170,10 @@ function Manage-Ollama {
 
 function Manage-WebUI {
     param([string]$Action)
+    $ports = Get-PortConfig
     $webuiPath = "${Root}\AI_CORE\Apps\open-webui"
     $webuiLauncher = "${Root}\AI_TOOLS\launch_openwebui.ps1"
-    $webuiPort = 3000
+    $webuiPort = $ports.openwebui
     $webuiRunning = netstat -ano 2>$null | Select-String "LISTENING" | Select-String ":${webuiPort} "
 
     switch ($Action) {
@@ -376,10 +393,11 @@ open-webui serve
     if (!(Test-Path $toolsDir)) { New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null }
     $launcher | Out-File "${Root}\AI_TOOLS\launch_openwebui.ps1" -Encoding utf8
 
+    $defaultPort = (Get-PortConfig).openwebui
     Write-Host "Open Web UI installed."
     Write-Host "  Location: $webuiPath"
     Write-Host "  Launch: ${Root}\AI_TOOLS\launch_openwebui.ps1"
-    Write-Host "  URL: http://127.0.0.1:3000"
+    Write-Host "  URL: http://127.0.0.1:$defaultPort"
 }
 
 function Show-Status {
@@ -415,9 +433,10 @@ function Show-Status {
 
     Write-Host ""
 
-    # ComfyUI — check install and whether port 8188 is listening
+    # ComfyUI — check install and port
+    $ports = Get-PortConfig
     $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
-    $comfyPort = 8188
+    $comfyPort = $ports.comfyui
     $comfyRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${comfyPort} "
     if (Test-Path $comfyPath) {
         if ($comfyRunning) {
@@ -429,8 +448,8 @@ function Show-Status {
         Write-Host "  [--]  ComfyUI (not installed)"
     }
 
-    # Ollama service — check process and port 11434
-    $ollamaPort = 11434
+    # Ollama service — check process and port
+    $ollamaPort = $ports.ollama
     $ollamaRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${ollamaPort} "
     if ($ollamaRunning) {
         Write-Host "  [OK]  Ollama (Running on port $ollamaPort)"
@@ -438,9 +457,9 @@ function Show-Status {
         Write-Host "  [--]  Ollama (not running)"
     }
 
-    # Open Web UI — check install and port 3000
+    # Open Web UI — check install and port
     $webuiPath = "$Root\AI_CORE\Apps\open-webui"
-    $webuiPort = 3000
+    $webuiPort = $ports.openwebui
     $webuiRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${webuiPort} "
     if (Test-Path $webuiPath) {
         if ($webuiRunning) {
@@ -615,6 +634,39 @@ function Setup-Path {
     Write-Host "  You can now use 'ai' from this window and all future windows."
 }
 
+function Setup-Ports {
+    $portFile = "${Root}\AI_CONFIG\ports.json"
+    $defaults = @{ollama=11434; comfyui=8188; openwebui=3000}
+    $current = @{}
+    if (Test-Path $portFile) {
+        $saved = Get-Content $portFile | ConvertFrom-Json
+        foreach ($key in $defaults.Keys) { $current.$key = $saved.$key }
+    }
+
+    Write-Host "Service Port Configuration"
+    Write-Host ""
+
+    $changed = $false
+    foreach ($key in $defaults.Keys) {
+        $val = if ($current.$key) { $current.$key } else { $defaults.$key }
+        $input = Read-Host "$key port (current: $val, Enter to keep)"
+        if ($input -match '^\d+$') {
+            $current.$key = [int]$input
+            $changed = $true
+        } else {
+            $current.$key = $val
+        }
+    }
+
+    if ($changed) {
+        $current | ConvertTo-Json | Out-File $portFile -Encoding utf8
+        Write-Host "Ports saved to $portFile"
+        Write-Host "Restart services for changes to take effect."
+    } else {
+        Write-Host "No changes."
+    }
+}
+
 # Dispatch
 switch ($Command) {
     "install" {
@@ -670,7 +722,8 @@ switch ($Command) {
     "setup"      {
         if ($SubCommand -eq "env") { Setup-Env }
         elseif ($SubCommand -eq "path") { Setup-Path }
-        else { Write-Host "Usage: ai setup <env|path>" }
+        elseif ($SubCommand -eq "ports") { Setup-Ports }
+        else { Write-Host "Usage: ai setup <env|path|ports>" }
     }
     "help"       { Show-Help }
     default      { Show-Help }
