@@ -8,6 +8,7 @@ Commands:
   stop <service>     Stop a service (all, ollama, comfyui, openwebui)
   restart <service>  Restart a service (all, ollama, comfyui, openwebui)
   status [service]   System health or specific service status
+  doctor             Full system diagnostics
   models list        List installed models
   clean cache        Clear temporary files
   setup env          Check and fix environment variables
@@ -56,6 +57,7 @@ function Show-Help {
     Write-Host "  stop <service>      Stop a service (all, ollama, comfyui, openwebui)"
     Write-Host "  restart <service>   Restart a service (all, ollama, comfyui, openwebui)"
     Write-Host "  status [service]    System health or specific service status"
+    Write-Host "  doctor              Full system diagnostics (Git, Python, services, env)"
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
     Write-Host "  setup env           Check and fix environment variables"
@@ -645,6 +647,87 @@ function Setup-Ports {
     }
 }
 
+function Doctor-Check {
+    Write-Host "Ai, ai, ai! Doctor Check"
+    Write-Host ""
+
+    # Git
+    $gitVer = git --version 2>$null
+    if ($gitVer) { Write-Host "PASS  Git — $gitVer" } else { Write-Host "FAIL  Git — not found" }
+
+    # Python versions
+    $py10 = py -3.10 --version 2>$null
+    $py11 = py -3.11 --version 2>$null
+    if ($py10) { Write-Host "PASS  Python 3.10 — $py10" } else { Write-Host "WARN  Python 3.10 — not found (legacy fallback)" }
+    if ($py11) { Write-Host "PASS  Python 3.11 — $py11" } else { Write-Host "FAIL  Python 3.11 — not found" }
+
+    # Ollama
+    $ollamaVer = ollama --version 2>$null
+    if ($ollamaVer) { Write-Host "PASS  Ollama — $ollamaVer" } else { Write-Host "FAIL  Ollama — not found" }
+
+    # FFmpeg
+    $ffmpegVer = ffmpeg -version 2>$null
+    if ($ffmpegVer) { Write-Host "PASS  FFmpeg" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" }
+
+    # Architecture
+    $configPath = "$Root\AI_CONFIG\system_config.json"
+    if (Test-Path $configPath) {
+        $cfg = Get-Content $configPath | ConvertFrom-Json
+        Write-Host "PASS  Architecture v$($cfg.architecture_version) — Root: $Root"
+    } else {
+        Write-Host "FAIL  Architecture — not initialized (run 1-init.ps1)"
+    }
+
+    # ComfyUI
+    $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
+    if (Test-Path $comfyPath) {
+        $comfyPort = (Get-PortConfig).comfyui
+        $running = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($comfyPort) "
+        if ($running) { Write-Host "PASS  ComfyUI — running on port $comfyPort" }
+        else { Write-Host "WARN  ComfyUI — installed but not running" }
+    } else {
+        Write-Host "WARN  ComfyUI — not installed"
+    }
+
+    # Open Web UI
+    $webuiPath = "$Root\AI_CORE\Apps\open-webui"
+    if (Test-Path $webuiPath) {
+        $webuiPort = (Get-PortConfig).openwebui
+        $running = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($webuiPort) "
+        if ($running) { Write-Host "PASS  Open Web UI — running on port $webuiPort" }
+        else { Write-Host "WARN  Open Web UI — installed but not running" }
+    } else {
+        Write-Host "WARN  Open Web UI — not installed"
+    }
+
+    # Model bindings
+    $allLinks = $true
+    foreach ($link in @("llm","diffusion","embeddings")) {
+        $lp = "$Root\AI_CORE\_bindings\$link"
+        if (!(Test-Path $lp)) { Write-Host "FAIL  Binding $link — missing"; $allLinks = $false }
+    }
+    if ($allLinks) { Write-Host "PASS  Model bindings" }
+
+    # Models
+    $llmCount = @(Get-ChildItem "$Root\AI_VAULT\models\llm\*" -Include "*.gguf","*.bin" -ErrorAction SilentlyContinue).Count
+    $diffCount = @(Get-ChildItem "$Root\AI_VAULT\models\diffusion" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
+    if ($llmCount -gt 0) { Write-Host "PASS  Models — $llmCount LLM(s), $diffCount diffusion file(s)" }
+    elseif ($diffCount -gt 0) { Write-Host "WARN  Models — no LLMs found, $diffCount diffusion file(s)" }
+    else { Write-Host "WARN  Models — none found (pull some with 'ollama pull <name>')" }
+
+    # Environment variables
+    $envOk = $true
+    $expVault = "$Root\AI_VAULT\models\llm"
+    $expCache = "$Root\AI_CACHE"
+    $ollamaEnv = [Environment]::GetEnvironmentVariable("OLLAMA_MODELS","User")
+    if ($ollamaEnv -ne $expVault) { Write-Host "WARN  OLLAMA_MODELS — should be $expVault"; $envOk = $false }
+    $hfEnv = [Environment]::GetEnvironmentVariable("HF_HOME","User")
+    if ($hfEnv -ne "${expCache}\huggingface") { Write-Host "WARN  HF_HOME — should be ${expCache}\huggingface"; $envOk = $false }
+    $torchEnv = [Environment]::GetEnvironmentVariable("TORCH_HOME","User")
+    if ($torchEnv -ne "${expCache}\torch") { Write-Host "WARN  TORCH_HOME — should be ${expCache}\torch"; $envOk = $false }
+    if ($envOk) { Write-Host "PASS  Environment variables" }
+}
+
 # Dispatch
 switch ($Command) {
     "install" {
@@ -692,6 +775,7 @@ switch ($Command) {
             default   { Write-Host "Usage: ai status [ollama|comfyui|openwebui]" }
         }
     }
+    "doctor"     { Doctor-Check }
     "models"     {
         if ($SubCommand -eq "list") { Show-Models }
         else { Write-Host "Usage: ai models list" }
