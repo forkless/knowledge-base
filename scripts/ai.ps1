@@ -349,9 +349,11 @@ python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"$gpuFlag
 
     Write-Host ""
     Write-Host "ComfyUI ready ($gpu). Launch with: .\AI_TOOLS\launch_comfyui.ps1"
+    Pop-Location
 }
 
 function Install-ComfyUI-Manager {
+    Push-Location
     $nodeDir = "${Root}\AI_CORE\Apps\ComfyUI\custom_nodes\ComfyUI-Manager"
     if (!(Test-Path $nodeDir)) {
         Write-Host "Installing ComfyUI-Manager..."
@@ -363,6 +365,7 @@ function Install-ComfyUI-Manager {
         git pull
         Write-Host "Updated. Restart ComfyUI to see changes."
     }
+    Pop-Location
 }
 
 function Install-Ollama {
@@ -372,6 +375,7 @@ function Install-Ollama {
 }
 
 function Install-OpenWebUI {
+    Push-Location
     $webuiPath = "${Root}\AI_CORE\Apps\open-webui"
     $webuiVenv = "${webuiPath}\venv"
 
@@ -417,6 +421,7 @@ open-webui serve --port `$port
     if ($defaultPort -ne 8080) {
         Write-Host "  Port set via AI_CONFIG\ports.json (default is 8080)"
     }
+    Pop-Location
 }
 
 function Show-Status {
