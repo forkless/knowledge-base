@@ -1,10 +1,6 @@
 # Howtos for The Rest of Us
 
-You know what forking is, right? Grabbing someone else's project, tweaking a few things, and calling it your own. It's how most of the internet gets built — and there's nothing wrong with that.
-
-So naturally, this site is called **forkless**. And yes, most of these guides will tell you to clone someone else's repo. The irony is not lost on me.
-
-Think of it this way: the *guides* are forkless — written from experience, not copied from somewhere else. The tools you install? Go ahead, fork away. I won't tell.
+This site is called **forkless**. Every guide on it starts with `git clone`. I named it before I wrote the guides. By the time I noticed, the domain was registered.
 
 Hey there. This is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
