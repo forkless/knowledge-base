@@ -9,7 +9,23 @@ Three PowerShell scripts automate the architecture deployment. Each handles one 
 - Administrator rights (for winget installs and symbolic links)
 - Execution policy allowing scripts: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 
-Run scripts in order. Restart PowerShell between scripts as noted.
+## Deployment Order
+
+These scripts must run in sequence. Each builds on the previous one. Running them out of order will fail because the folders, dependencies, or paths won't exist yet.
+
+```
+1. Initialize-AIArchitecture.ps1    create folders + bindings + config
+       ↓
+   Restart PowerShell — PATH updated with new tools
+       ↓
+2. Install-AIPrerequisites.ps1      install Git, Python, Ollama
+       ↓
+   Restart PowerShell — new tools added to PATH
+       ↓
+3. Install-ComfyUI.ps1              clone ComfyUI, venv, model paths
+```
+
+**Why restart between scripts:** Windows updates the system PATH when software is installed, but existing PowerShell windows don't reload it. Skipping the restart means `git`, `py`, and `ollama` commands won't be found.
 
 ## Initialize-AIArchitecture.ps1
 
@@ -116,6 +132,8 @@ Write-Host "Architecture initialization complete"
 - Existing folders are skipped — the script is idempotent and safe to re-run
 - The `gpu` field in system_config defaults to `"unknown"` — update it to `"amd"` or `"nvidia"` after install
 
+**Next:** Restart PowerShell, then run [Install-AIPrerequisites.ps1](#install-aiprerequisitesps1).
+
 ## Install-AIPrerequisites.ps1
 
 Installs system-wide dependencies via winget. Does not create any folders.
@@ -152,6 +170,8 @@ Write-Host "IMPORTANT: restart PowerShell after install"
 - After installation, **close all PowerShell windows and open a new one** before proceeding
 - Windows updates PATH immediately, but existing terminals do not reload it
 - Verify with: `py -0`, `git --version`, `ollama --version`
+
+**Next:** Restart PowerShell, then run [Install-ComfyUI.ps1](#install-comfyups1).
 
 ## Install-ComfyUI.ps1
 
@@ -237,19 +257,7 @@ python main.py --temp-directory "D:\AI\AI_CACHE\comfyui_temp"
 - If PowerShell execution policy blocks `.\venv\Scripts\Activate.ps1`, run: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 - The launcher embeds the absolute path at creation time — if the AI root moves, regenerate it
 
-## Deployment Order
-
-```
-Initialize-AIArchitecture.ps1           Step 1 — folders + bindings
-    ↓
-Restart PowerShell
-    ↓
-Install-AIPrerequisites.ps1             Step 2 — Git, Python, Ollama
-    ↓
-Restart PowerShell
-    ↓
-Install-ComfyUI.ps1                     Step 3 — ComfyUI + model paths
-```
+**Done.** ComfyUI is installed, configured, and ready to launch from `AI_TOOLS\launch_comfyui.ps1`.
 
 ## Script Locations
 
