@@ -469,9 +469,6 @@ function Show-Status {
     Write-Host "    VAEs:        $vaeCount"
 
     Write-Host ""
-    Write-Host "Root:"
-    Write-Host "  $Root"
-    Write-Host "  v$($cfg.architecture_version) — $gpu GPU"
 
     # Folder health — only show issues
     $missing = @()
