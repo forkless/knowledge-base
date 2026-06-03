@@ -4,11 +4,12 @@ Usage:  ai <command> [options]
 
 Commands:
   install <app>      Install an AI application (comfyui, ollama)
-  comfyui            Launch ComfyUI
-  ollama             Start or check Ollama service
+  comfyui <action>   start, stop, or status
+  ollama <action>    start, stop, or status
   status             Check system health
   models list        List installed models
   clean cache        Clear temporary files
+  setup env          Check and fix environment variables (run after install)
   help               Show this message
 #>
 
@@ -45,35 +46,91 @@ function Show-Help {
     Write-Host "Commands:"
     Write-Host "  install comfyui     Install or update ComfyUI"
     Write-Host "  install ollama      Install Ollama via winget"
-    Write-Host "  comfyui             Launch ComfyUI"
-    Write-Host "  ollama              Start or check Ollama service"
+    Write-Host "  comfyui start       Launch ComfyUI"
+    Write-Host "  comfyui stop        Kill ComfyUI"
+    Write-Host "  comfyui status      Check if ComfyUI is running"
+    Write-Host "  ollama start        Start Ollama background service"
+    Write-Host "  ollama stop         Stop Ollama"
+    Write-Host "  ollama status       Check if Ollama is running"
     Write-Host "  status              Check system health"
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
+    Write-Host "  setup env           Check and fix environment variables"
     Write-Host "  help                Show this message"
     Write-Host ""
     Write-Host "Root: $Root"
 }
 
-function Launch-ComfyUI {
+function Manage-ComfyUI {
+    param([string]$Action)
     $launcher = "${Root}\AI_TOOLS\launch_comfyui.ps1"
-    if (!(Test-Path $launcher)) {
-        Write-Host "ComfyUI not installed. Run: ai install comfyui"
-        exit 1
+    $process = Get-Process -Name "python" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match "ComfyUI" }
+    
+    switch ($Action) {
+        "start" {
+            if ($process) {
+                Write-Host "ComfyUI is already running (PID $($process.Id))"
+                Write-Host "URL: http://127.0.0.1:8188"
+                return
+            }
+            if (!(Test-Path $launcher)) {
+                Write-Host "ComfyUI not installed. Run: ai install comfyui"
+                exit 1
+            }
+            Write-Host "Starting ComfyUI..."
+            Start-Process -WindowStyle Hidden -FilePath "powershell" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$launcher`""
+            Start-Sleep -Seconds 3
+            Write-Host "ComfyUI started. URL: http://127.0.0.1:8188"
+        }
+        "stop" {
+            if (-not $process) {
+                Write-Host "ComfyUI is not running."
+                return
+            }
+            $process | Stop-Process -Force
+            Write-Host "ComfyUI stopped."
+        }
+        "status" {
+            if ($process) {
+                Write-Host "ComfyUI: running (PID $($process.Id)) — http://127.0.0.1:8188"
+            } else {
+                Write-Host "ComfyUI: not running"
+            }
+        }
     }
-    Write-Host "Starting ComfyUI..."
-    & $launcher
 }
 
-function Start-Ollama {
+function Manage-Ollama {
+    param([string]$Action)
     $process = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
-    if ($process) {
-        Write-Host "Ollama is already running (PID $($process.Id))"
-        Write-Host "API: http://localhost:11434"
-    } else {
-        Write-Host "Starting Ollama service..."
-        Start-Process -NoNewWindow -FilePath "ollama" -ArgumentList "serve"
-        Write-Host "Ollama started. API: http://localhost:11434"
+    
+    switch ($Action) {
+        "start" {
+            if ($process) {
+                Write-Host "Ollama is already running (PID $($process.Id))"
+                Write-Host "API: http://localhost:11434"
+                return
+            }
+            Write-Host "Starting Ollama in background..."
+            Start-Process -WindowStyle Hidden -FilePath "ollama" -ArgumentList "serve"
+            Start-Sleep -Seconds 2
+            Write-Host "Ollama started. API: http://localhost:11434"
+        }
+        "stop" {
+            if (-not $process) {
+                Write-Host "Ollama is not running."
+                return
+            }
+            $process | Stop-Process -Force
+            Write-Host "Ollama stopped."
+        }
+        "status" {
+            if ($process) {
+                Write-Host "Ollama: running (PID $($process.Id)) — http://localhost:11434"
+            } else {
+                Write-Host "Ollama: not running"
+            }
+        }
     }
 }
 
@@ -309,7 +366,110 @@ function Clean-Cache {
     Write-Host "Total freed: $total MB"
 }
 
+function Setup-Env {
+    Write-Host "Checking environment variables..."
+    Write-Host ""
+
+    $vars = @(
+        @{Name="OLLAMA_MODELS"; Expected="${Root}\AI_VAULT\models\llm"; Scope="User"; Help="Controls where Ollama stores models. Set before pulling."},
+        @{Name="HF_HOME"; Expected="${Root}\AI_CACHE\huggingface"; Scope="User"; Help="Keeps Hugging Face downloads in AI_CACHE, not AI_VAULT."},
+        @{Name="TORCH_HOME"; Expected="${Root}\AI_CACHE\torch"; Scope="User"; Help="Keeps PyTorch cache in AI_CACHE, not AI_VAULT."}
+    )
+
+    $allOk = $true
+
+    foreach ($v in $vars) {
+        $current = [Environment]::GetEnvironmentVariable($v.Name, $v.Scope)
+        if ($current -eq $v.Expected) {
+            Write-Host "  [OK]  $($v.Name) = $current"
+        } elseif ($current) {
+            Write-Host "  [MIS] $($v.Name) = $current"
+            Write-Host "        Expected: $($v.Expected)"
+            Write-Host "        $($v.Help)"
+            $choice = Read-Host "        Fix it? (Y/n)"
+            if ($choice -ne "n") {
+                [Environment]::SetEnvironmentVariable($v.Name, $v.Expected, $v.Scope)
+                Write-Host "        Fixed. Restart PowerShell and the service for it to take effect."
+            } else {
+                $allOk = $false
+                Write-Host "        Skipped."
+            }
+        } else {
+            Write-Host "  [MIS] $($v.Name) = (not set)"
+            Write-Host "        Expected: $($v.Expected)"
+            Write-Host "        $($v.Help)"
+            $choice = Read-Host "        Set it now? (Y/n)"
+            if ($choice -ne "n") {
+                [Environment]::SetEnvironmentVariable($v.Name, $v.Expected, $v.Scope)
+                Write-Host "        Set. Restart PowerShell and the service for it to take effect."
+            } else {
+                $allOk = $false
+                Write-Host "        Skipped."
+            }
+        }
+        Write-Host ""
+    }
+
+    if (-not $allOk) {
+        Write-Host "Some variables were skipped. This may cause issues with model storage and caching."
+        exit 1
+    }
+
+    Write-Host "All environment variables are correct."
+}
+
 # Dispatch
+    Write-Host "Checking environment variables..."
+    Write-Host ""
+
+    $vars = @(
+        @{Name="OLLAMA_MODELS"; Expected="${Root}\AI_VAULT\models\llm"; Scope="User"; Help="Controls where Ollama stores models. Set before pulling."},
+        @{Name="HF_HOME"; Expected="${Root}\AI_CACHE\huggingface"; Scope="User"; Help="Keeps Hugging Face downloads in AI_CACHE, not AI_VAULT."},
+        @{Name="TORCH_HOME"; Expected="${Root}\AI_CACHE\torch"; Scope="User"; Help="Keeps PyTorch cache in AI_CACHE, not AI_VAULT."}
+    )
+
+    $allOk = $true
+
+    foreach ($v in $vars) {
+        $current = [Environment]::GetEnvironmentVariable($v.Name, $v.Scope)
+        if ($current -eq $v.Expected) {
+            Write-Host "  [OK]  $($v.Name) = $current"
+        } elseif ($current) {
+            Write-Host "  [MIS] $($v.Name) = $current"
+            Write-Host "        Expected: $($v.Expected)"
+            Write-Host "        $($v.Help)"
+            $choice = Read-Host "        Fix it? (Y/n)"
+            if ($choice -ne "n") {
+                [Environment]::SetEnvironmentVariable($v.Name, $v.Expected, $v.Scope)
+                Write-Host "        Fixed. Restart PowerShell and the service for it to take effect."
+            } else {
+                $allOk = $false
+                Write-Host "        Skipped."
+            }
+        } else {
+            Write-Host "  [MIS] $($v.Name) = (not set)"
+            Write-Host "        Expected: $($v.Expected)"
+            Write-Host "        $($v.Help)"
+            $choice = Read-Host "        Set it now? (Y/n)"
+            if ($choice -ne "n") {
+                [Environment]::SetEnvironmentVariable($v.Name, $v.Expected, $v.Scope)
+                Write-Host "        Set. Restart PowerShell and the service for it to take effect."
+            } else {
+                $allOk = $false
+                Write-Host "        Skipped."
+            }
+        }
+        Write-Host ""
+    }
+
+    if (-not $allOk) {
+        Write-Host "Some variables were skipped. This may cause issues with model storage and caching."
+        exit 1
+    }
+
+    Write-Host "All environment variables are correct."
+}
+
 switch ($Command) {
     "install" {
         switch ($SubCommand) {
@@ -318,8 +478,16 @@ switch ($Command) {
             default   { Write-Host "Usage: ai install <comfyui|ollama>" }
         }
     }
-    "comfyui"    { Launch-ComfyUI }
-    "ollama"     { Start-Ollama }
+    "comfyui"    {
+        $actions = @("start", "stop", "status")
+        if ($SubCommand -in $actions) { Manage-ComfyUI $SubCommand }
+        else { Write-Host "Usage: ai comfyui <start|stop|status>" }
+    }
+    "ollama"     {
+        $actions = @("start", "stop", "status")
+        if ($SubCommand -in $actions) { Manage-Ollama $SubCommand }
+        else { Write-Host "Usage: ai ollama <start|stop|status>" }
+    }
     "status"     { Show-Status }
     "models"     {
         if ($SubCommand -eq "list") { Show-Models }
@@ -328,6 +496,10 @@ switch ($Command) {
     "clean"      {
         if ($SubCommand -eq "cache") { Clean-Cache }
         else { Write-Host "Usage: ai clean cache" }
+    }
+    "setup"      {
+        if ($SubCommand -eq "env") { Setup-Env }
+        else { Write-Host "Usage: ai setup env" }
     }
     "help"       { Show-Help }
     default      { Show-Help }
