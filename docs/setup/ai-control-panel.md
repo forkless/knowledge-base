@@ -6,15 +6,7 @@ The `ai` command is your daily driver for managing services, checking status, an
 
 ## Setup
 
-```powershell
-# From the repo folder
-.\scripts\ai.ps1 status
-
-# Or copy to AI_TOOLS and add to PATH
-copy scripts\ai.ps1 D:\AI\AI_TOOLS\ai.ps1
-$env:Path += ";D:\AI\AI_TOOLS"
-ai status
-```
+Run `ai setup path` once to make `ai` available from any folder. See the [command docs](#ai-setup-path) below.
 
 ## Commands
 
