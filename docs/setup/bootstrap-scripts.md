@@ -9,6 +9,23 @@ Three PowerShell scripts automate the architecture deployment. Each handles one 
 - Administrator rights (for winget installs and symbolic links)
 - Execution policy allowing scripts: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 
+## What You're Building
+
+The scripts create a modular AI environment with 6 independent layers:
+
+```
+AI_CONFIG     → configuration and model registry
+AI_CORE       → runtimes (ComfyUI, Ollama, LM Studio)
+AI_VAULT      → permanent models and datasets
+AI_WORKSPACE  → inputs, outputs, workflows
+AI_TOOLS      → scripts, converters, utilities
+AI_CACHE      → temporary downloads (safe to delete)
+```
+
+Models live in AI_VAULT, shared across all tools through symbolic links. No duplication, no scattered folders. Reinstall any tool without losing a single model.
+
+See **[Organize Your AI Folders](organize-your-ai-folders.md)** for the full architecture breakdown and design rationale.
+
 ## First-Time Download
 
 PowerShell blocks scripts downloaded from the internet by default. If you get a "not digitally signed" error, unblock them first:
