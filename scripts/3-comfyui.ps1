@@ -108,20 +108,22 @@ try {
 # Extra model paths
 Write-Host "Configuring model paths..."
 $yaml = @"
-checkpoints: ${Root}\AI_VAULT\models\diffusion\checkpoints
-loras: ${Root}\AI_VAULT\models\diffusion\loras
-vae: ${Root}\AI_VAULT\models\diffusion\vae
-controlnet: ${Root}\AI_VAULT\models\diffusion\controlnet
-embeddings: ${Root}\AI_VAULT\models\embeddings
+vault_config:
+    checkpoints: ${Root}\AI_VAULT\models\diffusion\checkpoints
+    loras: ${Root}\AI_VAULT\models\diffusion\loras
+    vae: ${Root}\AI_VAULT\models\diffusion\vae
+    controlnet: ${Root}\AI_VAULT\models\diffusion\controlnet
+    embeddings: ${Root}\AI_VAULT\models\embeddings
 "@
 $yaml | Out-File "${ComfyPath}\extra_model_paths.yaml" -Encoding utf8
 
-# Launcher
+# Launcher with GPU flag
 Write-Host "Creating launcher..."
+$gpuFlag = if ($gpuType -eq "amd") { " --directml" } else { "" }
 $launcher = @"
 Set-Location "$ComfyPath"
 .\venv\Scripts\Activate.ps1
-python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"
+python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"$gpuFlag
 "@
 $toolsDir = "${Root}\AI_TOOLS"
 if (!(Test-Path $toolsDir)) { New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null }

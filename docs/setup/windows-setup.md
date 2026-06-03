@@ -49,7 +49,7 @@ Also sets environment variables so models and caches go to the right places inst
 - Downloads ComfyUI into `AI_CORE\Apps`
 - Creates a Python 3.11 virtual environment (isolated, won't conflict with other tools)
 - Installs PyTorch with the correct GPU backend — CUDA for NVIDIA, DirectML for AMD
-- Generates `extra_model_paths.yaml` so ComfyUI finds models in the vault
+- Generates `extra_model_paths.yaml` so ComfyUI finds models in the vault (uses a named config block, not flat key-values)
 - Creates a launcher script at `AI_TOOLS\launch_comfyui.ps1`
 
 ## Running the Scripts
