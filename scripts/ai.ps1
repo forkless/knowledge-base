@@ -463,18 +463,16 @@ function Show-Status {
     Write-Host "CPU:  $cpu%"
     Write-Host "RAM:  $ramUsed/$ramTotal GB ($ramPct%)"
 
-    $gpuType = if (Get-WmiObject Win32_VideoController | Where-Object { $_.Name -match "NVIDIA" }) { "nvidia" } else { $null }
-    if ($gpuType -eq "nvidia") {
-        $gpuInfo = nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>$null
-        if ($gpuInfo) {
-            $gpuParts = $gpuInfo -split ", "
-            $gpuVramUsed = [math]::Round([int]$gpuParts[1] / 1024, 1)
-            $gpuVramTotal = [math]::Round([int]$gpuParts[2] / 1024, 1)
-            $gpuPct = $gpuParts[0]
-            Write-Host "GPU:  ${gpuPct}% | VRAM: ${gpuVramUsed}/${gpuVramTotal} GB"
-        }
+    # GPU — works for any WDDM driver (NVIDIA, AMD, Intel)
+    $gpuUtil = Get-Counter "\GPU(*)\Utilization Percentage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total|engine" } | Measure-Object -Property CookedValue -Average | Select-Object -ExpandProperty Average
+    $gpuVramTotal = (Get-Counter "\GPU Adapter Memory\Dedicated Usage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total" } | Measure-Object -Property CookedValue -Sum).Sum
+    $gpuVramUsed = (Get-Counter "\GPU Process Memory\Dedicated Usage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total" } | Measure-Object -Property CookedValue -Sum).Sum
+    if ($gpuUtil -and $gpuVramTotal) {
+        $gpuVramTotalGB = [math]::Round($gpuVramTotal / 1GB, 1)
+        $gpuVramUsedGB = [math]::Round($gpuVramUsed / 1GB, 1)
+        Write-Host "GPU:  $([math]::Round($gpuUtil))% | VRAM: ${gpuVramUsedGB}/${gpuVramTotalGB} GB"
     } else {
-        Write-Host "GPU:  n/a (no NVIDIA GPU detected)"
+        Write-Host "GPU:  n/a (no GPU counter data)"
     }
     Write-Host ""
 
