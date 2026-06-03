@@ -70,9 +70,11 @@ function Get-PortConfig {
     $portFile = "${Root}\AI_CONFIG\ports.json"
     $defaults = @{ollama=11434; comfyui=8188; openwebui=8080}
     if (Test-Path $portFile) {
-        $saved = Get-Content $portFile | ConvertFrom-Json
-        foreach ($key in $defaults.Keys) {
-            if ($saved.$key -and $saved.$key -gt 0) { $defaults.$key = $saved.$key }
+        $saved = Get-Content $portFile -Raw | ConvertFrom-Json
+        $keys = @($defaults.Keys)  # snapshot to avoid modification-while-enumerating
+        foreach ($key in $keys) {
+            $val = $saved.$key
+            if ($val -and $val -gt 0) { $defaults.$key = [int]$val }
         }
     }
     return $defaults
@@ -653,8 +655,8 @@ function Setup-Ports {
     $defaults = @{ollama=11434; comfyui=8188; openwebui=8080}
     $current = @{}
     if (Test-Path $portFile) {
-        $saved = Get-Content $portFile | ConvertFrom-Json
-        foreach ($key in $defaults.Keys) { $current.$key = $saved.$key }
+        $saved = Get-Content $portFile -Raw | ConvertFrom-Json
+        foreach ($key in @($defaults.Keys)) { $current.$key = $saved.$key }
     }
 
     Write-Host "Service Port Configuration"
