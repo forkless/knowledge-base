@@ -419,57 +419,6 @@ function Setup-Env {
 }
 
 # Dispatch
-    Write-Host "Checking environment variables..."
-    Write-Host ""
-
-    $vars = @(
-        @{Name="OLLAMA_MODELS"; Expected="${Root}\AI_VAULT\models\llm"; Scope="User"; Help="Controls where Ollama stores models. Set before pulling."},
-        @{Name="HF_HOME"; Expected="${Root}\AI_CACHE\huggingface"; Scope="User"; Help="Keeps Hugging Face downloads in AI_CACHE, not AI_VAULT."},
-        @{Name="TORCH_HOME"; Expected="${Root}\AI_CACHE\torch"; Scope="User"; Help="Keeps PyTorch cache in AI_CACHE, not AI_VAULT."}
-    )
-
-    $allOk = $true
-
-    foreach ($v in $vars) {
-        $current = [Environment]::GetEnvironmentVariable($v.Name, $v.Scope)
-        if ($current -eq $v.Expected) {
-            Write-Host "  [OK]  $($v.Name) = $current"
-        } elseif ($current) {
-            Write-Host "  [MIS] $($v.Name) = $current"
-            Write-Host "        Expected: $($v.Expected)"
-            Write-Host "        $($v.Help)"
-            $choice = Read-Host "        Fix it? (Y/n)"
-            if ($choice -ne "n") {
-                [Environment]::SetEnvironmentVariable($v.Name, $v.Expected, $v.Scope)
-                Write-Host "        Fixed. Restart PowerShell and the service for it to take effect."
-            } else {
-                $allOk = $false
-                Write-Host "        Skipped."
-            }
-        } else {
-            Write-Host "  [MIS] $($v.Name) = (not set)"
-            Write-Host "        Expected: $($v.Expected)"
-            Write-Host "        $($v.Help)"
-            $choice = Read-Host "        Set it now? (Y/n)"
-            if ($choice -ne "n") {
-                [Environment]::SetEnvironmentVariable($v.Name, $v.Expected, $v.Scope)
-                Write-Host "        Set. Restart PowerShell and the service for it to take effect."
-            } else {
-                $allOk = $false
-                Write-Host "        Skipped."
-            }
-        }
-        Write-Host ""
-    }
-
-    if (-not $allOk) {
-        Write-Host "Some variables were skipped. This may cause issues with model storage and caching."
-        exit 1
-    }
-
-    Write-Host "All environment variables are correct."
-}
-
 switch ($Command) {
     "install" {
         switch ($SubCommand) {
