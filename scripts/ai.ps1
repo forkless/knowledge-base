@@ -389,7 +389,7 @@ function Install-OpenWebUI {
     # Launcher that reads port from config
     $launcher = @"
 `$webuiPath = "$webuiPath"
-`$portFile = "`${webuiPath}\..\..\AI_CONFIG\ports.json"
+`$portFile = "`${webuiPath}\..\..\..\AI_CONFIG\ports.json"
 `$port = 8080
 if (Test-Path `$portFile) {
     `$cfg = Get-Content `$portFile | ConvertFrom-Json
