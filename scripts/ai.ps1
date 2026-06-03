@@ -451,6 +451,32 @@ function Show-Status {
         Write-Host ("│ {0,-8} │ {1,-7} │ {2,-6} │" -f $svc.Name, $status, $portTxt)
     }
     Write-Host "└──────────┴─────────┴────────┘"
+    Write-Host ""
+
+    # System resources
+    $cpu = (Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average
+    $os = Get-CimInstance Win32_OperatingSystem
+    $ramTotal = [math]::Round($os.TotalVisibleMemorySize / 1MB, 1)
+    $ramFree = [math]::Round($os.FreePhysicalMemory / 1MB, 1)
+    $ramUsed = [math]::Round($ramTotal - $ramFree, 1)
+    $ramPct = [math]::Round(($ramUsed / $ramTotal) * 100)
+    Write-Host "CPU:  $cpu%"
+    Write-Host "RAM:  $ramUsed/$ramTotal GB ($ramPct%)"
+
+    $gpuType = if (Get-WmiObject Win32_VideoController | Where-Object { $_.Name -match "NVIDIA" }) { "nvidia" } else { $null }
+    if ($gpuType -eq "nvidia") {
+        $gpuInfo = nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>$null
+        if ($gpuInfo) {
+            $gpuParts = $gpuInfo -split ", "
+            $gpuVramUsed = [math]::Round([int]$gpuParts[1] / 1024, 1)
+            $gpuVramTotal = [math]::Round([int]$gpuParts[2] / 1024, 1)
+            $gpuPct = $gpuParts[0]
+            Write-Host "GPU:  ${gpuPct}% | VRAM: ${gpuVramUsed}/${gpuVramTotal} GB"
+        }
+    } else {
+        Write-Host "GPU:  n/a (no NVIDIA GPU detected)"
+    }
+    Write-Host ""
 
     # Models summary
     $llmDir = "$Root\AI_VAULT\models\llm"
