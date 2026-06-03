@@ -13,7 +13,7 @@ This guide sets up the foundation for a local AI system:
 
 > Goal: create a stable base before installing any AI applications.
 
-## 1. Git (required for ComfyUI + extensions)
+## Git (required for ComfyUI + extensions)
 
 ```
 winget install Git.Git
@@ -21,7 +21,7 @@ winget install Git.Git
 
 > Git is required to clone ComfyUI and custom nodes. After install, open a **new** PowerShell window.
 
-## 2. Python Versions (AI runtime layer)
+## Python Versions (AI runtime layer)
 
 Install multiple Python versions side-by-side:
 
@@ -39,7 +39,7 @@ winget install Python.Python.3.11
 
 > Use the Python launcher instead of system Python: `py -3.11`
 
-## 3. Verify Python
+## Verify Python
 
 ```
 py -0
@@ -50,7 +50,7 @@ Expected output:
   - 3.11
   - 3.10
 
-## 4. Ollama (no Python required)
+## Ollama (no Python required)
 
 ```
 winget install Ollama.Ollama
@@ -58,7 +58,7 @@ winget install Ollama.Ollama
 
 Ollama runs as a local service: `http://localhost:11434`
 
-## 5. Critical Windows PATH behavior (IMPORTANT)
+## Critical Windows PATH behavior (IMPORTANT)
 
 After installing tools like Python, Git, or Ollama:
 
@@ -68,7 +68,7 @@ After installing tools like Python, Git, or Ollama:
 > - You do **not** need to reboot or log out in most cases.
 > - You MUST however close PowerShell and open a new one after installs.
 
-## 6. REQUIRED STEP: Refresh your terminal
+## REQUIRED STEP: Refresh your terminal
 
 After every winget install session:
 
@@ -87,7 +87,7 @@ git --version
 ollama --version
 ```
 
-## 7. Full system health check (recommended)
+## Full system health check (recommended)
 
 Run this anytime to confirm your AI environment is correctly set up.
 
@@ -100,7 +100,7 @@ ollama --version
 
 > If any command fails after install: reopen PowerShell first, then recheck.
 
-## 8. ComfyUI dependency note
+## ComfyUI dependency note
 
 ComfyUI requires:
 
