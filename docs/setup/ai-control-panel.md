@@ -38,6 +38,17 @@ ai stop ollama
 ai stop comfyui
 ```
 
+### ai restart &lt;service&gt;
+
+Stop and start a service in one command:
+
+```powershell
+ai restart ollama
+ai restart comfyui
+```
+
+Useful after config changes or if a service becomes unresponsive.
+
 ### ai status [service]
 
 Full system health check:

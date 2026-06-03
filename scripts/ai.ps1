@@ -6,6 +6,7 @@ Commands:
   install <app>      Install an AI application (comfyui, comfyui-manager, ollama, openwebui)
   start <service>    Start a service (ollama, comfyui, openwebui)
   stop <service>     Stop a service (ollama, comfyui, openwebui)
+  restart <service>  Restart a service (ollama, comfyui, openwebui)
   status [service]   System health or specific service status
   models list        List installed models
   clean cache        Clear temporary files
@@ -52,6 +53,7 @@ function Show-Help {
     Write-Host "  install openwebui       Install Open Web UI for Ollama"
     Write-Host "  start <service>     Start a service (ollama, comfyui, openwebui)"
     Write-Host "  stop <service>      Stop a service (ollama, comfyui, openwebui)"
+    Write-Host "  restart <service>   Restart a service (ollama, comfyui, openwebui)"
     Write-Host "  status [service]    System health or specific service status"
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
@@ -630,6 +632,14 @@ switch ($Command) {
             "comfyui"   { Manage-ComfyUI "stop" }
             "openwebui" { Manage-WebUI "stop" }
             default     { Write-Host "Usage: ai stop <ollama|comfyui|openwebui>" }
+        }
+    }
+    "restart"    {
+        switch ($SubCommand) {
+            "ollama"    { Manage-Ollama "stop"; Manage-Ollama "start" }
+            "comfyui"   { Manage-ComfyUI "stop"; Manage-ComfyUI "start" }
+            "openwebui" { Manage-WebUI "stop"; Manage-WebUI "start" }
+            default     { Write-Host "Usage: ai restart <ollama|comfyui|openwebui>" }
         }
     }
     "status"     {
