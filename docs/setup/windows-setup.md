@@ -75,17 +75,15 @@ After installing tools like Python, Git, or Ollama:
 
 After every winget install session:
 
-```
 1. Close ALL PowerShell windows
 2. Open a new PowerShell window
 3. Verify installation
-```
 
 > Why this is needed: PowerShell reads environment variables (PATH) only at startup.
 
-```
 Verify tools:
 
+```
 python --version
 py -0
 git --version
@@ -116,9 +114,9 @@ ComfyUI requires:
 
 > Use isolated virtual environments per tool. Do not mix dependencies across projects or Python versions.
 
-```
 Later installation will use:
 
+```
 py -3.11 -m venv venv
 ```
 
