@@ -48,9 +48,11 @@ function Show-Help {
     $cmd = "  {0,-26}{1}"
     $boxWidth = 78
     $title = " Ai, ai, ai! Control Panel v1.1 "
-    Write-Host "┌$("─" * ($boxWidth - 2))┐"
-    Write-Host ("│{0,-$($boxWidth - 2)}│" -f $title)
-    Write-Host "└$("─" * ($boxWidth - 2))┘"
+    $inner = $boxWidth - 2
+    $lPad = [Math]::Max(0, [Math]::Floor(($inner - $title.Length) / 2))
+    Write-Host "┌$("─" * $inner)┐"
+    Write-Host ("│" + " " * $lPad + $title + " " * ($inner - $lPad - $title.Length) + "│")
+    Write-Host "└$("─" * $inner)┘"
     Write-Host ""
     Write-Host "Usage: ai <command>"
     Write-Host "Commands:"
