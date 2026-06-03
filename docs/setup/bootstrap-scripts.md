@@ -186,6 +186,7 @@ Write-Host "IMPORTANT: restart PowerShell after install"
 **Important — read this before running:**
 
 - Requires administrator rights (winget installs system packages)
+- Winget sources can lag behind the latest releases by a few days. If you need a newer version than winget provides, download installers directly from python.org and ollama.com
 - After installation, **close all PowerShell windows and open a new one** before proceeding
 - Windows updates PATH immediately, but existing terminals do not reload it
 - Verify with: `py -0`, `git --version`, `ollama --version`

@@ -39,6 +39,8 @@ winget install Python.Python.3.11
 
 > Use the Python launcher instead of system Python: `py -3.11`
 
+> Winget sources can lag behind the latest releases by a few days. If you need a newer version than winget provides, download the installer directly from python.org.
+
 ## Verify Python
 
 ```powershell
@@ -54,6 +56,8 @@ winget install Ollama.Ollama
 ```
 
 Ollama runs as a local service: `http://localhost:11434`
+
+> If winget's Ollama version is behind, download the latest installer directly from [ollama.com/download/windows](https://ollama.com/download/windows).
 
 ## Critical Windows PATH behavior (IMPORTANT)
 
