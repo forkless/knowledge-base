@@ -15,7 +15,7 @@ This guide sets up the foundation for a local AI system:
 
 ## Git (required for ComfyUI + extensions)
 
-```
+```powershell
 winget install Git.Git
 ```
 
@@ -32,7 +32,7 @@ Install multiple Python versions side-by-side:
 >
 > AI tooling evolves unevenly across the ecosystem. Some tools and custom nodes prioritize long-term stability and work best on Python 3.10, while newer libraries and actively maintained projects target Python 3.11. Using both allows separation of stable legacy environments from modern toolchains, reducing dependency conflicts and improving overall reliability.
 
-```
+```powershell
 winget install Python.Python.3.10;
 winget install Python.Python.3.11
 ```
@@ -41,7 +41,7 @@ winget install Python.Python.3.11
 
 ## Verify Python
 
-```
+```powershell
 py -0
 ```
 
@@ -49,7 +49,7 @@ Expected output: `3.11`, `3.10`
 
 ## Ollama (no Python required)
 
-```
+```powershell
 winget install Ollama.Ollama
 ```
 
@@ -77,7 +77,7 @@ After every winget install session:
 
 Verify tools:
 
-```
+```powershell
 python --version
 py -0
 git --version
@@ -88,7 +88,7 @@ ollama --version
 
 Run this anytime to confirm your AI environment is correctly set up.
 
-```
+```powershell
 py -0
 python --version
 git --version
@@ -110,7 +110,7 @@ ComfyUI requires:
 
 Later installation will use:
 
-```
+```powershell
 py -3.11 -m venv venv
 ```
 
