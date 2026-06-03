@@ -153,7 +153,7 @@ function Manage-Ollama {
             # Generate launcher if missing
             $ollamaLauncher = "${Root}\AI_TOOLS\launch_ollama.ps1"
             if (!(Test-Path $ollamaLauncher)) {
-                "ollama serve" | Out-File $ollamaLauncher -Encoding utf8
+                @('$env:OLLAMA_HOST = "0.0.0.0"', 'ollama serve', 'Remove-Item Env:OLLAMA_HOST') | Out-File $ollamaLauncher -Encoding utf8
             }
             Start-Process -WindowStyle Hidden -FilePath "powershell" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$ollamaLauncher`""
             Start-Sleep -Seconds 2
@@ -345,7 +345,7 @@ vault_config:
     $launcher = @"
 Set-Location "$ComfyPath"
 .\venv\Scripts\Activate.ps1
-python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"$gpuFlag
+python main.py --listen 0.0.0.0 --temp-directory "${Root}\AI_CACHE\comfyui_temp"$gpuFlag
 "@
     # Ensure target directory exists
     $toolsDir = "${Root}\AI_TOOLS"

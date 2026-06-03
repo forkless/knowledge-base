@@ -161,7 +161,7 @@ $gpuFlag = if ($gpuType -eq "amd") { " --directml" } else { "" }
 $launcher = @"
 Set-Location "$ComfyPath"
 .\venv\Scripts\Activate.ps1
-python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"$gpuFlag
+python main.py --listen 0.0.0.0 --temp-directory "${Root}\AI_CACHE\comfyui_temp"$gpuFlag
 "@
 $toolsDir = "${Root}\AI_TOOLS"
 if (!(Test-Path $toolsDir)) { New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null }
