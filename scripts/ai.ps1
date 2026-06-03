@@ -91,9 +91,9 @@ function Manage-ComfyUI {
             }
             # Find PID listening on port 8188
             $line = netstat -ano | Select-String "LISTENING" | Select-String ":${comfyPort} "
-            $pid = $line -replace '.*\s+(\d+)\s*$', '$1'
-            if ($pid) {
-                Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+            $procId = $line -replace '.*\s+(\d+)\s*$', '$1'
+            if ($procId) {
+                Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
                 Write-Host "ComfyUI stopped."
             } else {
                 Write-Host "Could not find ComfyUI process."
@@ -171,9 +171,9 @@ function Manage-WebUI {
                 return
             }
             $line = netstat -ano | Select-String "LISTENING" | Select-String ":${webuiPort} "
-            $pid = $line -replace '.*\s+(\d+)\s*$', '$1'
-            if ($pid) {
-                Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+            $procId = $line -replace '.*\s+(\d+)\s*$', '$1'
+            if ($procId) {
+                Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
                 Write-Host "Open Web UI stopped."
             } else {
                 Write-Host "Could not find process for Open Web UI."
