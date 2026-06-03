@@ -470,7 +470,7 @@ function Show-Status {
     Write-Host "RAM:  $ramUsed/$ramTotal GB ($ramPct%)"
 
     # GPU — utilization (WDDM counters or nvidia-smi)
-    $gpuUtil = Get-Counter "\GPU Engine(*)\Utilization Percentage" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty CounterSamples | Measure-Object -Property CookedValue -Average | Select-Object -ExpandProperty Average
+    $gpuUtil = Get-Counter "\GPU Engine(*)\Utilization Percentage" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty CounterSamples | Where-Object { $_.CookedValue -gt 0 } | Measure-Object -Property CookedValue -Sum | Select-Object -ExpandProperty Sum
     if (-not $gpuUtil -and (Get-Command nvidia-smi -ErrorAction SilentlyContinue)) {
         $gpuUtil = nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>$null
     }
