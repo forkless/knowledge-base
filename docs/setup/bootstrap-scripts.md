@@ -15,12 +15,91 @@ Run scripts in order. Restart PowerShell between scripts as noted.
 
 Creates the full folder structure, symbolic links, and initial config files. Does not install any software.
 
-```powershell
-# Run this first
-.\Initialize-AIArchitecture.ps1
-```
+Run with: `.\Initialize-AIArchitecture.ps1`
 
 Prompts for the install path. Defaults to `D:\AI` if left blank.
+
+```powershell
+<#
+AI Architecture Initializer v1.1
+Creates folder structure + config + bindings only
+No software installation
+#>
+
+$RootMode = Read-Host "Install path (press Enter for D:\AI)"
+
+if ([string]::IsNullOrWhiteSpace($RootMode)) {
+    $BasePath = "D:\AI"
+} else {
+    $BasePath = $RootMode.TrimEnd("\")
+}
+
+Write-Host "AI Root: $BasePath"
+
+# Folders
+$folders = @(
+    "$BasePath",
+    "$BasePath\AI_CONFIG",
+    "$BasePath\AI_CORE",
+    "$BasePath\AI_CORE\Apps",
+    "$BasePath\AI_CORE\Services",
+    "$BasePath\AI_CORE\Environments",
+    "$BasePath\AI_CORE\_bindings",
+    "$BasePath\AI_VAULT",
+    "$BasePath\AI_VAULT\models",
+    "$BasePath\AI_VAULT\models\llm",
+    "$BasePath\AI_VAULT\models\diffusion",
+    "$BasePath\AI_VAULT\models\diffusion\checkpoints",
+    "$BasePath\AI_VAULT\models\diffusion\loras",
+    "$BasePath\AI_VAULT\models\diffusion\vae",
+    "$BasePath\AI_VAULT\models\diffusion\controlnet",
+    "$BasePath\AI_VAULT\models\embeddings",
+    "$BasePath\AI_VAULT\datasets",
+    "$BasePath\AI_WORKSPACE",
+    "$BasePath\AI_WORKSPACE\workflows",
+    "$BasePath\AI_WORKSPACE\input",
+    "$BasePath\AI_WORKSPACE\output",
+    "$BasePath\AI_WORKSPACE\sessions",
+    "$BasePath\AI_TOOLS",
+    "$BasePath\AI_TOOLS\scripts",
+    "$BasePath\AI_TOOLS\utilities",
+    "$BasePath\AI_TOOLS\converters",
+    "$BasePath\AI_CACHE",
+    "$BasePath\AI_CACHE\huggingface",
+    "$BasePath\AI_CACHE\torch",
+    "$BasePath\AI_CACHE\comfyui_temp",
+    "$BasePath\AI_CACHE\ollama"
+)
+
+foreach ($f in $folders) {
+    if (!(Test-Path $f)) {
+        New-Item -ItemType Directory -Path $f -Force | Out-Null
+        Write-Host "Created: $f"
+    }
+}
+
+# Symlinks
+cmd /c mklink /D "$BasePath\AI_CORE\_bindings\llm" "$BasePath\AI_VAULT\models\llm"
+cmd /c mklink /D "$BasePath\AI_CORE\_bindings\diffusion" "$BasePath\AI_VAULT\models\diffusion"
+cmd /c mklink /D "$BasePath\AI_CORE\_bindings\embeddings" "$BasePath\AI_VAULT\models\embeddings"
+
+# Config files
+$config = @{
+    architecture_version = "1.1"
+    platform = "windows"
+    root = $BasePath
+    vault = "$BasePath\AI_VAULT"
+    workspace = "$BasePath\AI_WORKSPACE"
+    cache = "$BasePath\AI_CACHE"
+    gpu = "unknown"
+}
+$config | ConvertTo-Json -Depth 10 | Out-File "$BasePath\AI_CONFIG\system_config.json"
+
+$modelRegistry = @{ models = @() }
+$modelRegistry | ConvertTo-Json -Depth 10 | Out-File "$BasePath\AI_CONFIG\model_registry.json"
+
+Write-Host "Architecture initialization complete"
+```
 
 **What it creates:**
 
@@ -42,8 +121,20 @@ Prompts for the install path. Defaults to `D:\AI` if left blank.
 Installs system-wide dependencies via winget. Does not create any folders.
 
 ```powershell
-# Run second, after architecture is initialized
-.\Install-AIPrerequisites.ps1
+<#
+Installs system dependencies only
+No folder creation
+#>
+
+Write-Host "Installing prerequisites..."
+
+winget install Git.Git
+winget install Python.Python.3.10
+winget install Python.Python.3.11
+winget install Ollama.Ollama
+
+Write-Host ""
+Write-Host "IMPORTANT: restart PowerShell after install"
 ```
 
 **What it installs:**
@@ -67,8 +158,48 @@ Installs system-wide dependencies via winget. Does not create any folders.
 Clones ComfyUI into `AI_CORE\Apps`, creates a Python virtual environment, installs dependencies, configures model paths, and generates a launcher script.
 
 ```powershell
-# Run third, after prerequisites are installed and terminal is refreshed
-.\Install-ComfyUI.ps1
+<#
+Installs ComfyUI into AI_CORE\Apps
+Connects to AI_VAULT via extra model paths
+#>
+
+$Root = Read-Host "Enter AI root path (e.g. D:\AI)"
+
+$ComfyPath = "$Root\AI_CORE\Apps\ComfyUI"
+
+if (!(Test-Path $ComfyPath)) {
+    git clone https://github.com/comfyanonymous/ComfyUI.git $ComfyPath
+}
+
+Set-Location $ComfyPath
+
+# Python env
+py -3.11 -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Model path config
+$yaml = @"
+checkpoints: $Root\AI_VAULT\models\diffusion\checkpoints
+loras: $Root\AI_VAULT\models\diffusion\loras
+vae: $Root\AI_VAULT\models\diffusion\vae
+controlnet: $Root\AI_VAULT\models\diffusion\controlnet
+embeddings: $Root\AI_VAULT\models\embeddings
+"@
+
+$yaml | Out-File "$ComfyPath\extra_model_paths.yaml"
+
+# Launcher
+$launcher = @"
+Set-Location "$ComfyPath"
+.\venv\Scripts\Activate.ps1
+python main.py --temp-directory "$Root\AI_CACHE\comfyui_temp"
+"@
+
+$launcher | Out-File "$Root\AI_TOOLS\launch_comfyui.ps1"
+
+Write-Host "ComfyUI installation complete"
 ```
 
 Prompts for the AI root path (must match what was entered for Initialize-AIArchitecture).
