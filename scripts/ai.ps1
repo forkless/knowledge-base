@@ -219,7 +219,10 @@ vault_config:
     if ($firstLine -match "^[a-zA-Z_]+:$" -and $yamlLines.Count -gt 1 -and $yamlLines[1] -match "^\s+[a-zA-Z_]+:") {
         Write-Host "  OK: named config block detected"
     } else {
-        Write-Host "  WARNING: format may be wrong"
+        Write-Host "  WARNING: format may be wrong — dumping file:"
+        $yamlLines | ForEach-Object { Write-Host "    >$_<" }
+        Write-Host "  First line trimmed: '${firstLine}'"
+        Write-Host "  Has indent check on line 2: $($yamlLines.Count -gt 1 -and $yamlLines[1] -match '^\s+[a-zA-Z_]+:')"
     }
 
     # Launcher with GPU flag

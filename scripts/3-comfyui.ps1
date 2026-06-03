@@ -124,9 +124,9 @@ $firstLine = $yamlLines[0].Trim()
 if ($firstLine -match "^[a-zA-Z_]+:$" -and $yamlLines.Count -gt 1 -and $yamlLines[1] -match "^\s+[a-zA-Z_]+:") {
     Write-Host "  OK: named config block detected"
 } else {
-    Write-Host "  WARNING: format may be wrong — expected a named config block"
-    Write-Host "  File content:"
-    $yamlLines | ForEach-Object { Write-Host "    $_" }
+    Write-Host "  WARNING: format may be wrong — dumping file:"
+    $yamlLines | ForEach-Object { Write-Host "    >$_<" }
+    Write-Host "  First line trimmed: '${firstLine}'"
 }
 
 # Launcher with GPU flag
