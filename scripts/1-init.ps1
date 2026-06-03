@@ -1,5 +1,5 @@
 <#
-1-init.ps1 — Ai Bootstrap v1.1
+1-init.ps1 — Ai, ai, ai! Bootstrap v1.1
 Creates folder structure + config + bindings only.
 No software installation.
 #>
@@ -154,7 +154,7 @@ if (!(Test-Path $registryPath)) {
 # -------------------------
 
 Write-Host ""
-Write-Host "===== Ai Bootstrap v1.1 ====="
+Write-Host "===== Ai, ai, ai! Bootstrap v1.1 ====="
 Write-Host "Architecture initialized"
 Write-Host "  Root: $BasePath"
 Write-Host "  Folders: $created new, $skipped existing"

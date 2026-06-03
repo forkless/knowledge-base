@@ -41,7 +41,7 @@ $Command = $args[0]
 $SubCommand = $args[1]
 
 function Show-Help {
-    Write-Host "===== Ai Control Panel v1.1 ====="
+    Write-Host "===== Ai, ai, ai! Control Panel v1.1 ====="
     Write-Host ""
     Write-Host "Usage: ai <command>"
     Write-Host "Commands:"

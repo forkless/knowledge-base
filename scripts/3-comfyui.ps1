@@ -1,5 +1,5 @@
 <#
-3-comfyui.ps1 — Ai Bootstrap v1.1
+3-comfyui.ps1 — Ai, ai, ai! Bootstrap v1.1
 Install ComfyUI and connect to AI_VAULT.
 Requires: 1-init.ps1 and 2-deps.ps1 already run.
 #>
@@ -130,7 +130,7 @@ $launcher | Out-File "${Root}\AI_TOOLS\launch_comfyui.ps1" -Encoding utf8
 # Summary
 Write-Host ""
 Write-Host "========================="
-Write-Host " Ai Bootstrap v1.1"
+Write-Host " Ai, ai, ai! Bootstrap v1.1"
 Write-Host "========================="
 Write-Host "ComfyUI installed"
 Write-Host "  Location: $ComfyPath"

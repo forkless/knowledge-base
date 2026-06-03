@@ -1,4 +1,4 @@
-# Ai Bootstrap v1.1
+# Ai, ai, ai! Bootstrap v1.1
 
 Three scripts automate the whole setup — folders, software, and ComfyUI. A fourth script (`ai`) handles daily tasks like starting services and checking what's running.
 
