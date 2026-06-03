@@ -1,6 +1,14 @@
 # AI Knowledge Base
 
-A collection of guides for setting up and running a local AI stack on Windows, with a focus on AMD GPUs.
+Hey there. This little site is a collection of guides for people like you — hobbyists, tinkerers, folks who just want to run cool AI stuff on their own computer without needing a degree in computer science.
+
+Most of what's out there assumes you already know the tools, or it's scattered across a dozen forum posts. This is my attempt to write down what actually works, in plain language, for Windows machines — especially AMD ones, because that's still surprisingly hard to find in one place.
+
+Think of it as a friendly notebook. Pick a guide, follow along, and if something breaks? You're not alone. That's the whole point of sharing this.
+
+---
+
+## What's Here
 
 ## Getting Started
 
