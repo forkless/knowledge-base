@@ -4,9 +4,9 @@ Usage:  ai <command> [options]
 
 Commands:
   install <app>      Install an AI application (comfyui, comfyui-manager, ollama, openwebui)
-  start <service>    Start a service (ollama, comfyui, openwebui)
-  stop <service>     Stop a service (ollama, comfyui, openwebui)
-  restart <service>  Restart a service (ollama, comfyui, openwebui)
+  start <service>    Start a service (all, ollama, comfyui, openwebui)
+  stop <service>     Stop a service (all, ollama, comfyui, openwebui)
+  restart <service>  Restart a service (all, ollama, comfyui, openwebui)
   status [service]   System health or specific service status
   models list        List installed models
   clean cache        Clear temporary files
@@ -52,9 +52,9 @@ function Show-Help {
     Write-Host "  install comfyui-manager  Install ComfyUI-Manager custom nodes"
     Write-Host "  install ollama          Install Ollama via winget"
     Write-Host "  install openwebui       Install Open Web UI for Ollama"
-    Write-Host "  start <service>     Start a service (ollama, comfyui, openwebui)"
-    Write-Host "  stop <service>      Stop a service (ollama, comfyui, openwebui)"
-    Write-Host "  restart <service>   Restart a service (ollama, comfyui, openwebui)"
+    Write-Host "  start <service>     Start a service (all, ollama, comfyui, openwebui)"
+    Write-Host "  stop <service>      Stop a service (all, ollama, comfyui, openwebui)"
+    Write-Host "  restart <service>   Restart a service (all, ollama, comfyui, openwebui)"
     Write-Host "  status [service]    System health or specific service status"
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
@@ -417,132 +417,94 @@ open-webui serve --port `$port
 }
 
 function Show-Status {
-    Write-Host "System Status: $Root"
-    Write-Host ""
-
-    # Folders
-    $layers = @("AI_CONFIG", "AI_CORE", "AI_VAULT", "AI_WORKSPACE", "AI_TOOLS", "AI_CACHE")
-    foreach ($layer in $layers) {
-        $path = "$Root\$layer"
-        if (Test-Path $path) {
-            Write-Host "  [OK]  $layer"
-        } else {
-            Write-Host "  [MISS] $layer"
-        }
-    }
-
-    Write-Host ""
-
-    # Config
-    $configPath = "$Root\AI_CONFIG\system_config.json"
-    if (Test-Path $configPath) {
-        $config = Get-Content $configPath | ConvertFrom-Json
-        $detectedGpu = Get-GPUType
-        if ($detectedGpu -ne "unknown") {
-            Write-Host "  Config: v$($config.architecture_version) — $($detectedGpu.ToUpper()) GPU"
-        } else {
-            Write-Host "  Config: v$($config.architecture_version) — $($config.gpu.ToUpper()) GPU (run ai install comfyui to auto-detect)"
-        }
-    } else {
-        Write-Host "  Config: missing"
-    }
-
-    Write-Host ""
-
-    # ComfyUI — check install and port
     $ports = Get-PortConfig
-    $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
-    $comfyPort = $ports.comfyui
-    $comfyRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${comfyPort} "
-    if (Test-Path $comfyPath) {
-        if ($comfyRunning) {
-            Write-Host "  [OK]  ComfyUI (Running on port $comfyPort)"
-        } else {
-            Write-Host "  [OK]  ComfyUI (not running)"
-        }
-    } else {
-        Write-Host "  [--]  ComfyUI (not installed)"
+    $configPath = "$Root\AI_CONFIG\system_config.json"
+    $gpu = "unknown"
+    if (Test-Path $configPath) {
+        $cfg = Get-Content $configPath | ConvertFrom-Json
+        $detected = Get-GPUType
+        $gpu = if ($detected -ne "unknown") { $detected.ToUpper() } else { $cfg.gpu.ToUpper() }
     }
 
-    # Ollama service — check process and port
-    $ollamaPort = $ports.ollama
-    $ollamaRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${ollamaPort} "
-    if ($ollamaRunning) {
-        Write-Host "  [OK]  Ollama (Running on port $ollamaPort)"
-    } else {
-        Write-Host "  [--]  Ollama (not running)"
+    Write-Host "AI Platform Status"
+    Write-Host "────────────────────────────────"
+
+    $services = @(
+        @{Name="Ollama";    Port=$ports.ollama;    Path="$Root\AI_CORE\Services\Ollama"},
+        @{Name="ComfyUI";   Port=$ports.comfyui;   Path="$Root\AI_CORE\Apps\ComfyUI"},
+        @{Name="OpenWebUI"; Port=$ports.openwebui; Path="$Root\AI_CORE\Apps\open-webui"}
+    )
+    foreach ($svc in $services) {
+        $running = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($svc.Port) "
+        $installed = Test-Path $svc.Path
+        if ($installed -and $running) {
+            Write-Host ("{0,-12} Running   Port {1}" -f $svc.Name, $svc.Port)
+        } elseif ($installed) {
+            Write-Host ("{0,-12} Stopped   Port {1}" -f $svc.Name, $svc.Port)
+        } else {
+            Write-Host ("{0,-12} --        (not installed)" -f $svc.Name)
+        }
     }
 
-    # Open Web UI — check install and port
-    $webuiPath = "$Root\AI_CORE\Apps\open-webui"
-    $webuiPort = $ports.openwebui
-    $webuiRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${webuiPort} "
-    if (Test-Path $webuiPath) {
-        if ($webuiRunning) {
-            Write-Host "  [OK]  Open Web UI (Running on port $webuiPort)"
-        } else {
-            Write-Host "  [--]  Open Web UI (not running)"
-        }
-    } else {
-        Write-Host "  [--]  Open Web UI (not installed)"
-    }
+    # Models summary
+    $llmDir = "$Root\AI_VAULT\models\llm"
+    $diffDir = "$Root\AI_VAULT\models\diffusion"
+    $embedDir = "$Root\AI_VAULT\models\embeddings"
+    $llmCount = if (Test-Path $llmDir) { @(Get-ChildItem "$llmDir\*" -Include "*.gguf","*.bin" -ErrorAction SilentlyContinue).Count } else { 0 }
+    $diffCount = if (Test-Path $diffDir) { @(Get-ChildItem $diffDir -Recurse -ErrorAction SilentlyContinue).Count } else { 0 }
+    $vaeCount = if (Test-Path "$diffDir\vae") { @(Get-ChildItem "$diffDir\vae" -ErrorAction SilentlyContinue).Count } else { 0 }
+    Write-Host ""
+    Write-Host "  Models:"
+    Write-Host "    LLMs:        $llmCount"
+    Write-Host "    Diffusion:   $diffCount"
+    Write-Host "    VAEs:        $vaeCount"
 
     Write-Host ""
+    Write-Host "Root:"
+    Write-Host "  $Root"
+    Write-Host "  v$($cfg.architecture_version) — $gpu GPU"
 
-    # Symlinks
-    $links = @("llm", "diffusion", "embeddings")
-    foreach ($link in $links) {
-        $linkPath = "$Root\AI_CORE\_bindings\$link"
-        if (Test-Path $linkPath) {
-            $target = (Get-Item $linkPath).Target
-            Write-Host "  [OK]  _bindings\$link -> $target"
-        } else {
-            Write-Host "  [MISS] _bindings\$link"
-        }
+    # Folder health — only show issues
+    $missing = @()
+    foreach ($layer in @("AI_CONFIG","AI_CORE","AI_VAULT","AI_WORKSPACE","AI_TOOLS","AI_CACHE")) {
+        if (!(Test-Path "$Root\$layer")) { $missing += $layer }
+    }
+    foreach ($link in @("llm","diffusion","embeddings")) {
+        if (!(Test-Path "$Root\AI_CORE\_bindings\$link")) { $missing += "_bindings\$link" }
+    }
+    if ($missing.Count -gt 0) {
+        Write-Host ""
+        Write-Host "Issues:"
+        foreach ($m in $missing) { Write-Host "  MISSING: $m" }
     }
 }
 
 function Show-Models {
-    # Count models by type
-    $diffusionDirs = @("checkpoints", "loras", "vae", "controlnet")
     $llmDir = "$Root\AI_VAULT\models\llm"
+    $diffDir = "$Root\AI_VAULT\models\diffusion"
     $embedDir = "$Root\AI_VAULT\models\embeddings"
 
-    Write-Host "Installed Models"
-    Write-Host ""
-
-    # LLM
-    if (Test-Path $llmDir) {
-        $count = (Get-ChildItem "$llmDir\*" -Include "*.gguf","*.bin","*.ggml" -ErrorAction SilentlyContinue).Count
-        Write-Host "  LLM:           $count models"
-    }
-
-    # Diffusion types
-    foreach ($dir in $diffusionDirs) {
-        $path = "$Root\AI_VAULT\models\diffusion\$dir"
-        if (Test-Path $path) {
-            $count = @(Get-ChildItem $path -ErrorAction SilentlyContinue).Count
-            Write-Host "  Diffusion/${dir}: $count files"
+    function List-Files($dir, $header, $pattern) {
+        if (!(Test-Path $dir)) { return }
+        $items = Get-ChildItem "$dir\*" -Include $pattern -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }
+        if ($items.Count -eq 0) { return }
+        Write-Host $header
+        Write-Host "────────────────────────────────"
+        foreach ($item in $items) {
+            Write-Host "  $($item.BaseName)"
         }
+        Write-Host ""
     }
 
-    # Embeddings
-    if (Test-Path $embedDir) {
-        $count = @(Get-ChildItem $embedDir -ErrorAction SilentlyContinue).Count
-        Write-Host "  Embeddings:    $count files"
-    }
+    List-Files $llmDir "LLM" @("*.gguf","*.bin")
+    List-Files "$diffDir\checkpoints" "Diffusion (checkpoints)" @("*.safetensors","*.ckpt")
+    List-Files "$diffDir\loras" "Diffusion (LoRAs)" @("*.safetensors")
+    List-Files "$diffDir\vae" "VAE" @("*.safetensors","*.ckpt")
+    List-Files "$diffDir\controlnet" "ControlNet" @("*.safetensors")
+    List-Files $embedDir "Embeddings" @("*")
 
-    # Check registry
-    $registryPath = "$Root\AI_CONFIG\model_registry.json"
-    if (Test-Path $registryPath) {
-        $registry = Get-Content $registryPath | ConvertFrom-Json
-        if ($registry.models.Count -gt 0) {
-            Write-Host ""
-            Write-Host "Registry entries:"
-            foreach ($m in $registry.models) {
-                Write-Host "  - $($m.name) ($($m.type))"
-            }
-        }
+    if (!(Test-Path $llmDir) -and !(Test-Path $diffDir) -and !(Test-Path $embedDir)) {
+        Write-Host "No models found."
     }
 }
 
@@ -696,26 +658,29 @@ switch ($Command) {
     }
     "start"      {
         switch ($SubCommand) {
+            "all"       { Manage-Ollama "start"; Manage-ComfyUI "start"; Manage-WebUI "start" }
             "ollama"    { Manage-Ollama "start" }
             "comfyui"   { Manage-ComfyUI "start" }
             "openwebui" { Manage-WebUI "start" }
-            default     { Write-Host "Usage: ai start <ollama|comfyui|openwebui>" }
+            default     { Write-Host "Usage: ai start <all|ollama|comfyui|openwebui>" }
         }
     }
     "stop"      {
         switch ($SubCommand) {
+            "all"       { Manage-Ollama "stop"; Manage-ComfyUI "stop"; Manage-WebUI "stop" }
             "ollama"    { Manage-Ollama "stop" }
             "comfyui"   { Manage-ComfyUI "stop" }
             "openwebui" { Manage-WebUI "stop" }
-            default     { Write-Host "Usage: ai stop <ollama|comfyui|openwebui>" }
+            default     { Write-Host "Usage: ai stop <all|ollama|comfyui|openwebui>" }
         }
     }
     "restart"    {
         switch ($SubCommand) {
+            "all"       { Manage-Ollama "stop"; Manage-Ollama "start"; Manage-ComfyUI "stop"; Manage-ComfyUI "start"; Manage-WebUI "stop"; Manage-WebUI "start" }
             "ollama"    { Manage-Ollama "stop"; Manage-Ollama "start" }
             "comfyui"   { Manage-ComfyUI "stop"; Manage-ComfyUI "start" }
             "openwebui" { Manage-WebUI "stop"; Manage-WebUI "start" }
-            default     { Write-Host "Usage: ai restart <ollama|comfyui|openwebui>" }
+            default     { Write-Host "Usage: ai restart <all|ollama|comfyui|openwebui>" }
         }
     }
     "status"     {
