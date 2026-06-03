@@ -172,18 +172,15 @@ function Install-ComfyUI {
     }
 
     .\venv\Scripts\Activate.ps1
-    # Install requirements but skip torch (handled separately)
-    pip install -r requirements.txt --no-deps 2>$null
-    pip install -r requirements.txt 2>&1 | Out-Null
 
     # GPU-specific torch backend
     if ($gpu -eq "amd") {
-        Write-Host "AMD GPU detected — installing DirectML backend..."
-        pip uninstall torch torchvision torchaudio -y
-        pip install torch-directml
+        Write-Host "AMD GPU — skipping CUDA torch, installing DirectML..."
+        pip install -r requirements.txt --no-deps 2>&1 | Out-Null
+        pip install torch-directml torchvision torchaudio 2>&1 | Out-Null
     } else {
-        Write-Host "NVIDIA GPU detected — using default CUDA torch"
-        # torch from requirements.txt is already installed
+        Write-Host "NVIDIA GPU — installing with CUDA torch"
+        pip install -r requirements.txt 2>&1 | Out-Null
     }
 
     deactivate

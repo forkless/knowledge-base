@@ -92,12 +92,14 @@ Write-Host "Detected GPU: $gpuType"
 Write-Host "Installing requirements..."
 try {
     .\venv\Scripts\Activate.ps1
-    pip install -r requirements.txt --no-deps 2>$null
-    pip install -r requirements.txt 2>&1 | Out-Null
+
     if ($gpuType -eq "amd") {
-        Write-Host "AMD GPU — installing DirectML..."
-        pip uninstall torch torchvision torchaudio -y
-        pip install torch-directml
+        # Install everything except torch
+        Write-Host "AMD GPU — skipping CUDA torch, installing DirectML..."
+        pip install -r requirements.txt --no-deps 2>&1 | Out-Null
+        pip install torch-directml torchaudio torchvision 2>&1 | Out-Null
+    } else {
+        pip install -r requirements.txt 2>&1 | Out-Null
     }
 } catch {
     Write-Host "ERROR: pip install failed — $_"
