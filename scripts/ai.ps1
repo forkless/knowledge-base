@@ -113,31 +113,38 @@ function Manage-ComfyUI {
 
 function Manage-Ollama {
     param([string]$Action)
-    $process = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
-    
+    $ollamaPort = 11434
+    $ollamaRunning = netstat -ano 2>$null | Select-String "LISTENING" | Select-String ":${ollamaPort} "
+
     switch ($Action) {
         "start" {
-            if ($process) {
-                Write-Host "Ollama is already running (PID $($process.Id))"
-                Write-Host "API: http://localhost:11434"
+            if ($ollamaRunning) {
+                Write-Host "Ollama: Running on port $ollamaPort"
+                Write-Host "API: http://localhost:$ollamaPort"
                 return
             }
             Write-Host "Starting Ollama in background..."
             Start-Process -WindowStyle Hidden -FilePath "ollama" -ArgumentList "serve"
             Start-Sleep -Seconds 2
-            Write-Host "Ollama started. API: http://localhost:11434"
+            Write-Host "Ollama started. API: http://localhost:$ollamaPort"
         }
         "stop" {
-            if (-not $process) {
+            if (-not $ollamaRunning) {
                 Write-Host "Ollama is not running."
                 return
             }
-            $process | Stop-Process -Force
-            Write-Host "Ollama stopped."
+            $line = netstat -ano | Select-String "LISTENING" | Select-String ":${ollamaPort} "
+            $procId = $line -replace '.*\s+(\d+)\s*$', '$1'
+            if ($procId) {
+                Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue
+                Write-Host "Ollama stopped."
+            } else {
+                Write-Host "Could not find Ollama process."
+            }
         }
         "status" {
-            if ($process) {
-                Write-Host "Ollama: running (PID $($process.Id)) — http://localhost:11434"
+            if ($ollamaRunning) {
+                Write-Host "Ollama: Running on port $ollamaPort — http://localhost:$ollamaPort"
             } else {
                 Write-Host "Ollama: not running"
             }
@@ -422,10 +429,11 @@ function Show-Status {
         Write-Host "  [--]  ComfyUI (not installed)"
     }
 
-    # Ollama service — check process and port
-    $ollamaProcess = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
-    if ($ollamaProcess) {
-        Write-Host "  [OK]  Ollama (running)"
+    # Ollama service — check process and port 11434
+    $ollamaPort = 11434
+    $ollamaRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${ollamaPort} "
+    if ($ollamaRunning) {
+        Write-Host "  [OK]  Ollama (Running on port $ollamaPort)"
     } else {
         Write-Host "  [--]  Ollama (not running)"
     }
