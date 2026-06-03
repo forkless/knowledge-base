@@ -134,6 +134,16 @@ Checks:
 
 If any variable is missing or wrong, it offers to fix it. Skipping any variable causes the check to fail — this prevents accidental misconfiguration.
 
+### ai setup path
+
+Makes `ai` available from any PowerShell window by adding AI_TOOLS to your user PATH:
+
+```powershell
+ai setup path
+```
+
+Copies itself to `AI_TOOLS\ai.ps1` and adds the folder to PATH. Restart PowerShell, then just type `ai` from anywhere.
+
 ### ai help
 
 Shows the full command list:

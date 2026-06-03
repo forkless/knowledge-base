@@ -9,7 +9,8 @@ Commands:
   status [service]   System health or specific service status
   models list        List installed models
   clean cache        Clear temporary files
-  setup env          Check and fix environment variables (run after install)
+  setup env          Check and fix environment variables
+  setup path         Add AI_TOOLS to PATH for 'ai' from anywhere
   help               Show this message
 #>
 
@@ -53,6 +54,7 @@ function Show-Help {
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
     Write-Host "  setup env           Check and fix environment variables"
+    Write-Host "  setup path          Add AI_TOOLS to PATH for 'ai' from anywhere"
     Write-Host "  help                Show this message"
     Write-Host ""
     Write-Host "Root: $Root"
@@ -445,6 +447,29 @@ function Setup-Env {
     Write-Host "All environment variables are correct."
 }
 
+function Setup-Path {
+    $toolsDir = "${Root}\AI_TOOLS"
+    $scriptPath = "${toolsDir}\ai.ps1"
+
+    # Copy self to AI_TOOLS
+    if (!(Test-Path $toolsDir)) {
+        New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null
+    }
+    Copy-Item -Path "$PSCommandPath" -Destination "$scriptPath" -Force
+    Write-Host "  Copied ai.ps1 to $scriptPath"
+
+    # Add to user PATH
+    $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    if ($currentPath -notlike "*${toolsDir}*") {
+        $newPath = "${currentPath};${toolsDir}"
+        [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+        Write-Host "  Added AI_TOOLS to user PATH"
+        Write-Host "  Restart PowerShell, then use 'ai' from anywhere."
+    } else {
+        Write-Host "  AI_TOOLS already in PATH"
+    }
+}
+
 # Dispatch
 switch ($Command) {
     "install" {
@@ -486,7 +511,8 @@ switch ($Command) {
     }
     "setup"      {
         if ($SubCommand -eq "env") { Setup-Env }
-        else { Write-Host "Usage: ai setup env" }
+        elseif ($SubCommand -eq "path") { Setup-Path }
+        else { Write-Host "Usage: ai setup <env|path>" }
     }
     "help"       { Show-Help }
     default      { Show-Help }
