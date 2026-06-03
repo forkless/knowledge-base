@@ -8,27 +8,24 @@ Think of it as a friendly notebook. Pick a topic, follow along, and if something
 
 ---
 
-## AI
+## Windows AMD AI Stack
 
-Guides for running local AI: image generation, LLMs, and creative workflows.
+Guides for setting up and running a local AI stack on Windows with AMD GPUs. Everything from scratch to daily use.
 
-- **[ComfyUI](ai/comfyui.md)** — Node-based image generation engine
-- **[Ollama](ai/ollama.md)** — Local LLM runtime
-- **[Stable Diffusion](ai/stable-diffusion.md)** — Text-to-image model setup
-- **[Krita + AI Workflow](ai/krita-ai-workflow.md)** — In-painting and editing with ComfyUI
+**Start here:**
 
-## Docker
-
-- **[Docker](docker/index.md)** — Setup, compose, and usage guides
-
-## Setup
-
-Everything starts with the bootstrap scripts. They handle folders, dependencies, and application deployment.
-
-- **[Ai, ai, ai! Bootstrap Guide](setup/bootstrap-scripts.md)** — Run this first. Three scripts set up the full stack.
-- **[Organize Your AI Folders](setup/organize-your-ai-folders.md)** — Architecture breakdown and folder structure reference.
+- **[Ai, ai, ai! Bootstrap Guide](setup/bootstrap-scripts.md)** — Three scripts that set up the entire stack in minutes.
 - **[Ai Control Panel](setup/ai-control-panel.md)** — Daily management: start/stop services, check status, clean cache.
-- **[Windows Setup Guide](setup/windows-setup.md)** — Manual install reference (only needed if you skip the scripts).
+
+**Reference:**
+
+- **[Organize Your AI Folders](setup/organize-your-ai-folders.md)** — How the folder structure works and why.
+- **[Windows Setup Guide](setup/windows-setup.md)** — Manual install steps (what the scripts automate).
+- **[Ollama](ai/ollama.md)** — Running local LLMs with Ollama.
+- **[Docker](docker/index.md)** — Running AI tools in containers.
+- **[ComfyUI](ai/comfyui.md)** — Image generation with ComfyUI.
+- **[Stable Diffusion](ai/stable-diffusion.md)** — Text-to-image model setup.
+- **[Krita + AI Workflow](ai/krita-ai-workflow.md)** — In-painting and editing with ComfyUI.
 
 ## Tools
 
