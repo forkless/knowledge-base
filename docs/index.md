@@ -1,5 +1,11 @@
 # Howtos for The Rest of Us
 
+You know what forking is, right? Grabbing someone else's project, tweaking a few things, and calling it your own. It's how most of the internet gets built — and there's nothing wrong with that.
+
+This is the opposite.
+
+**Forkless** means picking a path and sticking to it. Building things from scratch, understanding what you're running, and keeping it yours. No copies, no detours, no "it worked on my machine" — just practical howtos for people who actually want to set things up, not just clone them.
+
 Hey there. This is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
 Think of it as a friendly notebook. Pick a topic, follow along, and if something breaks? You're not alone.
