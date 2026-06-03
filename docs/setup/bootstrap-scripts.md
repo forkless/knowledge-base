@@ -9,6 +9,25 @@ Three PowerShell scripts automate the architecture deployment. Each handles one 
 - Administrator rights (for winget installs and symbolic links)
 - Execution policy allowing scripts: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 
+## First-Time Download
+
+PowerShell blocks scripts downloaded from the internet by default. If you get a "not digitally signed" error, unblock them first:
+
+```powershell
+Unblock-File .\Initialize-AIArchitecture.ps1
+Unblock-File .\Install-AIPrerequisites.ps1
+Unblock-File .\Install-ComfyUI.ps1
+Unblock-File .\ai.ps1
+```
+
+Or unblock everything at once:
+
+```powershell
+Get-ChildItem *.ps1 | Unblock-File
+```
+
+This only needs to be done once after downloading.
+
 ## Deployment Order
 
 These scripts must run in sequence. Each builds on the previous one. Running them out of order will fail because the folders, dependencies, or paths won't exist yet.
