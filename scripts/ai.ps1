@@ -78,6 +78,8 @@ function Install-ComfyUI {
     if (!(Test-Path ".\venv")) {
         Write-Host "Creating Python 3.11 environment..."
         py -3.11 -m venv venv
+    } else {
+        Write-Host "Python environment exists — updating..."
     }
 
     .\venv\Scripts\Activate.ps1

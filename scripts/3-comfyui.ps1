@@ -32,14 +32,17 @@ if (!(Test-Path $ComfyPath)) {
 
 Set-Location "$ComfyPath"
 
-# Venv
-if (Test-Path ".\venv") { Remove-Item -Recurse -Force ".\venv" }
-Write-Host "Creating Python 3.11 environment..."
-$venvResult = py -3.11 -m venv venv 2>&1
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Failed to create venv — $venvResult"
-    Write-Host "Make sure Python 3.11 is installed and terminal was restarted."
-    exit 1
+# Venv — create if missing, reuse if exists (idempotent)
+if (!(Test-Path ".\venv")) {
+    Write-Host "Creating Python 3.11 environment..."
+    $venvResult = py -3.11 -m venv venv 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "ERROR: Failed to create venv — $venvResult"
+        Write-Host "Make sure Python 3.11 is installed and terminal was restarted."
+        exit 1
+    }
+} else {
+    Write-Host "Python environment exists — updating..."
 }
 
 # GPU detection
@@ -98,4 +101,5 @@ Write-Host "  Temp dir: ${Root}\AI_CACHE\comfyui_temp"
 Write-Host "  GPU: $gpuType"
 Write-Host "========================"
 Write-Host ""
-Write-Host "To launch: ${Root}\AI_TOOLS\launch_comfyui.ps1"
+Write-Host "Daily launch: ${Root}\AI_TOOLS\launch_comfyui.ps1"
+Write-Host "Re-run 3-comfyui.ps1 to update ComfyUI and dependencies (safe, doesn't destroy venv)"
