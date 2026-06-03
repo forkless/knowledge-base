@@ -113,10 +113,12 @@ Remove an installed application:
 
 ```powershell
 ai remove comfyui
+ai remove comfyui-manager
 ai remove ollama
+ai remove openwebui
 ```
 
-This removes the application folder, its venv, and config. Models in AI_VAULT are preserved.
+This removes the application folder, its venv, and config. Models in AI_VAULT are preserved. Removing ComfyUI-Manager is useful if a custom node causes issues — it's a simple folder delete.
 
 ### ai doctor
 
