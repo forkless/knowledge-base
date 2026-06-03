@@ -297,6 +297,29 @@ The script detects your GPU and installs the correct backend automatically:
 **Notes:**
 
 - If the ComfyUI folder already exists, the clone step is skipped
+
+## Environment Variables — Set Before Using
+
+Some tools need environment variables configured **before** they first run. Set them after 2-deps.ps1 and restart PowerShell, then proceed to 3-comfyui.ps1.
+
+**OLLAMA_MODELS:**
+
+```powershell
+setx OLLAMA_MODELS "D:\AI\AI_VAULT\models\llm"
+```
+
+Must be set before pulling models. Models pulled without it go to the default location and won't be found by the vault path.
+
+**HF_HOME and TORCH_HOME:**
+
+```powershell
+setx HF_HOME "D:\AI\AI_CACHE\huggingface"
+setx TORCH_HOME "D:\AI\AI_CACHE\torch"
+```
+
+Keeps download caches out of AI_VAULT. Set these before running any Hugging Face or PyTorch code.
+
+**Notes:**
 - The virtual environment is always recreated (existing venv is replaced)
 - If PowerShell execution policy blocks `.\venv\Scripts\Activate.ps1`, run: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 - The launcher embeds the absolute path at creation time — if the AI root moves, regenerate it
