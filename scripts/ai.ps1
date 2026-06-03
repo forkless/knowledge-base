@@ -535,12 +535,13 @@ function Show-Models {
         }
     })
     if ($ollamaModels) {
-        Write-Host "LLM"
-        Write-Host "────────────────────────"
+        Write-Host "┌────────────────────────┬──────────┐"
+        Write-Host "│ Model                  │ Size     │"
+        Write-Host "├────────────────────────┼──────────┤"
         foreach ($m in $ollamaModels) {
-            $sizeFmt = if ($m.Size) { "($($m.Size))" } else { "" }
-            Write-Host "  $($m.Name) $sizeFmt"
+            Write-Host ("│ {0,-22} │ {1,-8} │" -f $m.Name, $m.Size)
         }
+        Write-Host "└────────────────────────┴──────────┘"
         Write-Host ""
     }
     List-Files "$diffDir\checkpoints" "Diffusion (checkpoints)" @("*.safetensors","*.ckpt")
