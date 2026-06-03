@@ -4,34 +4,39 @@
 
 ## Core Idea
 
-Instead of mixing everything into one folder, the system is split into 5 clear layers:
+Instead of mixing everything into one folder, the system is split into 6 clear layers:
 
-- **AI_CORE** — running engines (ComfyUI, LM Studio, Ollama)
+- **AI_CONFIG** — centralized configuration and model registry
+- **AI_CORE** — AI runtimes and applications (ComfyUI, Ollama, LM Studio)
 - **AI_VAULT** — permanent models (LLMs, diffusion, embeddings)
 - **AI_WORKSPACE** — input, output, and workflow files
 - **AI_TOOLS** — helper scripts and utilities
-- **AI_CACHE** — temporary downloads and caches (added as the system evolved)
+- **AI_CACHE** — temporary downloads and caches
 
-> This avoids duplication, keeps models stable, and makes tools interchangeable.
+> This avoids duplication, keeps models stable, and makes tools interchangeable. Architecture evolves but the principles stay the same.
 
 ## Final Folder Structure
 
 ```
-D:\AI\
+<AI_ROOT>\               (e.g. D:\AI\)
+│
+├── AI_CONFIG
+│   ├── system_config.json
+│   ├── model_registry.json
+│   └── app_configs
+│       ├── comfyui
+│       └── ollama
 │
 ├── AI_CORE
 │   │
-│   ├── ComfyUI
-│   │   ├── app
-│   │   ├── venv
-│   │   ├── venv_py310
-│   │   └── custom_nodes
+│   ├── Apps
+│   │   ├── ComfyUI
+│   │   └── LM Studio
 │   │
-│   ├── Ollama
+│   ├── Services
+│   │   └── Ollama
 │   │
-│   ├── LM Studio
-│   │
-│   ├── environments
+│   ├── Environments
 │   │   ├── python311_base
 │   │   └── python310_legacy
 │   │
@@ -45,6 +50,10 @@ D:\AI\
 │   ├── models
 │   │   ├── llm
 │   │   ├── diffusion
+│   │   │   ├── checkpoints
+│   │   │   ├── loras
+│   │   │   ├── vae
+│   │   │   └── controlnet
 │   │   └── embeddings
 │   │
 │   └── datasets
@@ -70,7 +79,7 @@ D:\AI\
     └── ollama
 ```
 
-> This structure separates runtimes (CORE), permanent assets (VAULT), workspace (WORKSPACE), utilities (TOOLS), and temporary data (CACHE).
+> This structure separates configuration, runtimes, assets, workspace, tools, and caches into independent layers.
 
 ## How the Layers Connect
 
@@ -91,9 +100,8 @@ D:\AI\
         │  AI_CORE / _bindings │
         │   (Model Routing)    │
         ├──────────────────────┤
-        │  ComfyUI             │
-        │  Ollama              │
-        │  LM Studio           │
+        │  Apps, Services      │
+        │  Environments        │
         └──────────┬───────────┘
                    │
           ┌────────┴────────┐
@@ -102,38 +110,113 @@ D:\AI\
   │ AI_WORKSPACE │  │  AI_CACHE    │
   │(User Files)  │  │(Temp Data)   │
   └──────────────┘  └──────────────┘
+
+        ┌──────────────────────┐
+        │     AI_CONFIG        │
+        │  (System Config)     │
+        └──────────────────────┘
 ```
 
 ## Design Philosophy
 
-Think of it like a real system:
+Think of the environment as a complete operating platform for AI workloads:
 
 | Layer | Role | Analogy |
 |-------|------|---------|
+| AI_CONFIG | Configuration | Control panel |
 | AI_CORE | Runtimes | Engines in a machine |
 | AI_VAULT | Permanent models | Fuel and parts |
 | AI_WORKSPACE | User files | Factory output |
 | AI_TOOLS | Scripts and utilities | Maintenance tools |
 | AI_CACHE | Temporary data | Workbench scraps |
 
-The goal is modularity: any engine can be replaced without touching your data.
+The architecture separates execution from storage. Applications consume resources from centralized locations rather than maintaining private copies. The goal is modularity: any engine can be replaced without touching your data.
 
 ## Why This Structure Works
 
-- **Separation of concerns**: engines, data, tools, and temp files are independent
+- **Separation of concerns**: config, engines, data, tools, and temp files are independent
 - **No model duplication**: VAULT is single source of truth
 - **Safe upgrades**: CORE can be deleted and reinstalled without losing models
 - **Scalable**: new AI apps slot into CORE without restructuring everything
 
-## File Access Model (Important)
+## Layer Details
 
-Models in AI_VAULT are:
+### AI_CONFIG
 
-- Read-only during inference
-- Loaded into RAM or VRAM by AI_CORE apps
-- Not modified during normal usage
+Centralized configuration layer. No models, no executables, no cache — just metadata.
 
-> File conflicts only happen if multiple tools try to download into the same model directory. Inference itself is safe.
+```
+AI_CONFIG
+├── system_config.json       ← architecture version, root path, GPU type
+├── model_registry.json      ← installed models with paths and formats
+└── app_configs
+    ├── comfyui
+    └── ollama
+```
+
+**system_config.json:**
+
+```json
+{
+  "architecture_version": "1.1",
+  "platform": "windows",
+  "root": "D:\\AI",
+  "gpu": "amd"
+}
+```
+
+**model_registry.json:**
+
+```json
+{
+  "models": [
+    {
+      "name": "Llama-3",
+      "type": "llm",
+      "format": "gguf",
+      "path": "AI_VAULT/models/llm/llama3"
+    }
+  ]
+}
+```
+
+### AI_CORE
+
+Contains all AI runtimes. Split into Apps (user-facing), Services (background daemons), and Environments (Python venvs).
+
+- **Apps**: ComfyUI, LM Studio
+- **Services**: Ollama
+- **Environments**: isolated Python venvs per runtime
+- **_bindings**: symbolic links to AI_VAULT
+
+AI_CORE is disposable — reinstall without affecting any other layer.
+
+### AI_VAULT
+
+Single source of truth for all models and datasets. Models are stored once and consumed by every runtime through the binding layer.
+
+- **models/llm** — GGUF, GPTQ, exl2 formats
+- **models/diffusion** — checkpoints, LoRAs, VAEs, ControlNet
+- **models/embeddings** — text embeddings, clip models
+- **datasets** — training data, reference sets
+
+Never sync AI_VAULT with OneDrive or cloud folders. Back it up separately.
+
+### AI_WORKSPACE
+
+User-facing work area. Input files, generated outputs, workflow definitions, and session data.
+
+Safe to archive independently. Safe to clean without affecting installed runtimes.
+
+### AI_TOOLS
+
+Automation and maintenance layer. Scripts for environment validation, model management, backups, and conversion.
+
+Only AI_TOOLS should intentionally modify AI_VAULT.
+
+### AI_CACHE
+
+Temporary data that is safe to delete and rebuild. Contains Hugging Face cache, PyTorch cache, ComfyUI temp files, and Ollama temp data.
 
 ## Model Routing with Symbolic Links
 
@@ -188,7 +271,6 @@ Benefits:
 - Easy cleanup — delete the entire cache folder
 - Predictable storage usage
 - Prevents pollution of permanent assets
-- No cache files mixed with models
 
 ## Ownership Boundaries
 
@@ -196,6 +278,7 @@ Each layer has a defined access level:
 
 | Layer | Read | Write |
 |-------|------|-------|
+| AI_CONFIG | Yes | Yes |
 | AI_CORE | Yes | Runtime only |
 | AI_VAULT | Yes | AI_TOOLS only |
 | AI_WORKSPACE | Yes | Yes |
@@ -219,23 +302,25 @@ Before setting up this structure, see the **[Windows Setup Guide](windows-setup.
 
 ## Bootstrap Installer
 
-*This is a planned automation script — not yet implemented.*
+The bootstrap installer is **complete** and performs:
 
-The bootstrap should:
+1. Select installation location
+2. Create the full directory structure
+3. Install Git, Python 3.10, Python 3.11, and Ollama
+4. Configure environment variables (OLLAMA_MODELS, HF_HOME, TORCH_HOME)
+5. Create the `_bindings` directory
+6. Generate configuration files (system_config.json, model_registry.json)
+7. Verify the installation
+8. Prepare runtime directories and venvs
 
-1. Create the full directory structure
-2. Install prerequisites (Git, Python 3.10, Python 3.11, Ollama)
-3. Configure environment variables (OLLAMA_MODELS, HF_HOME, TORCH_HOME)
-4. Create the `_bindings` directory
-5. Verify the installation
-6. Prepare runtime directories and venvs
+## Roadmap
 
-When complete, the system provides:
+| Phase | What | Status |
+|-------|------|--------|
+| 1 | Architecture definition | Complete |
+| 2 | Bootstrap installer | Complete |
+| 3 | ComfyUI deployment script (clone, venv, extra model paths, launchers) | Next |
+| 4 | Model management (register, verify hashes, track versions) | Planned |
+| 5 | Application expansion (LM Studio, Open WebUI) | Planned |
 
-- Modular architecture
-- Centralized model storage
-- Zero model duplication
-- Safe engine replacement
-- Isolated cache management
-- Reproducible deployment
-- Long-term maintainability
+No architectural changes required for future phases — new apps slot into AI_CORE without restructuring.
