@@ -438,7 +438,7 @@ function Show-Status {
     Write-Host "────────────────────────────────"
 
     $services = @(
-        @{Name="Ollama";    Port=$ports.ollama;    Path="$Root\AI_CORE\Services\Ollama"},
+        @{Name="Ollama";    Port=$ports.ollama;    Path="$Root\AI_VAULT\models\llm"},
         @{Name="ComfyUI";   Port=$ports.comfyui;   Path="$Root\AI_CORE\Apps\ComfyUI"},
         @{Name="OpenWebUI"; Port=$ports.openwebui; Path="$Root\AI_CORE\Apps\open-webui"}
     )
@@ -458,9 +458,9 @@ function Show-Status {
     $llmDir = "$Root\AI_VAULT\models\llm"
     $diffDir = "$Root\AI_VAULT\models\diffusion"
     $embedDir = "$Root\AI_VAULT\models\embeddings"
-    $llmCount = if (Test-Path $llmDir) { @(Get-ChildItem "$llmDir\*" -Include "*.gguf","*.bin" -ErrorAction SilentlyContinue).Count } else { 0 }
-    $diffCount = if (Test-Path $diffDir) { @(Get-ChildItem $diffDir -Recurse -ErrorAction SilentlyContinue).Count } else { 0 }
-    $vaeCount = if (Test-Path "$diffDir\vae") { @(Get-ChildItem "$diffDir\vae" -ErrorAction SilentlyContinue).Count } else { 0 }
+    $llmCount = if (Test-Path $llmDir) { @(Get-ChildItem $llmDir -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
+    $diffCount = if (Test-Path $diffDir) { @(Get-ChildItem $diffDir -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
+    $vaeCount = if (Test-Path "$diffDir\vae") { @(Get-ChildItem "$diffDir\vae" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
     Write-Host ""
     Write-Host "  Models:"
     Write-Host "    LLMs:        $llmCount"
@@ -504,7 +504,7 @@ function Show-Models {
         Write-Host ""
     }
 
-    List-Files $llmDir "LLM" @("*.gguf","*.bin")
+    List-Files $llmDir "LLM" @("*")
     List-Files "$diffDir\checkpoints" "Diffusion (checkpoints)" @("*.safetensors","*.ckpt")
     List-Files "$diffDir\loras" "Diffusion (LoRAs)" @("*.safetensors")
     List-Files "$diffDir\vae" "VAE" @("*.safetensors","*.ckpt")
@@ -730,7 +730,7 @@ function Doctor-Check {
     if ($allLinks) { Write-Host "PASS  Model bindings" }
 
     # Models
-    $llmCount = @(Get-ChildItem "$Root\AI_VAULT\models\llm\*" -Include "*.gguf","*.bin" -ErrorAction SilentlyContinue).Count
+    $llmCount = @(Get-ChildItem "$Root\AI_VAULT\models\llm" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
     $diffCount = @(Get-ChildItem "$Root\AI_VAULT\models\diffusion" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
     if ($llmCount -gt 0) { Write-Host "PASS  Models — $llmCount LLM(s), $diffCount diffusion file(s)" }
     elseif ($diffCount -gt 0) { Write-Host "WARN  Models — no LLMs found, $diffCount diffusion file(s)" }
