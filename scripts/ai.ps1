@@ -482,7 +482,8 @@ function Show-Status {
     $llmDir = "$Root\AI_VAULT\models\llm"
     $diffDir = "$Root\AI_VAULT\models\diffusion"
     $embedDir = "$Root\AI_VAULT\models\embeddings"
-    $ollamaModels = @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+")
+    $ollamaRows = @(ollama list 2>$null | Select-Object -Skip 1)
+    $ollamaModels = @($ollamaRows | ForEach-Object { $parts = $_ -split '\s{2,}'; if ($parts.Count -ge 1) { $parts[0] -replace ':latest','' } })
     $llmCount = $ollamaModels.Count
     $diffCount = if (Test-Path $diffDir) { @(Get-ChildItem $diffDir -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
     $vaeCount = if (Test-Path "$diffDir\vae") { @(Get-ChildItem "$diffDir\vae" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count } else { 0 }
@@ -526,15 +527,19 @@ function Show-Models {
         Write-Host ""
     }
 
-    $ollamaModels = @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+(\S+)\s+(\S+)\s+" | ForEach-Object {
-        $parts = $_ -split '\s+'
-        [PSCustomObject]@{Name=$parts[1]; Size=$parts[3]}
+    $rawModels = ollama list 2>$null | Select-Object -Skip 1
+    $ollamaModels = @($rawModels | ForEach-Object {
+        $parts = $_ -split '\s{2,}'
+        if ($parts.Count -ge 3) {
+            [PSCustomObject]@{Name=($parts[0] -replace ':latest',''); Size=$parts[2]}
+        }
     })
     if ($ollamaModels) {
         Write-Host "LLM"
         Write-Host "────────────────────────"
         foreach ($m in $ollamaModels) {
-            Write-Host "  $($m.Name)  ($($m.Size))"
+            $sizeFmt = if ($m.Size) { "($($m.Size))" } else { "" }
+            Write-Host "  $($m.Name) $sizeFmt"
         }
         Write-Host ""
     }
@@ -736,7 +741,7 @@ function Doctor-Check {
     Write-Host ("│ {0,-20} │ {1,-28} │" -f "Model bindings", $(if ($bindOk) { "OK" } else { "MISSING" }))
 
     # Models
-    $olMods = @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+")
+    $olMods = @(ollama list 2>$null | Select-Object -Skip 1)
     $diffC = @(Get-ChildItem "$Root\AI_VAULT\models\diffusion" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
     Write-Host ("│ {0,-20} │ {1,-28} │" -f "Models", "$($olMods.Count) LLM(s), $diffC diffusion")
 
