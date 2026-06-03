@@ -469,15 +469,27 @@ function Show-Status {
     Write-Host "CPU:  $cpu%"
     Write-Host "RAM:  $ramUsed/$ramTotal GB ($ramPct%)"
 
-    # GPU — try WDDM counters first, fall back to nvidia-smi, then WMI
+    # GPU — utilization (WDDM counters or nvidia-smi)
     $gpuUtil = Get-Counter "\GPU(*)\Utilization Percentage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total|engine" } | Measure-Object -Property CookedValue -Average | Select-Object -ExpandProperty Average
     if (-not $gpuUtil -and (Get-Command nvidia-smi -ErrorAction SilentlyContinue)) {
         $gpuUtil = nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>$null
     }
-    $gpuVram = Get-Counter "\GPU Adapter Memory\Dedicated Usage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total" } | Measure-Object -Property CookedValue -Sum | Select-Object -ExpandProperty Sum
-    if ($gpuUtil) {
-        Write-Host "GPU:  $([math]::Round([double]$gpuUtil))%"
-        if ($gpuVram) { Write-Host "VRAM: $([math]::Round($gpuVram / 1GB, 1)) GB used" }
+    # VRAM — try WDDM counters, then WMI for total
+    $gpuVramUsed = Get-Counter "\GPU Process Memory\Dedicated Usage" -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples } | Where-Object { $_.Path -notmatch "_Total" } | Measure-Object -Property CookedValue -Sum | Select-Object -ExpandProperty Sum
+    $gpuVramTotal = (Get-WmiObject Win32_VideoController | Select-Object -First 1).AdapterRAM
+    # Build GPU line
+    $gpuParts = @()
+    if ($gpuUtil) { $gpuParts += "$([math]::Round([double]$gpuUtil))%" }
+    if ($gpuVramUsed -and $gpuVramTotal) {
+        $usedGB = [math]::Round($gpuVramUsed / 1GB, 1)
+        $totalGB = [math]::Round($gpuVramTotal / 1GB, 1)
+        $gpuParts += "${usedGB}/${totalGB} GB"
+    } elseif ($gpuVramTotal) {
+        $totalGB = [math]::Round($gpuVramTotal / 1GB, 1)
+        $gpuParts += "${totalGB} GB total"
+    }
+    if ($gpuParts.Count -gt 0) {
+        Write-Host "GPU:  $($gpuParts -join ' | ')"
     } else {
         $gpuName = (Get-WmiObject Win32_VideoController | Select-Object -First 1).Name
         if ($gpuName) { Write-Host "GPU:  $gpuName" } else { Write-Host "GPU:  not detected" }
