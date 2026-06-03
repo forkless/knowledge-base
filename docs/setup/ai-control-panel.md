@@ -1,6 +1,6 @@
 ← [Setup](../)
 
-# AI Control Panel
+# Ai Control Panel v1.1
 
 The `ai` command is a unified CLI for managing the entire AI architecture. Instead of running individual bootstrap scripts, you use one entry point.
 

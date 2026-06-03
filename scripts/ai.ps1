@@ -1,5 +1,5 @@
 <#
-AI Control Panel — unified CLI for the AI architecture
+Ai Control Panel v1.1 — daily driver for the Ai Bootstrap system
 Usage:  ai <command> [options]
 
 Commands:
@@ -41,8 +41,9 @@ $Command = $args[0]
 $SubCommand = $args[1]
 
 function Show-Help {
-    Write-Host "Usage: ai <command>"
+    Write-Host "===== Ai Control Panel v1.1 ====="
     Write-Host ""
+    Write-Host "Usage: ai <command>"
     Write-Host "Commands:"
     Write-Host "  install comfyui     Install or update ComfyUI"
     Write-Host "  install ollama      Install Ollama via winget"

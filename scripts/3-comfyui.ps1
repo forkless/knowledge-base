@@ -1,6 +1,7 @@
 <#
-3-comfyui.ps1 — Install ComfyUI and connect to AI_VAULT
-Requires: 1-init.ps1 run, 2-deps.ps1 run, terminal restarted.
+3-comfyui.ps1 — Ai Bootstrap v1.1
+Install ComfyUI and connect to AI_VAULT.
+Requires: 1-init.ps1 and 2-deps.ps1 already run.
 #>
 
 # Try to read root from config first, fall back to prompt
@@ -128,8 +129,10 @@ $launcher | Out-File "${Root}\AI_TOOLS\launch_comfyui.ps1" -Encoding utf8
 
 # Summary
 Write-Host ""
-Write-Host "========================"
-Write-Host "ComfyUI installation complete"
+Write-Host "========================="
+Write-Host " Ai Bootstrap v1.1"
+Write-Host "========================="
+Write-Host "ComfyUI installed"
 Write-Host "  Location: $ComfyPath"
 Write-Host "  Venv: ${ComfyPath}\venv (Python 3.11)"
 Write-Host "  Model paths: extra_model_paths.yaml"

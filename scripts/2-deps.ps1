@@ -1,6 +1,6 @@
 <#
-2-deps.ps1 — Install system dependencies
-Requires administrator rights for winget.
+2-deps.ps1 — Ai Bootstrap v1.1
+Install system dependencies. Requires admin rights.
 #>
 
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
@@ -39,7 +39,9 @@ $results += @{Name="Ollama"; Status=if ($LASTEXITCODE -eq 0) {"OK"} else {"FAILE
 if ($LASTEXITCODE -ne 0) { Write-Host "$result" }
 Write-Host ""
 
-Write-Host "========================"
+Write-Host "========================="
+Write-Host " Ai Bootstrap v1.1"
+Write-Host "========================="
 Write-Host "Install Summary"
 foreach ($r in $results) { Write-Host "  $($r.Name): $($r.Status)" }
 Write-Host "========================"
