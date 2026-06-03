@@ -340,6 +340,6 @@ setx TORCH_HOME "D:\AI\AI_CACHE\torch"
 
 ## Script Locations
 
-The scripts live in the `scripts/` folder of this repository. A zip archive (`ai-bootstrap-v1.1.zip`) is available at the repo root for easy download — grab it, extract, and run.
+The scripts live in the `scripts/` folder of this repository. Download the [latest release zip](https://github.com/forkless/knowledge-base/releases/tag/v0.1.0) for a single archive with all four scripts — grab it, extract, and run.
 
 After architecture initialization, copy them to `AI_TOOLS\scripts\` or run them directly. All scripts are also mirrored in this documentation as code blocks above — inspect them before running.
