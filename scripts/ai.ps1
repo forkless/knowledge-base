@@ -535,13 +535,19 @@ function Show-Models {
         }
     })
     if ($ollamaModels) {
-        Write-Host "┌────────────────────────┬──────────┐"
-        Write-Host "│ Model                  │ Size     │"
-        Write-Host "├────────────────────────┼──────────┤"
+        $maxNameLen = [Math]::Max(6, ($ollamaModels | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum)
+        $maxSizeLen = [Math]::Max(5, ($ollamaModels | ForEach-Object { ($_.Size -replace '[^\w. ]','').Length } | Measure-Object -Maximum).Maximum)
+        $top = "┌" + ("─" * ($maxNameLen + 2)) + "┬" + ("─" * ($maxSizeLen + 2)) + "┐"
+        $header = "│ " + "Model".PadRight($maxNameLen) + " │ " + "Size".PadRight($maxSizeLen) + " │"
+        $sep = "├" + ("─" * ($maxNameLen + 2)) + "┼" + ("─" * ($maxSizeLen + 2)) + "┤"
+        $bot = "└" + ("─" * ($maxNameLen + 2)) + "┴" + ("─" * ($maxSizeLen + 2)) + "┘"
+        Write-Host $top
+        Write-Host $header
+        Write-Host $sep
         foreach ($m in $ollamaModels) {
-            Write-Host ("│ {0,-22} │ {1,-8} │" -f $m.Name, $m.Size)
+            Write-Host ("│ {0,-$maxNameLen} │ {1,-$maxSizeLen} │" -f $m.Name, $m.Size)
         }
-        Write-Host "└────────────────────────┴──────────┘"
+        Write-Host $bot
         Write-Host ""
     }
     List-Files "$diffDir\checkpoints" "Diffusion (checkpoints)" @("*.safetensors","*.ckpt")
