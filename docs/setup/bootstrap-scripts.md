@@ -250,6 +250,13 @@ Set-Location "D:\AI\AI_CORE\Apps\ComfyUI"
 python main.py --temp-directory "D:\AI\AI_CACHE\comfyui_temp"
 ```
 
+**GPU detection:**
+
+The script detects your GPU and installs the correct backend automatically:
+
+- **NVIDIA** — standard CUDA PyTorch from requirements.txt
+- **AMD** — uninstalls CUDA torch, installs `torch-directml` instead
+
 **Notes:**
 
 - If the ComfyUI folder already exists, the clone step is skipped

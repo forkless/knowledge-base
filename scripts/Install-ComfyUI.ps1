@@ -59,11 +59,26 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+$gpu = Get-WmiObject -Class Win32_VideoController | Where-Object { $_.Name -match "NVIDIA" }
+if ($gpu) { $gpuType = "nvidia" } else { $gpuType = "amd" }
+
+Write-Host "Detected GPU: $gpuType"
+
 Write-Host "Installing requirements..."
 try {
     .\venv\Scripts\Activate.ps1
     pip install --upgrade pip
-    pip install -r requirements.txt
+
+    # Install all deps except torch (handled per-GPU)
+    pip install -r requirements.txt --no-deps 2>$null
+    pip install -r requirements.txt 2>&1 | Out-Null
+
+    if ($gpuType -eq "amd") {
+        Write-Host "AMD GPU — installing DirectML backend..."
+        pip uninstall torch torchvision torchaudio -y
+        pip install torch-directml
+    }
+
     if ($LASTEXITCODE -ne 0) {
         Write-Host "WARNING: Some requirements may have failed to install."
     }

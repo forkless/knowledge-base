@@ -35,6 +35,13 @@ Installs or updates ComfyUI into `AI_CORE\Apps`. If the folder already exists, i
 ai install comfyui
 ```
 
+Detects your GPU and installs the correct backend:
+
+- **NVIDIA** — standard CUDA PyTorch from requirements.txt
+- **AMD** — uninstalls CUDA torch, installs `torch-directml` instead
+
+Also updates `system_config.json` with the detected GPU type so other tools can reference it.
+
 Creates:
 - Python 3.11 virtual environment
 - `extra_model_paths.yaml` pointing to AI_VAULT

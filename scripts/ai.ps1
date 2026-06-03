@@ -34,8 +34,27 @@ function Show-Help {
     Write-Host "Root: $Root"
 }
 
+function Get-GPUType {
+    # Check for NVIDIA
+    $nvidia = Get-WmiObject -Class Win32_VideoController | Where-Object { $_.Name -match "NVIDIA" }
+    if ($nvidia) {
+        return "nvidia"
+    }
+
+    # Check for AMD
+    $amd = Get-WmiObject -Class Win32_VideoController | Where-Object { $_.Name -match "AMD|Radeon" }
+    if ($amd) {
+        return "amd"
+    }
+
+    return "unknown"
+}
+
 function Install-ComfyUI {
     $ComfyPath = "$Root\AI_CORE\Apps\ComfyUI"
+    $gpu = Get-GPUType
+
+    Write-Host "Detected GPU: $gpu"
 
     if (!(Test-Path $ComfyPath)) {
         Write-Host "Cloning ComfyUI..."
@@ -55,8 +74,33 @@ function Install-ComfyUI {
 
     .\venv\Scripts\Activate.ps1
     pip install --upgrade pip
-    pip install -r requirements.txt
+
+    # Install requirements but skip torch (handled separately)
+    pip install -r requirements.txt --no-deps 2>$null
+    pip install -r requirements.txt 2>&1 | Out-Null
+
+    # GPU-specific torch backend
+    if ($gpu -eq "amd") {
+        Write-Host "AMD GPU detected — installing DirectML backend..."
+        pip uninstall torch torchvision torchaudio -y
+        pip install torch-directml
+    } else {
+        Write-Host "NVIDIA GPU detected — using default CUDA torch"
+        # torch from requirements.txt is already installed
+    }
+
     deactivate
+
+    # Update config with detected GPU
+    $configPath = "$Root\AI_CONFIG\system_config.json"
+    if (Test-Path $configPath) {
+        $config = Get-Content $configPath | ConvertFrom-Json
+        if ($config.gpu -eq "unknown" -and $gpu -ne "unknown") {
+            $config.gpu = $gpu
+            $config | ConvertTo-Json -Depth 10 | Out-File $configPath
+            Write-Host "system_config.json updated: gpu=$gpu"
+        }
+    }
 
     # Extra model paths
     $yaml = @"
@@ -76,7 +120,8 @@ python main.py --temp-directory "$Root\AI_CACHE\comfyui_temp"
 "@
     $launcher | Out-File "$Root\AI_TOOLS\launch_comfyui.ps1" -Encoding utf8
 
-    Write-Host "ComfyUI ready. Launch with: ai\AI_TOOLS\launch_comfyui.ps1"
+    Write-Host ""
+    Write-Host "ComfyUI ready ($gpu). Launch with: .\AI_TOOLS\launch_comfyui.ps1"
 }
 
 function Install-Ollama {
@@ -106,7 +151,12 @@ function Show-Status {
     $configPath = "$Root\AI_CONFIG\system_config.json"
     if (Test-Path $configPath) {
         $config = Get-Content $configPath | ConvertFrom-Json
-        Write-Host "  Config: v$($config.architecture_version) — $($config.gpu) GPU"
+        $detectedGpu = Get-GPUType
+        if ($detectedGpu -ne "unknown") {
+            Write-Host "  Config: v$($config.architecture_version) — $detectedGpu GPU"
+        } else {
+            Write-Host "  Config: v$($config.architecture_version) — $($config.gpu) GPU (run ai install comfyui to auto-detect)"
+        }
     } else {
         Write-Host "  Config: missing"
     }
