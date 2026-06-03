@@ -3,7 +3,7 @@ Ai, ai, ai! Control Panel v1.1 — daily driver for the Ai Bootstrap system
 Usage:  ai <command> [options]
 
 Commands:
-  install <app>      Install an AI application (comfyui, comfyui-manager, ollama)
+  install <app>      Install an AI application (comfyui, comfyui-manager, ollama, openwebui)
   start <service>    Start a service (ollama, comfyui)
   stop <service>     Stop a service (ollama, comfyui)
   status [service]   System health or specific service status
@@ -49,6 +49,7 @@ function Show-Help {
     Write-Host "  install comfyui         Install or update ComfyUI"
     Write-Host "  install comfyui-manager  Install ComfyUI-Manager custom nodes"
     Write-Host "  install ollama          Install Ollama via winget"
+    Write-Host "  install openwebui       Install Open Web UI for Ollama"
     Write-Host "  start <service>     Start a service (ollama, comfyui)"
     Write-Host "  stop <service>      Stop a service (ollama, comfyui)"
     Write-Host "  status [service]    System health or specific service status"
@@ -286,6 +287,44 @@ function Install-Ollama {
     Write-Host "Installing Ollama..."
     winget install Ollama.Ollama --accept-source-agreements
     Write-Host "Done. Restart PowerShell, then set: setx OLLAMA_MODELS `"$Root\AI_CORE\_bindings\llm`""
+}
+
+function Install-OpenWebUI {
+    $webuiPath = "${Root}\AI_CORE\Apps\open-webui"
+    $webuiVenv = "${webuiPath}\venv"
+
+    if (!(Test-Path $webuiPath)) {
+        New-Item -ItemType Directory -Path $webuiPath -Force | Out-Null
+    }
+
+    Set-Location "$webuiPath"
+
+    if (!(Test-Path $webuiVenv)) {
+        Write-Host "Creating Python environment..."
+        py -3.11 -m venv venv
+    }
+
+    Write-Host "Installing Open Web UI..."
+    .\venv\Scripts\Activate.ps1
+    pip install open-webui 2>&1 | Out-Null
+    deactivate
+
+    # Launcher
+    $launcher = @"
+`$webuiPath = "$webuiPath"
+Set-Location "`$webuiPath"
+.\venv\Scripts\Activate.ps1
+open-webui serve
+"@
+
+    $toolsDir = "${Root}\AI_TOOLS"
+    if (!(Test-Path $toolsDir)) { New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null }
+    $launcher | Out-File "${Root}\AI_TOOLS\launch_openwebui.ps1" -Encoding utf8
+
+    Write-Host "Open Web UI installed."
+    Write-Host "  Location: $webuiPath"
+    Write-Host "  Launch: ${Root}\AI_TOOLS\launch_openwebui.ps1"
+    Write-Host "  URL: http://127.0.0.1:3000"
 }
 
 function Show-Status {
@@ -527,7 +566,8 @@ switch ($Command) {
             "comfyui"         { Install-ComfyUI }
             "comfyui-manager" { Install-ComfyUI-Manager }
             "ollama"          { Install-Ollama }
-            default           { Write-Host "Usage: ai install <comfyui|comfyui-manager|ollama>" }
+            "openwebui"       { Install-OpenWebUI }
+            default           { Write-Host "Usage: ai install <comfyui|comfyui-manager|ollama|openwebui>" }
         }
     }
     "start"      {
