@@ -28,6 +28,7 @@ Environment prep that spans across topics.
 - **[Windows Setup Guide](setup/windows-setup.md)** — Install Git, Python, Ollama, and verify your environment
 - **[Organize Your AI Folders](setup/organize-your-ai-folders.md)** — Set up the D:\AI\ layout (CONFIG / CORE / VAULT / WORKSPACE / TOOLS / CACHE)
 - **[Bootstrap Scripts](setup/bootstrap-scripts.md)** — Automate architecture deployment with PowerShell
+- **[AI Control Panel](setup/ai-control-panel.md)** — Unified CLI for install, status, models, cache
 - **[Python Environment](setup/python.md)** — Virtual environments and dependency management
 
 ## Tools
