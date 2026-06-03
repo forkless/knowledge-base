@@ -140,7 +140,12 @@ function Manage-Ollama {
                 return
             }
             Write-Host "Starting Ollama in background..."
-            Start-Process -WindowStyle Hidden -FilePath "ollama" -ArgumentList "serve"
+            # Generate launcher if missing
+            $ollamaLauncher = "${Root}\AI_TOOLS\launch_ollama.ps1"
+            if (!(Test-Path $ollamaLauncher)) {
+                "ollama serve" | Out-File $ollamaLauncher -Encoding utf8
+            }
+            Start-Process -WindowStyle Hidden -FilePath "powershell" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$ollamaLauncher`""
             Start-Sleep -Seconds 2
             Write-Host "Ollama started. API: http://localhost:$ollamaPort"
         }
