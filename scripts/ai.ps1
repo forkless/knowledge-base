@@ -70,7 +70,6 @@ function Show-Help {
     Write-Host ($cmd -f "setup ports",            "Configure service ports")
     Write-Host ($cmd -f "help",                   "Show this message")
     Write-Host ""
-    Write-Host "Root: $Root"
 }
 
 function Get-PortConfig {
