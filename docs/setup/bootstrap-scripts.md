@@ -47,7 +47,7 @@ Run that once, then you're good.
 | **[1-init.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/1-init.ps1)** | Creates all the folders, links, and config files. Detects your GPU type. Does not install anything. |
 | **[2-deps.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/2-deps.ps1)** | Installs Git, Python, Ollama, and FFmpeg. Sets up environment variables so models go to the right place. |
 | **[3-comfyui.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/3-comfyui.ps1)** | Downloads ComfyUI, creates a Python environment, sets up model paths, and creates a launcher. |
-| **[ai.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/ai.ps1)** | Your daily driver — start/stop services, check status, list models, clean cache, fix settings. |
+| **[ai.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status and ports; list models; clean cache; fix settings and install/remove apps. |
 
 ## Run Order
 
@@ -58,7 +58,7 @@ Scripts must run in this order. Each one prepares something the next one needs.
        ↓
    Restart PowerShell — lets it find newly installed tools
        ↓
-2. 2-deps.ps1         install Git, Python, Ollama
+2. 2-deps.ps1         install Git, Python, Ollama, FFmpeg
        ↓
    Restart PowerShell — lets it find newly installed tools
        ↓
@@ -85,6 +85,18 @@ If something seems off later, run `ai setup env` to check and fix them.
 - **Safe to re-run**: Running a script again won't break anything. It skips what's already there, creates what's missing.
 - **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from a config file — no need to type it again.
 
+## Port Configuration
+
+Each service has a default port set during initialization:
+
+| Service | Default Port |
+|---------|-------------|
+| Ollama | 11434 |
+| ComfyUI | 8188 |
+| Open Web UI | 8080 |
+
+Change them anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json`. Restart the service after changing.
+
 **Pip notice:** You may see `[notice] A new release of pip is available` during ComfyUI setup. That's just pip telling you a newer version exists. The version that comes with Python 3.11 works fine — you can ignore it.
 
 ## Launcher Scripts
@@ -107,8 +119,13 @@ Open a fresh PowerShell window and try:
 
 | Command | What it does |
 |---------|-------------|
-| `ai start ollama` | Starts Ollama in the background |
-| `ai start comfyui` | Starts ComfyUI in the background |
-| `ai status` | Shows if everything is running |
+| `ai start ollama` | Starts Ollama |
+| `ai start comfyui` | Starts ComfyUI |
+| `ai start openwebui` | Starts Open Web UI |
+| `ai status` | Shows what's running and on which ports |
 | `ai models list` | Shows what models you have |
+| `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
+| `ai install openwebui` | Installs Open Web UI for Ollama |
+| `ai setup ports` | Change service ports |
+| `ai clean cache` | Free up space |
 | `ollama pull llama3` | Downloads a model (lands in the vault) |
