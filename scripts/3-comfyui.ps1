@@ -103,13 +103,11 @@ Write-Host "Installing requirements..."
 try {
     .\venv\Scripts\Activate.ps1
 
+    # Install full requirements (includes torch — needed for non-torch deps like safetensors)
+    pip install -r requirements.txt 2>&1 | Out-Null
     if ($gpuType -eq "amd") {
-        # Install everything except torch
-        Write-Host "AMD GPU — skipping CUDA torch, installing DirectML..."
-        pip install -r requirements.txt --no-deps 2>&1 | Out-Null
-        pip install torch-directml torchaudio torchvision 2>&1 | Out-Null
-    } else {
-        pip install -r requirements.txt 2>&1 | Out-Null
+        Write-Host "AMD GPU — adding DirectML backend..."
+        pip install torch-directml 2>&1 | Out-Null
     }
 } catch {
     Write-Host "ERROR: pip install failed — $_"
