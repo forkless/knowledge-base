@@ -3,7 +3,7 @@ Ai, ai, ai! Control Panel v1.1 — daily driver for the Ai Bootstrap system
 Usage:  ai <command> [options]
 
 Commands:
-  install <app>      Install an AI application (comfyui, ollama)
+  install <app>      Install an AI application (comfyui, comfyui-manager, ollama)
   start <service>    Start a service (ollama, comfyui)
   stop <service>     Stop a service (ollama, comfyui)
   status [service]   System health or specific service status
@@ -46,8 +46,9 @@ function Show-Help {
     Write-Host ""
     Write-Host "Usage: ai <command>"
     Write-Host "Commands:"
-    Write-Host "  install comfyui     Install or update ComfyUI"
-    Write-Host "  install ollama      Install Ollama via winget"
+    Write-Host "  install comfyui         Install or update ComfyUI"
+    Write-Host "  install comfyui-manager  Install ComfyUI-Manager custom nodes"
+    Write-Host "  install ollama          Install Ollama via winget"
     Write-Host "  start <service>     Start a service (ollama, comfyui)"
     Write-Host "  stop <service>      Stop a service (ollama, comfyui)"
     Write-Host "  status [service]    System health or specific service status"
@@ -257,6 +258,20 @@ python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"$gpuFlag
 
     Write-Host ""
     Write-Host "ComfyUI ready ($gpu). Launch with: .\AI_TOOLS\launch_comfyui.ps1"
+}
+
+function Install-ComfyUI-Manager {
+    $nodeDir = "${Root}\AI_CORE\Apps\ComfyUI\custom_nodes\ComfyUI-Manager"
+    if (!(Test-Path $nodeDir)) {
+        Write-Host "Installing ComfyUI-Manager..."
+        git clone https://github.com/ltdrdata/ComfyUI-Manager.git "$nodeDir"
+        Write-Host "ComfyUI-Manager installed. Restart ComfyUI to see it."
+    } else {
+        Write-Host "ComfyUI-Manager already installed — pulling updates..."
+        Set-Location "$nodeDir"
+        git pull
+        Write-Host "Updated. Restart ComfyUI to see changes."
+    }
 }
 
 function Install-Ollama {
@@ -474,9 +489,10 @@ function Setup-Path {
 switch ($Command) {
     "install" {
         switch ($SubCommand) {
-            "comfyui" { Install-ComfyUI }
-            "ollama"  { Install-Ollama }
-            default   { Write-Host "Usage: ai install <comfyui|ollama>" }
+            "comfyui"         { Install-ComfyUI }
+            "comfyui-manager" { Install-ComfyUI-Manager }
+            "ollama"          { Install-Ollama }
+            default           { Write-Host "Usage: ai install <comfyui|comfyui-manager|ollama>" }
         }
     }
     "start"      {
