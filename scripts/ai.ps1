@@ -657,6 +657,17 @@ function Doctor-Check {
     Write-Host "Ai, ai, ai! Doctor Check"
     Write-Host ""
 
+    # Platform banner (top of output)
+    $configPath = "$Root\AI_CONFIG\system_config.json"
+    if (Test-Path $configPath) {
+        $cfg = Get-Content $configPath | ConvertFrom-Json
+        Write-Host "PASS  Platform — Ai, ai, ai! v$($cfg.architecture_version), Root: $Root, GPU: $($cfg.gpu)"
+    } else {
+        Write-Host "FAIL  Platform — not initialized (run 1-init.ps1)"
+        return
+    }
+    Write-Host ""
+
     # Git
     $gitVer = git --version 2>$null
     if ($gitVer) { Write-Host "PASS  Git — $gitVer" } else { Write-Host "FAIL  Git — not found" }
@@ -679,16 +690,12 @@ function Doctor-Check {
 
     # FFmpeg
     $ffmpegVer = ffmpeg -version 2>$null
-    if ($ffmpegVer) { Write-Host "PASS  FFmpeg" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
+    $ffmpegLine = if ($ffmpegVer) { ($ffmpegVer -split "`n")[0] } else { "" }
+    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — $ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
 
-    # Architecture
-    $configPath = "$Root\AI_CONFIG\system_config.json"
-    if (Test-Path $configPath) {
-        $cfg = Get-Content $configPath | ConvertFrom-Json
-        Write-Host "PASS  Architecture v$($cfg.architecture_version) — Root: $Root"
-    } else {
-        Write-Host "FAIL  Architecture — not initialized (run 1-init.ps1)"
-    }
+    # Arch config check (verifies file is readable, banner already shown above)
+    $archCheck = Get-Content "$Root\AI_CONFIG\system_config.json" -ErrorAction SilentlyContinue
+    if (-not $archCheck) { Write-Host "FAIL  Config missing — run 1-init.ps1" }
 
     # ComfyUI
     $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
