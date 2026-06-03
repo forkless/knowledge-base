@@ -1,4 +1,4 @@
-# Knowledge Base
+# Howtos for The Rest of Us
 
 Hey there. This is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
