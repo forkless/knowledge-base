@@ -106,8 +106,9 @@ try {
     # Install full requirements (includes torch — needed for non-torch deps like safetensors)
     pip install -r requirements.txt 2>&1 | Out-Null
     if ($gpuType -eq "amd") {
-        Write-Host "AMD GPU — adding DirectML backend..."
+        Write-Host "AMD GPU — adding DirectML backend and fixing audio deps..."
         pip install torch-directml 2>&1 | Out-Null
+        pip install torchaudio --force-reinstall 2>&1 | Out-Null
     }
 } catch {
     Write-Host "ERROR: pip install failed — $_"

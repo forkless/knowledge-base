@@ -186,8 +186,9 @@ function Install-ComfyUI {
     # Install full requirements (includes torch — needed for non-torch deps)
     pip install -r requirements.txt 2>&1 | Out-Null
     if ($gpu -eq "amd") {
-        Write-Host "AMD GPU — adding DirectML backend..."
+        Write-Host "AMD GPU — adding DirectML backend and fixing audio deps..."
         pip install torch-directml 2>&1 | Out-Null
+        pip install torchaudio --force-reinstall 2>&1 | Out-Null
     }
 
     deactivate
