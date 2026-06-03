@@ -11,16 +11,26 @@
     max-width: 960px !important;
   }
 
-  /* Better font stack for code — ensures box-drawing alignment */
+  /* Code blocks — terminal-style dark background */
   pre, code, .highlight, .highlighter-rouge {
     font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", "Fira Code", "Consolas", monospace !important;
     font-size: 0.88em;
   }
 
-  /* Code blocks — slightly lighter than body bg */
-  .highlight pre, .highlighter-rouge .highlight {
-    background: #fafafa !important;
-    border-radius: 6px;
+  .highlight pre, .highlighter-rouge .highlight, pre {
+    background: #1a1d23 !important;
+    color: #c0d0c0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    line-height: 1.5;
+  }
+
+  /* Inline code — subtle terminal tint, not full dark */
+  code:not(pre code) {
+    background: #e8e6e0;
+    color: #393e46;
+    padding: 2px 6px;
+    border-radius: 4px;
   }
 
   /* Headings — dark charcoal */
@@ -90,23 +100,5 @@
     margin-right: 6px;
   }
 
-  /* Terminal blocks — paste commands here */
-  .terminal {
-    background: #1a1d23;
-    color: #c0d0c0;
-    font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", "Fira Code", "Consolas", monospace;
-    font-size: 0.88em;
-    padding: 14px 18px;
-    border-radius: 8px;
-    overflow-x: auto;
-    line-height: 1.5;
-    margin: 12px 0;
-  }
-  .terminal .prompt {
-    color: #d4763a;
-    user-select: none;
-  }
-  .terminal .output {
-    color: #8a9a8a;
-  }
+
 </style>
