@@ -300,18 +300,13 @@ Only AI_TOOLS may intentionally modify AI_VAULT. Runtimes should consume models,
 
 Before setting up this structure, see the **[Windows Setup Guide](windows-setup.md)** for installing Git, Python, and Ollama.
 
-## Bootstrap Installer
+## Bootstrap Scripts
 
-The bootstrap installer is **complete** and performs:
+Three PowerShell scripts automate the deployment. See the **[Bootstrap Scripts Guide](bootstrap-scripts.md)** for full details, prerequisites, and deployment order.
 
-1. Select installation location
-2. Create the full directory structure
-3. Install Git, Python 3.10, Python 3.11, and Ollama
-4. Configure environment variables (OLLAMA_MODELS, HF_HOME, TORCH_HOME)
-5. Create the `_bindings` directory
-6. Generate configuration files (system_config.json, model_registry.json)
-7. Verify the installation
-8. Prepare runtime directories and venvs
+- **Initialize-AIArchitecture.ps1** — folders, bindings, config files
+- **Install-AIPrerequisites.ps1** — Git, Python 3.10, Python 3.11, Ollama
+- **Install-ComfyUI.ps1** — clone, venv, model paths, launcher
 
 ## Roadmap
 
