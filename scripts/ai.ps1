@@ -4,9 +4,9 @@ Usage:  ai <command> [options]
 
 Commands:
   install <app>      Install an AI application (comfyui, ollama)
-  comfyui <action>   start, stop, or status
-  ollama <action>    start, stop, or status
-  status             Check system health
+  start <service>    Start a service (ollama, comfyui)
+  stop <service>     Stop a service (ollama, comfyui)
+  status [service]   System health or specific service status
   models list        List installed models
   clean cache        Clear temporary files
   setup env          Check and fix environment variables (run after install)
@@ -46,13 +46,9 @@ function Show-Help {
     Write-Host "Commands:"
     Write-Host "  install comfyui     Install or update ComfyUI"
     Write-Host "  install ollama      Install Ollama via winget"
-    Write-Host "  comfyui start       Launch ComfyUI"
-    Write-Host "  comfyui stop        Kill ComfyUI"
-    Write-Host "  comfyui status      Check if ComfyUI is running"
-    Write-Host "  ollama start        Start Ollama background service"
-    Write-Host "  ollama stop         Stop Ollama"
-    Write-Host "  ollama status       Check if Ollama is running"
-    Write-Host "  status              Check system health"
+    Write-Host "  start <service>     Start a service (ollama, comfyui)"
+    Write-Host "  stop <service>      Stop a service (ollama, comfyui)"
+    Write-Host "  status [service]    System health or specific service status"
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
     Write-Host "  setup env           Check and fix environment variables"
@@ -427,17 +423,28 @@ switch ($Command) {
             default   { Write-Host "Usage: ai install <comfyui|ollama>" }
         }
     }
-    "comfyui"    {
-        $actions = @("start", "stop", "status")
-        if ($SubCommand -in $actions) { Manage-ComfyUI $SubCommand }
-        else { Write-Host "Usage: ai comfyui <start|stop|status>" }
+    "start"      {
+        switch ($SubCommand) {
+            "ollama"  { Manage-Ollama "start" }
+            "comfyui" { Manage-ComfyUI "start" }
+            default   { Write-Host "Usage: ai start <ollama|comfyui>" }
+        }
     }
-    "ollama"     {
-        $actions = @("start", "stop", "status")
-        if ($SubCommand -in $actions) { Manage-Ollama $SubCommand }
-        else { Write-Host "Usage: ai ollama <start|stop|status>" }
+    "stop"      {
+        switch ($SubCommand) {
+            "ollama"  { Manage-Ollama "stop" }
+            "comfyui" { Manage-ComfyUI "stop" }
+            default   { Write-Host "Usage: ai stop <ollama|comfyui>" }
+        }
     }
-    "status"     { Show-Status }
+    "status"     {
+        switch ($SubCommand) {
+            "ollama"  { Manage-Ollama "status" }
+            "comfyui" { Manage-ComfyUI "status" }
+            ""        { Show-Status }
+            default   { Write-Host "Usage: ai status [ollama|comfyui]" }
+        }
+    }
     "models"     {
         if ($SubCommand -eq "list") { Show-Models }
         else { Write-Host "Usage: ai models list" }
