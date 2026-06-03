@@ -320,11 +320,11 @@ Before setting up this structure, see the **[Windows Setup Guide](windows-setup.
 
 ## Bootstrap Scripts
 
-Three PowerShell scripts automate the deployment. See the **[Bootstrap Scripts Guide](bootstrap-scripts.md)** for full details, prerequisites, and deployment order.
+Three numbered scripts automate the deployment. See the **[Bootstrap Scripts Guide](bootstrap-scripts.md)** for full details, prerequisites, and deployment order.
 
-- **Initialize-AIArchitecture.ps1** — folders, bindings, config files
-- **Install-AIPrerequisites.ps1** — Git, Python 3.10, Python 3.11, Ollama
-- **Install-ComfyUI.ps1** — clone, venv, model paths, launcher
+- **1-init.ps1** — folders, bindings, config files
+- **2-deps.ps1** — Git, Python 3.10, Python 3.11, Ollama
+- **3-comfyui.ps1** — clone, venv, model paths, launcher
 
 ## Roadmap
 
