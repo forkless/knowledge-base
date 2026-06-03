@@ -112,11 +112,19 @@ Write-Host "Creating launcher..."
 $launcher = @"
 Set-Location "$ComfyPath"
 .\venv\Scripts\Activate.ps1
-python main.py --temp-directory "$Root\AI_CACHE\comfyui_temp"
+python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"
 "@
 
-$launcher | Out-File "$Root\AI_TOOLS\launch_comfyui.ps1" -Encoding utf8
-Write-Host "Created: $Root\AI_TOOLS\launch_comfyui.ps1"
+# Ensure target directory exists
+$toolsDir = "${Root}\AI_TOOLS"
+if (!(Test-Path $toolsDir)) {
+    New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null
+    Write-Host "Created: $toolsDir"
+}
+
+$launcherPath = "${Root}\AI_TOOLS\launch_comfyui.ps1"
+$launcher | Out-File $launcherPath -Encoding utf8
+Write-Host "Created: $launcherPath"
 
 # -------------------------
 # SUMMARY
@@ -128,9 +136,9 @@ Write-Host "ComfyUI installation complete"
 Write-Host "  Location: $ComfyPath"
 Write-Host "  Venv: $ComfyPath\venv (Python 3.11)"
 Write-Host "  Model paths: extra_model_paths.yaml"
-Write-Host "  Launcher: $Root\AI_TOOLS\launch_comfyui.ps1"
-Write-Host "  Temp dir: $Root\AI_CACHE\comfyui_temp"
+Write-Host "  Launcher: ${Root}\AI_TOOLS\launch_comfyui.ps1"
+Write-Host "  Temp dir: ${Root}\AI_CACHE\comfyui_temp"
 Write-Host "========================"
 Write-Host ""
-Write-Host "To launch: .\$Root\AI_TOOLS\launch_comfyui.ps1"
+Write-Host "To launch: ${Root}\AI_TOOLS\launch_comfyui.ps1"
 Write-Host "Or navigate to AI_TOOLS and run: .\launch_comfyui.ps1"

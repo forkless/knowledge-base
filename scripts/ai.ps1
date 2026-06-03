@@ -124,9 +124,13 @@ embeddings: $Root\AI_VAULT\models\embeddings
     $launcher = @"
 Set-Location "$ComfyPath"
 .\venv\Scripts\Activate.ps1
-python main.py --temp-directory "$Root\AI_CACHE\comfyui_temp"
+python main.py --temp-directory "${Root}\AI_CACHE\comfyui_temp"
 "@
-    $launcher | Out-File "$Root\AI_TOOLS\launch_comfyui.ps1" -Encoding utf8
+    # Ensure target directory exists
+    $toolsDir = "${Root}\AI_TOOLS"
+    if (!(Test-Path $toolsDir)) { New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null }
+
+    $launcher | Out-File "${Root}\AI_TOOLS\launch_comfyui.ps1" -Encoding utf8
 
     Write-Host ""
     Write-Host "ComfyUI ready ($gpu). Launch with: .\AI_TOOLS\launch_comfyui.ps1"
