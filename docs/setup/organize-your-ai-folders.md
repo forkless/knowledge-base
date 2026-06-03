@@ -296,6 +296,24 @@ Only AI_TOOLS may intentionally modify AI_VAULT. Runtimes should consume models,
 - AI_CACHE is safe to delete entirely at any time
 - AI_CORE is disposable — reinstall without affecting data
 
+## GPU Support Notes
+
+The architecture and scripts are GPU-agnostic — they detect your card and install the correct backend (CUDA for NVIDIA, DirectML for AMD).
+
+**AMD on Windows (DirectML):**
+
+Works with any DirectX 12 capable AMD GPU — Radeon RX 5000 series and newer, Radeon VII, Ryzen 7000 series iGPUs. Performance scales with VRAM:
+
+- 8GB VRAM — good for SD 1.5, small LLMs
+- 16GB VRAM — good for SDXL, medium LLMs (7B-13B)
+- 24GB VRAM — good for Flux, larger LLMs
+
+Older GCN-based cards (Radeon RX 400/500 series, Vega 56/64) may work but have limited DirectML optimization. Expect slower performance.
+
+**NVIDIA on Windows (CUDA):**
+
+Works with any CUDA-capable NVIDIA GPU. Same VRAM guidelines apply.
+
 ## Prerequisites
 
 Before setting up this structure, see the **[Windows Setup Guide](windows-setup.md)** for installing Git, Python, and Ollama.
