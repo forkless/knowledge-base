@@ -710,22 +710,27 @@ function Doctor-Check {
 
     # ComfyUI
     $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
+    $comfyPort = (Get-PortConfig).comfyui
+    $comfyRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($comfyPort) "
+    $comfyVerFile = "$comfyPath\comfyui_version.py"
+    $comfyVer = if (Test-Path $comfyVerFile) { (Select-String -Path $comfyVerFile -Pattern "__version__\s*=\s*['""]([^'""]+)['""]" | ForEach-Object { $_.Matches.Groups[1].Value }) } else { $null }
     if (Test-Path $comfyPath) {
-        $comfyPort = (Get-PortConfig).comfyui
-        $running = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($comfyPort) "
-        if ($running) { Write-Host "PASS  ComfyUI — running on port $comfyPort" }
-        else { Write-Host "WARN  ComfyUI — installed but not running" }
+        if ($comfyVer) { Write-Host "PASS  ComfyUI — $comfyVer" } else { Write-Host "PASS  ComfyUI" }
+        if ($comfyRunning) { Write-Host "PASS  ComfyUI service — running on port $comfyPort" }
+        else { Write-Host "WARN  ComfyUI service — not running" }
     } else {
         Write-Host "WARN  ComfyUI — not installed"
     }
 
     # Open Web UI
     $webuiPath = "$Root\AI_CORE\Apps\open-webui"
+    $webuiPort = (Get-PortConfig).openwebui
+    $webuiRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($webuiPort) "
+    $webuiVer = if (Test-Path "$webuiPath\venv") { & "$webuiPath\venv\Scripts\python.exe" -c "import open_webui; print(open_webui.__version__)" 2>$null } else { $null }
     if (Test-Path $webuiPath) {
-        $webuiPort = (Get-PortConfig).openwebui
-        $running = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":$($webuiPort) "
-        if ($running) { Write-Host "PASS  Open Web UI — running on port $webuiPort" }
-        else { Write-Host "WARN  Open Web UI — installed but not running" }
+        if ($webuiVer) { Write-Host "PASS  Open Web UI — $webuiVer" } else { Write-Host "PASS  Open Web UI" }
+        if ($webuiRunning) { Write-Host "PASS  Open Web UI service — running on port $webuiPort" }
+        else { Write-Host "WARN  Open Web UI service — not running" }
     } else {
         Write-Host "WARN  Open Web UI — not installed"
     }
