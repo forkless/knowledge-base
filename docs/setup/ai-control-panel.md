@@ -109,6 +109,22 @@ ai clean cache
 
 Shows how much space was freed.
 
+### ai setup env
+
+Checks and fixes environment variables. Run this if `3-comfyui.ps1` warns about misconfigured paths, or after changing the AI root.
+
+```powershell
+ai setup env
+```
+
+Checks:
+
+- `OLLAMA_MODELS` — should point to `AI_VAULT\models\llm`
+- `HF_HOME` — should point to `AI_CACHE\huggingface`
+- `TORCH_HOME` — should point to `AI_CACHE\torch`
+
+If any variable is missing or wrong, it offers to fix it. Skipping any variable causes the check to fail with a non-zero exit code.
+
 ### ai help
 
 Displays the full command list.
