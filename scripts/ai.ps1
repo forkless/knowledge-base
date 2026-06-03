@@ -45,25 +45,26 @@ $Command = $args[0]
 $SubCommand = $args[1]
 
 function Show-Help {
+    $cmd = "  {0,-26}{1}"
     Write-Host "===== Ai, ai, ai! Control Panel v1.1 ====="
     Write-Host ""
     Write-Host "Usage: ai <command>"
     Write-Host "Commands:"
-    Write-Host "  install comfyui         Install or update ComfyUI"
-    Write-Host "  install comfyui-manager  Install ComfyUI-Manager custom nodes"
-    Write-Host "  install ollama          Install Ollama via winget"
-    Write-Host "  install openwebui       Install Open Web UI for Ollama"
-    Write-Host "  start <service>     Start a service (all, ollama, comfyui, openwebui)"
-    Write-Host "  stop <service>      Stop a service (all, ollama, comfyui, openwebui)"
-    Write-Host "  restart <service>   Restart a service (all, ollama, comfyui, openwebui)"
-    Write-Host "  status [service]    System health or specific service status"
-    Write-Host "  doctor              Full system diagnostics (Git, Python, services, env)"
-    Write-Host "  models list         List installed models"
-    Write-Host "  clean cache         Delete all temporary files"
-    Write-Host "  setup env           Check and fix environment variables"
-    Write-Host "  setup path          Add AI_TOOLS to PATH for 'ai' from anywhere"
-    Write-Host "  setup ports         Configure service ports"
-    Write-Host "  help                Show this message"
+    Write-Host ($cmd -f "install comfyui",        "Install or update ComfyUI")
+    Write-Host ($cmd -f "install comfyui-manager","Install ComfyUI-Manager custom nodes")
+    Write-Host ($cmd -f "install ollama",         "Install Ollama via winget")
+    Write-Host ($cmd -f "install openwebui",      "Install Open Web UI for Ollama")
+    Write-Host ($cmd -f "start <service>",        "Start a service (all, ollama, comfyui, openwebui)")
+    Write-Host ($cmd -f "stop <service>",         "Stop a service (all, ollama, comfyui, openwebui)")
+    Write-Host ($cmd -f "restart <service>",       "Restart a service (all, ollama, comfyui, openwebui)")
+    Write-Host ($cmd -f "status [service]",       "System health or specific service status")
+    Write-Host ($cmd -f "doctor",                 "Full system diagnostics (Git, Python, services, env)")
+    Write-Host ($cmd -f "models list",            "List installed models")
+    Write-Host ($cmd -f "clean cache",            "Delete all temporary files")
+    Write-Host ($cmd -f "setup env",              "Check and fix environment variables")
+    Write-Host ($cmd -f "setup path",             "Add AI_TOOLS to PATH for 'ai' from anywhere")
+    Write-Host ($cmd -f "setup ports",            "Configure service ports")
+    Write-Host ($cmd -f "help",                   "Show this message")
     Write-Host ""
     Write-Host "Root: $Root"
 }
