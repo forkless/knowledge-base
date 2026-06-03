@@ -118,6 +118,29 @@ ai remove ollama
 
 This removes the application folder, its venv, and config. Models in AI_VAULT are preserved.
 
+### ai doctor
+
+Full system diagnostics — checks Git, Python versions, Ollama, FFmpeg, architecture, ComfyUI, Open Web UI, model bindings, installed models, and environment variables.
+
+```powershell
+ai doctor
+```
+
+Example output:
+
+```
+PASS  Git — git version 2.45.0.windows.1
+PASS  Python 3.11 — Python 3.11.9
+PASS  Ollama — ollama version is 0.5.1
+PASS  FFmpeg
+PASS  Architecture v1.1 — Root: D:\AI
+PASS  ComfyUI — running on port 8188
+WARN  Open Web UI — installed but not running
+PASS  Model bindings
+PASS  Models — 5 LLM(s), 12 diffusion file(s)
+PASS  Environment variables
+```
+
 ### ai models list
 
 Lists all installed models grouped by category (LLM, Diffusion, VAE, LoRAs, etc.):

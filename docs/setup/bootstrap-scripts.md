@@ -122,6 +122,7 @@ Open a fresh PowerShell window and try:
 | `ai start all` | Starts all services |
 | `ai stop all` | Stops all services |
 | `ai restart all` | Restarts all services |
+| `ai doctor` | Full system diagnostics (Git, Python, services, env) |
 | `ai status` | Compact dashboard — running services, ports, model counts |
 | `ai models list` | Lists every model, grouped by category |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
