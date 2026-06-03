@@ -31,9 +31,9 @@ See **[Organize Your AI Folders](organize-your-ai-folders.md)** for the full arc
 PowerShell blocks scripts downloaded from the internet by default. If you get a "not digitally signed" error, unblock them first:
 
 ```powershell
-Unblock-File .\Initialize-AIArchitecture.ps1
-Unblock-File .\Install-AIPrerequisites.ps1
-Unblock-File .\Install-ComfyUI.ps1
+Unblock-File .\1-init.ps1
+Unblock-File .\2-deps.ps1
+Unblock-File .\3-comfyui.ps1
 Unblock-File .\ai.ps1
 ```
 
@@ -50,24 +50,24 @@ This only needs to be done once after downloading.
 These scripts must run in sequence. Each builds on the previous one. Running them out of order will fail because the folders, dependencies, or paths won't exist yet.
 
 ```
-1. Initialize-AIArchitecture.ps1    create folders + bindings + config
+1. 1-init.ps1         create folders + bindings + config
        ↓
    Restart PowerShell — PATH updated with new tools
        ↓
-2. Install-AIPrerequisites.ps1      install Git, Python, Ollama
+2. 2-deps.ps1         install Git, Python, Ollama
        ↓
    Restart PowerShell — new tools added to PATH
        ↓
-3. Install-ComfyUI.ps1              clone ComfyUI, venv, model paths
+3. 3-comfyui.ps1      clone ComfyUI, venv, model paths
 ```
 
 **Why restart between scripts:** Windows updates the system PATH when software is installed, but existing PowerShell windows don't reload it. Skipping the restart means `git`, `py`, and `ollama` commands won't be found.
 
-## Initialize-AIArchitecture.ps1
+## 1-init.ps1
 
 Creates the full folder structure, symbolic links, and initial config files. Does not install any software.
 
-Run with: `.\Initialize-AIArchitecture.ps1`
+Run with: `.\1-init.ps1`
 
 Prompts for the install path. Defaults to `D:\AI` if left blank.
 
@@ -168,9 +168,9 @@ Write-Host "Architecture initialization complete"
 - Existing folders are skipped — the script is idempotent and safe to re-run
 - GPU is auto-detected via WMI and written to `system_config.json`
 
-**Next:** Restart PowerShell, then run [Install-AIPrerequisites.ps1](#install-aiprerequisitesps1).
+**Next:** Restart PowerShell, then run [2-deps.ps1](#2-depsps1).
 
-## Install-AIPrerequisites.ps1
+## 2-deps.ps1
 
 Installs system-wide dependencies via winget. Does not create any folders.
 
@@ -208,9 +208,9 @@ Write-Host "IMPORTANT: restart PowerShell after install"
 - Windows updates PATH immediately, but existing terminals do not reload it
 - Verify with: `py -0`, `git --version`, `ollama --version`
 
-**Next:** Restart PowerShell, then run [Install-ComfyUI.ps1](#install-comfyups1).
+**Next:** Restart PowerShell, then run [3-comfyui.ps1](#3-comfyups1).
 
-## Install-ComfyUI.ps1
+## 3-comfyui.ps1
 
 Clones ComfyUI into `AI_CORE\Apps`, creates a Python virtual environment, installs dependencies, configures model paths, and generates a launcher script.
 
