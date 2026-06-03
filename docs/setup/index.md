@@ -1,9 +1,8 @@
 # Setup
 
-Environment prep that spans across topics.
+Everything starts with the bootstrap scripts. They handle folders, dependencies, and application deployment.
 
-- **[Windows Setup Guide](windows-setup.md)** — Install Git, Python, Ollama, and verify your environment
-- **[Organize Your AI Folders](organize-your-ai-folders.md)** — Set up the D:\AI\ layout (CONFIG / CORE / VAULT / WORKSPACE / TOOLS / CACHE)
-- **[Bootstrap Scripts](bootstrap-scripts.md)** — Automate architecture deployment with PowerShell
-- **[AI Control Panel](ai-control-panel.md)** — Unified CLI for install, status, models, cache
-- **[Python Environment](python.md)** — Virtual environments and dependency management
+- **[Ai, ai, ai! Bootstrap Guide](bootstrap-scripts.md)** — Run this first. Three scripts set up the full stack.
+- **[Organize Your AI Folders](organize-your-ai-folders.md)** — Architecture breakdown and folder structure.
+- **[Ai Control Panel](ai-control-panel.md)** — Daily management: start/stop services, check status, clean cache.
+- **[Windows Setup Guide](windows-setup.md)** — Manual install reference (only needed if you skip the scripts).
