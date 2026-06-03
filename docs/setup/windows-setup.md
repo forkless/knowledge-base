@@ -45,10 +45,7 @@ winget install Python.Python.3.11
 py -0
 ```
 
-Expected output:
-
-  - 3.11
-  - 3.10
+Expected output: `3.11`, `3.10`
 
 ## Ollama (no Python required)
 
