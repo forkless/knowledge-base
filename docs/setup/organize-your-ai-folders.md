@@ -332,7 +332,7 @@ Three PowerShell scripts automate the deployment. See the **[Bootstrap Scripts G
 |-------|------|--------|
 | 1 | Architecture definition | Complete |
 | 2 | Bootstrap installer | Complete |
-| 3 | ComfyUI deployment script (clone, venv, extra model paths, launchers) | Next |
+| 3 | ComfyUI deployment script (clone, venv, extra model paths, launchers) | Complete |
 | 4 | Model management (register, verify hashes, track versions) | Planned |
 | 5 | Application expansion (LM Studio, Open WebUI) | Planned |
 
