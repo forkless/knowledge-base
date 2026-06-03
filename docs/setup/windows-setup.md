@@ -77,6 +77,12 @@ winget install Ollama.Ollama
 
 Then follow the **[Organize Your AI Folders](organize-your-ai-folders.md)** guide to create the folder structure by hand.
 
+## After Deps Install: Restart PowerShell
+
+After `2-deps.ps1` installs Git, Python, Ollama, and FFmpeg, **restart PowerShell**. Existing windows won't see the new tools in PATH.
+
+If `ai doctor` shows FFmpeg as missing even after install, a fresh terminal is likely all you need.
+
 ## Pip Version Notice
 
 You might see this during ComfyUI install:

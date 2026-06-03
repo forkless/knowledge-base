@@ -667,7 +667,7 @@ function Doctor-Check {
 
     # FFmpeg
     $ffmpegVer = ffmpeg -version 2>$null
-    if ($ffmpegVer) { Write-Host "PASS  FFmpeg" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" }
+    if ($ffmpegVer) { Write-Host "PASS  FFmpeg" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
 
     # Architecture
     $configPath = "$Root\AI_CONFIG\system_config.json"
