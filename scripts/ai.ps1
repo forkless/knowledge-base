@@ -4,8 +4,8 @@ Usage:  ai <command> [options]
 
 Commands:
   install <app>      Install an AI application (comfyui, comfyui-manager, ollama, openwebui)
-  start <service>    Start a service (ollama, comfyui)
-  stop <service>     Stop a service (ollama, comfyui)
+  start <service>    Start a service (ollama, comfyui, openwebui)
+  stop <service>     Stop a service (ollama, comfyui, openwebui)
   status [service]   System health or specific service status
   models list        List installed models
   clean cache        Clear temporary files
@@ -50,8 +50,8 @@ function Show-Help {
     Write-Host "  install comfyui-manager  Install ComfyUI-Manager custom nodes"
     Write-Host "  install ollama          Install Ollama via winget"
     Write-Host "  install openwebui       Install Open Web UI for Ollama"
-    Write-Host "  start <service>     Start a service (ollama, comfyui)"
-    Write-Host "  stop <service>      Stop a service (ollama, comfyui)"
+    Write-Host "  start <service>     Start a service (ollama, comfyui, openwebui)"
+    Write-Host "  stop <service>      Stop a service (ollama, comfyui, openwebui)"
     Write-Host "  status [service]    System health or specific service status"
     Write-Host "  models list         List installed models"
     Write-Host "  clean cache         Delete all temporary files"
@@ -138,6 +138,52 @@ function Manage-Ollama {
                 Write-Host "Ollama: running (PID $($process.Id)) — http://localhost:11434"
             } else {
                 Write-Host "Ollama: not running"
+            }
+        }
+    }
+}
+
+function Manage-WebUI {
+    param([string]$Action)
+    $webuiPath = "${Root}\AI_CORE\Apps\open-webui"
+    $webuiLauncher = "${Root}\AI_TOOLS\launch_openwebui.ps1"
+    $webuiPort = 3000
+    $webuiRunning = netstat -ano 2>$null | Select-String "LISTENING" | Select-String ":${webuiPort} "
+
+    switch ($Action) {
+        "start" {
+            if ($webuiRunning) {
+                Write-Host "Open Web UI is already running (port $webuiPort)"
+                return
+            }
+            if (!(Test-Path $webuiPath)) {
+                Write-Host "Open Web UI not installed. Run: ai install openwebui"
+                exit 1
+            }
+            Write-Host "Starting Open Web UI..."
+            Start-Process -WindowStyle Hidden -FilePath "powershell" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$webuiLauncher`""
+            Start-Sleep -Seconds 3
+            Write-Host "Open Web UI started. URL: http://127.0.0.1:$webuiPort"
+        }
+        "stop" {
+            if (-not $webuiRunning) {
+                Write-Host "Open Web UI is not running."
+                return
+            }
+            $line = netstat -ano | Select-String "LISTENING" | Select-String ":${webuiPort} "
+            $pid = $line -replace '.*\s+(\d+)\s*$', '$1'
+            if ($pid) {
+                Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+                Write-Host "Open Web UI stopped."
+            } else {
+                Write-Host "Could not find process for Open Web UI."
+            }
+        }
+        "status" {
+            if ($webuiRunning) {
+                Write-Host "Open Web UI: running (port $webuiPort) — http://127.0.0.1:$webuiPort"
+            } else {
+                Write-Host "Open Web UI: not running"
             }
         }
     }
@@ -572,24 +618,27 @@ switch ($Command) {
     }
     "start"      {
         switch ($SubCommand) {
-            "ollama"  { Manage-Ollama "start" }
-            "comfyui" { Manage-ComfyUI "start" }
-            default   { Write-Host "Usage: ai start <ollama|comfyui>" }
+            "ollama"    { Manage-Ollama "start" }
+            "comfyui"   { Manage-ComfyUI "start" }
+            "openwebui" { Manage-WebUI "start" }
+            default     { Write-Host "Usage: ai start <ollama|comfyui|openwebui>" }
         }
     }
     "stop"      {
         switch ($SubCommand) {
-            "ollama"  { Manage-Ollama "stop" }
-            "comfyui" { Manage-ComfyUI "stop" }
-            default   { Write-Host "Usage: ai stop <ollama|comfyui>" }
+            "ollama"    { Manage-Ollama "stop" }
+            "comfyui"   { Manage-ComfyUI "stop" }
+            "openwebui" { Manage-WebUI "stop" }
+            default     { Write-Host "Usage: ai stop <ollama|comfyui|openwebui>" }
         }
     }
     "status"     {
         switch ($SubCommand) {
-            "ollama"  { Manage-Ollama "status" }
-            "comfyui" { Manage-ComfyUI "status" }
+            "ollama"    { Manage-Ollama "status" }
+            "comfyui"   { Manage-ComfyUI "status" }
+            "openwebui" { Manage-WebUI "status" }
             ""        { Show-Status }
-            default   { Write-Host "Usage: ai status [ollama|comfyui]" }
+            default   { Write-Host "Usage: ai status [ollama|comfyui|openwebui]" }
         }
     }
     "models"     {
