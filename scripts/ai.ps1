@@ -164,12 +164,12 @@ function Install-ComfyUI {
 
     Set-Location "$ComfyPath"
 
-    # Recreate venv if AMD has CUDA torch installed
+    # Recreate venv if DirectML module is missing (AMD)
     $recreateVenv = $false
     if ((Test-Path ".\venv") -and $gpu -eq "amd") {
-        $torchCheck = & ".\venv\Scripts\python.exe" -c "import torch; print(torch.__version__)" 2>$null
-        if ($torchCheck -and $torchCheck -notmatch "directml") {
-            Write-Host "AMD GPU with CUDA torch — recreating venv"
+        $dmlCheck = & ".\venv\Scripts\python.exe" -c "import torch_directml; print('ok')" 2>$null
+        if ($dmlCheck -ne "ok") {
+            Write-Host "AMD GPU — DirectML backend not found, recreating venv"
             $recreateVenv = $true
         }
     }

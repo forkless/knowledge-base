@@ -70,13 +70,13 @@ if (!(Test-Path $ComfyPath)) {
 
 Set-Location "$ComfyPath"
 
-# Venv — create if missing or GPU type changed
+# Venv — create if missing or missing DirectML module (AMD)
 $recreateVenv = $false
 if ((Test-Path ".\venv") -and $gpuType -eq "amd") {
-    # Check if venv has CUDA torch (wrong for AMD)
-    $torchCheck = & ".\venv\Scripts\python.exe" -c "import torch; print(torch.__version__)" 2>$null
-    if ($torchCheck -and $torchCheck -notmatch "directml") {
-        Write-Host "AMD GPU detected with CUDA torch — recreating venv"
+    # Check if DirectML backend is installed
+    $dmlCheck = & ".\venv\Scripts\python.exe" -c "import torch_directml; print('ok')" 2>$null
+    if ($dmlCheck -ne "ok") {
+        Write-Host "AMD GPU — DirectML backend not found, recreating venv"
         $recreateVenv = $true
     }
 }
