@@ -49,7 +49,7 @@ function Show-Help {
     $boxWidth = 78
     $title = " Ai, ai, ai! Control Panel v1.1 "
     Write-Host "┌$("─" * ($boxWidth - 2))┐"
-    Write-Host ("│{0,$boxWidth}│" -f $title)
+    Write-Host ("│{0,-$($boxWidth - 2)}│" -f $title)
     Write-Host "└$("─" * ($boxWidth - 2))┘"
     Write-Host ""
     Write-Host "Usage: ai <command>"
