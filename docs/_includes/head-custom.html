@@ -1,5 +1,12 @@
 <style>
-  /* Wider content area for code blocks and diagrams */
+  /* Warm light background — "For Dummies" feel */
+  body {
+    background: #f7f7f7;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* Wider content area */
   .container-lg {
     max-width: 960px !important;
   }
@@ -10,73 +17,67 @@
     font-size: 0.88em;
   }
 
-  /* Slightly warmer background for code blocks */
+  /* Code blocks — slightly lighter than body bg */
   .highlight pre, .highlighter-rouge .highlight {
-    background: #f6f4f0 !important;
+    background: #fafafa !important;
     border-radius: 6px;
   }
 
-  /* Better paragraph readability */
-  body {
-    font-size: 16px;
-    line-height: 1.7;
-  }
-
-  /* Links — dark tangerine instead of default blue */
-  a {
-    color: #c47030;
-    text-decoration: none;
-  }
-  a:hover {
-    color: #a05520;
-    text-decoration: underline;
-  }
-  a:visited {
-    color: #b06028;
-  }
-
-  /* Nicer blockquotes — tangerine accent to match links */
-  blockquote {
-    border-left: 4px solid #c47030;
-    color: #555;
-    background: #faf8f5;
-    padding: 8px 16px;
-    border-radius: 0 6px 6px 0;
-  }
-
-  /* Headings — rich warm brown, distinct from links */
+  /* Headings — dark charcoal */
   h1, h2, h3, h4 {
-    color: #7a5a3a;
+    color: #393e46;
   }
 
   h2 {
     margin-top: 32px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #e5e0d8;
+    border-bottom: 1px solid #e0e0e0;
   }
 
   h3 {
     margin-top: 24px;
   }
 
-  /* Table styling — cleaner rows */
+  /* Links — golden yellow accent */
+  a {
+    color: #f8b500;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #d99a00;
+    text-decoration: underline;
+  }
+  a:visited {
+    color: #d99a00;
+  }
+
+  /* Blockquotes — slate accent, light bg */
+  blockquote {
+    border-left: 4px solid #5c636e;
+    color: #555;
+    background: #fafafa;
+    padding: 8px 16px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Tables — clean and simple */
   table {
     border-collapse: collapse;
     width: 100%;
   }
   th, td {
     padding: 8px 12px;
-    border: 1px solid #ddd7ce;
+    border: 1px solid #e0e0e0;
   }
   th {
-    background: #f0ece5;
+    background: #f0f0f0;
     font-weight: 600;
   }
   tr:nth-child(even) {
-    background: #faf8f5;
+    background: #fafafa;
   }
 
-  /* Lists with consistent spacing */
+  /* Lists */
   li {
     margin-bottom: 4px;
   }
