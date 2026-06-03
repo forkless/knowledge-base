@@ -143,7 +143,7 @@ Makes `ai` available from any PowerShell window by adding AI_TOOLS to your user 
 ai setup path
 ```
 
-Copies itself to `AI_TOOLS\ai.ps1` and adds the folder to PATH. Restart PowerShell, then just type `ai` from anywhere.
+Copies itself to `AI_TOOLS\ai.ps1` and adds the folder to PATH. Works immediately in the current window and persists for all future windows.
 
 ### ai help
 

@@ -473,16 +473,23 @@ function Setup-Path {
     Copy-Item -Path "$PSCommandPath" -Destination "$scriptPath" -Force
     Write-Host "  Copied ai.ps1 to $scriptPath"
 
-    # Add to user PATH
+    # Add to user PATH (persistent)
     $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
     if ($currentPath -notlike "*${toolsDir}*") {
         $newPath = "${currentPath};${toolsDir}"
         [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
-        Write-Host "  Added AI_TOOLS to user PATH"
-        Write-Host "  Restart PowerShell, then use 'ai' from anywhere."
+        Write-Host "  Added AI_TOOLS to user PATH (persistent)"
     } else {
-        Write-Host "  AI_TOOLS already in PATH"
+        Write-Host "  AI_TOOLS already in user PATH"
     }
+
+    # Also add to current session so it works immediately
+    if ($env:Path -notlike "*${toolsDir}*") {
+        $env:Path = "${env:Path};${toolsDir}"
+        Write-Host "  Added AI_TOOLS to current session PATH"
+    }
+
+    Write-Host "  You can now use 'ai' from this window and all future windows."
 }
 
 # Dispatch
