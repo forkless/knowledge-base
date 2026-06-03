@@ -2,10 +2,11 @@
 
 ## Core Idea
 
-Instead of mixing everything into one folder, the system is split into 3 clear layers:
+Instead of mixing everything into one folder, the system is split into 4 clear layers:
 
 - **AI_CORE** — running engines (ComfyUI, LM Studio, Ollama)
 - **AI_VAULT** — permanent models (LLMs, diffusion, embeddings)
+- **AI_WORKSPACE** — input, output, and workflow files
 - **AI_TOOLS** — helper scripts & utilities
 
 > This avoids duplication, keeps models stable, and makes tools interchangeable.
@@ -47,40 +48,40 @@ D:\AI\
     └── utilities
 ```
 
-> This structure separates runtime (CORE), permanent assets (VAULT), and automation tools (TOOLS).
+> This structure separates runtimes (CORE), permanent assets (VAULT), workspace (WORKSPACE), and utilities (TOOLS).
 
 ## How It Works (Conceptually)
 
 ```
-          +----------------------+
-          |      AI_CORE         |
-          |  (Runs Models)       |
-          |----------------------|
-          | ComfyUI             |
-          | LM Studio           |
-          | Ollama              |
-          +----------+----------+
-                     |
-                     v
-          +----------------------+
-          |      AI_VAULT        |
-          |  (Permanent Data)    |
-          |----------------------|
-          | LLM models          |
-          | Diffusion models    |
-          | Embeddings          |
-          +----------+----------+
-                     |
-                     v
-          +----------------------+
-          |   AI_WORKSPACE       |
-          | (Inputs / Outputs)   |
-          +----------------------+
+╔══════════════════════════╗
+║        AI_CORE           ║
+║    (Runs Models)         ║
+╠══════════════════════════╣
+║  ComfyUI                 ║
+║  LM Studio               ║
+║  Ollama                  ║
+╚══════════╦═══════════════╝
+           ║
+           ▼
+╔══════════════════════════╗
+║       AI_VAULT           ║
+║   (Permanent Data)       ║
+╠══════════════════════════╣
+║  LLM models              ║
+║  Diffusion models        ║
+║  Embeddings              ║
+╚══════════╦═══════════════╝
+           ║
+           ▼
+╔══════════════════════════╗
+║     AI_WORKSPACE         ║
+║  (Inputs / Outputs)      ║
+╚══════════════════════════╝
 
-          +----------------------+
-          |     AI_TOOLS         |
-          | (Converters etc.)    |
-          +----------------------+
+╔══════════════════════════╗
+║       AI_TOOLS           ║
+║  (Converters etc.)       ║
+╚══════════════════════════╝
 ```
 
 ## Why This Structure Works
