@@ -268,6 +268,6 @@ The script detects your GPU and installs the correct backend automatically:
 
 ## Script Locations
 
-The scripts live in the `scripts/` folder of this repository. After architecture initialization, copy them to `AI_TOOLS\scripts\` or run them directly from the repo.
+The scripts live in the `scripts/` folder of this repository. A zip archive (`ai-bootstrap-v1.1.zip`) is available at the repo root for easy download — grab it, extract, and run.
 
-All three scripts are also mirrored in this documentation as code blocks above — inspect them before running.
+After architecture initialization, copy them to `AI_TOOLS\scripts\` or run them directly. All scripts are also mirrored in this documentation as code blocks above — inspect them before running.
