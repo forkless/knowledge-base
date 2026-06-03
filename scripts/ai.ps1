@@ -669,7 +669,12 @@ function Doctor-Check {
 
     # Ollama
     $ollamaVer = ollama --version 2>$null
-    if ($ollamaVer) { Write-Host "PASS  Ollama — $ollamaVer" } else { Write-Host "FAIL  Ollama — not found" }
+    if ($ollamaVer) {
+        Write-Host "PASS  Ollama — $ollamaVer"
+        $ollamaRunning = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
+        if ($ollamaRunning) { Write-Host "       Service: Running (port $(Get-PortConfig).ollama)" }
+        else { Write-Host "       Service: Stopped" }
+    } else { Write-Host "FAIL  Ollama — not found" }
 
     # FFmpeg
     $ffmpegVer = ffmpeg -version 2>$null
