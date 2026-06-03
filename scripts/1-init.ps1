@@ -153,9 +153,14 @@ if (!(Test-Path $registryPath)) {
 # SUMMARY
 # -------------------------
 
+# PORTS CONFIG
+$portConfig = @{ollama=11434; comfyui=8188; openwebui=3000}
+$portConfig | ConvertTo-Json | Out-File "${BasePath}\AI_CONFIG\ports.json" -Encoding utf8
+Write-Host "Port config: ports.json (defaults)"
+
 Write-Host ""
 Write-Host "===== Ai, ai, ai! Bootstrap v1.1 ====="
-Write-Host "Architecture initialized"
+Write-Host "Architecture initialization complete"
 Write-Host "  Root: $BasePath"
 Write-Host "  Folders: $created new, $skipped existing"
 Write-Host "  GPU: $gpuType"
