@@ -92,7 +92,7 @@ Write-Host "Detected GPU: $gpuType"
 Write-Host "Installing requirements..."
 try {
     .\venv\Scripts\Activate.ps1
-    pip install --upgrade pip
+    pip install --upgrade pip --quiet 2>$null
     pip install -r requirements.txt --no-deps 2>$null
     pip install -r requirements.txt 2>&1 | Out-Null
     if ($gpuType -eq "amd") {

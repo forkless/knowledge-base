@@ -172,7 +172,7 @@ function Install-ComfyUI {
     }
 
     .\venv\Scripts\Activate.ps1
-    pip install --upgrade pip
+    pip install --upgrade pip --quiet 2>$null
 
     # Install requirements but skip torch (handled separately)
     pip install -r requirements.txt --no-deps 2>$null
