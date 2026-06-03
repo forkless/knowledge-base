@@ -85,6 +85,8 @@ If something seems off later, run `ai setup env` to check and fix them.
 - **Safe to re-run**: Running a script again won't break anything. It skips what's already there, creates what's missing.
 - **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from a config file — no need to type it again.
 
+**Pip notice:** You may see `[notice] A new release of pip is available` during ComfyUI setup. That's just pip telling you a newer version exists. The version that comes with Python 3.11 works fine — you can ignore it.
+
 **Note:** The scripts install and configure everything, but don't start the services. You need to launch them manually when you want to use them.
 
 ## After Everything Runs

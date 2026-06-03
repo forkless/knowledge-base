@@ -77,6 +77,16 @@ winget install Ollama.Ollama
 
 Then follow the **[Organize Your AI Folders](organize-your-ai-folders.md)** guide to create the folder structure by hand.
 
+## Pip Version Notice
+
+You might see this during ComfyUI install:
+
+```
+[notice] A new release of pip is available: 24.0 -> 26.1.2
+```
+
+This is a notification, not an error. The version that comes with Python 3.11 works perfectly. You can ignore it.
+
 ## Common Pitfalls
 
 - **Command not found?** Close PowerShell and open a fresh window
