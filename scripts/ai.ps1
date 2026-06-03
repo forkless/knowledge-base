@@ -12,7 +12,16 @@ Commands:
   help               Show this message
 #>
 
-$Root = if (Test-Path "D:\AI") { "D:\AI" } elseif ($env:AI_ROOT) { $env:AI_ROOT } else { $null }
+# Detect root — try config first, then common paths, then prompt
+$Root = $null
+$configCandidates = @("D:\AI\AI_CONFIG\system_config.json", "$env:AI_ROOT\AI_CONFIG\system_config.json")
+foreach ($p in $configCandidates) {
+    if (Test-Path $p) {
+        try { $cfg = Get-Content $p | ConvertFrom-Json; $Root = $cfg.root; break } catch {}
+    }
+}
+if (-not $Root -and (Test-Path "D:\AI")) { $Root = "D:\AI" }
+if (-not $Root -and $env:AI_ROOT) { $Root = $env:AI_ROOT }
 
 if (-not $Root) {
     $input = Read-Host "AI root not found. Enter path (e.g. D:\AI)"
@@ -24,7 +33,7 @@ if (-not $Root) {
 }
 
 if (!(Test-Path $Root)) {
-    Write-Host "WARNING: $Root does not exist yet. Run Initialize-AIArchitecture.ps1 first, then try again."
+    Write-Host "WARNING: $Root does not exist yet. Run 1-init.ps1 first, then try again."
 }
 
 $Command = $args[0]

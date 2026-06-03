@@ -3,7 +3,19 @@
 Requires: 1-init.ps1 run, 2-deps.ps1 run, terminal restarted.
 #>
 
-$Root = Read-Host "Enter AI root path (e.g. D:\AI)"
+# Try to read root from config first, fall back to prompt
+$Root = $null
+$configPaths = @("D:\AI\AI_CONFIG\system_config.json", "$env:AI_ROOT\AI_CONFIG\system_config.json")
+foreach ($p in $configPaths) {
+    if (Test-Path $p) {
+        $cfg = Get-Content $p | ConvertFrom-Json
+        $Root = $cfg.root
+        break
+    }
+}
+if (-not $Root) {
+    $Root = Read-Host "Enter AI root path (e.g. D:\AI)"
+}
 $Root = $Root.TrimEnd("\")
 
 $ComfyPath = "${Root}\AI_CORE\Apps\ComfyUI"
