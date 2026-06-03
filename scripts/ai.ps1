@@ -46,7 +46,11 @@ $SubCommand = $args[1]
 
 function Show-Help {
     $cmd = "  {0,-26}{1}"
-    Write-Host "===== Ai, ai, ai! Control Panel v1.1 ====="
+    $boxWidth = 78
+    $title = " Ai, ai, ai! Control Panel v1.1 "
+    Write-Host "┌$("─" * ($boxWidth - 2))┐"
+    Write-Host ("│{0,$boxWidth}│" -f $title)
+    Write-Host "└$("─" * ($boxWidth - 2))┘"
     Write-Host ""
     Write-Host "Usage: ai <command>"
     Write-Host "Commands:"
