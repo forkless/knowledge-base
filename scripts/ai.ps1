@@ -437,9 +437,9 @@ function Show-Status {
         $config = Get-Content $configPath | ConvertFrom-Json
         $detectedGpu = Get-GPUType
         if ($detectedGpu -ne "unknown") {
-            Write-Host "  Config: v$($config.architecture_version) — $detectedGpu GPU"
+            Write-Host "  Config: v$($config.architecture_version) — $($detectedGpu.ToUpper()) GPU"
         } else {
-            Write-Host "  Config: v$($config.architecture_version) — $($config.gpu) GPU (run ai install comfyui to auto-detect)"
+            Write-Host "  Config: v$($config.architecture_version) — $($config.gpu.ToUpper()) GPU (run ai install comfyui to auto-detect)"
         }
     } else {
         Write-Host "  Config: missing"
