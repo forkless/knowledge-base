@@ -693,15 +693,6 @@ function Doctor-Check {
     $ollamaVer = ollama --version 2>$null
     if ($ollamaVer) { Write-Host "PASS  Ollama — $ollamaVer" } else { Write-Host "FAIL  Ollama — not found" }
 
-    # FFmpeg
-    $ffmpegVer = ffmpeg -version 2>$null
-    $ffmpegLine = if ($ffmpegVer) { ($ffmpegVer -split "`n")[0] } else { "" }
-    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — $ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
-
-    # Arch config check (verifies file is readable, banner already shown above)
-    $archCheck = Get-Content "$Root\AI_CONFIG\system_config.json" -ErrorAction SilentlyContinue
-    if (-not $archCheck) { Write-Host "FAIL  Config missing — run 1-init.ps1" }
-
     # ComfyUI
     $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
     $comfyVerFile = "$comfyPath\comfyui_version.py"
@@ -720,6 +711,15 @@ function Doctor-Check {
     } else {
         Write-Host "WARN  Open Web UI — not installed"
     }
+
+    # FFmpeg
+    $ffmpegVer = ffmpeg -version 2>$null
+    $ffmpegLine = if ($ffmpegVer) { ($ffmpegVer -split "`n")[0] } else { "" }
+    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — $ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
+
+    # Arch config check (verifies file is readable, banner already shown above)
+    $archCheck = Get-Content "$Root\AI_CONFIG\system_config.json" -ErrorAction SilentlyContinue
+    if (-not $archCheck) { Write-Host "FAIL  Config missing — run 1-init.ps1" }
 
     # Model bindings
     $allLinks = $true
