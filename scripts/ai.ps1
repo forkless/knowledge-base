@@ -186,9 +186,10 @@ function Install-ComfyUI {
     if ($gpu -eq "amd") {
         Write-Host "AMD GPU — installing DirectML stack..."
         pip install torch-directml 2>&1 | Out-Null
+        pip install -r requirements.txt 2>&1 | Out-Null
+        Write-Host "  Replacing CUDA torchaudio with CPU version..."
         pip install torchaudio --force-reinstall --no-deps --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
         Write-Host "  DirectML and CPU torchaudio ready"
-        pip install -r requirements.txt 2>&1 | Out-Null
     } else {
         pip install -r requirements.txt 2>&1 | Out-Null
     }

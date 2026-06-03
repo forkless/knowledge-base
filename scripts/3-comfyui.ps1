@@ -104,13 +104,15 @@ try {
     .\venv\Scripts\Activate.ps1
 
     if ($gpuType -eq "amd") {
-        # Install CPU torch + DirectML + CPU torchaudio first
+        # Install DirectML stack (replaces CUDA torch with CPU torch)
         Write-Host "AMD GPU — installing DirectML stack..."
         pip install torch-directml 2>&1 | Out-Null
-        # Force reinstall torchaudio from CPU index — CUDA version crashes
+        # Install full requirements (includes CUDA torchaudio — will be fixed next)
+        pip install -r requirements.txt 2>&1 | Out-Null
+        # Reinstall torchaudio from CPU index (CUDA version crashes on AMD)
+        Write-Host "  Replacing CUDA torchaudio with CPU version..."
         pip install torchaudio --force-reinstall --no-deps --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 2>&1 | Out-Null
         Write-Host "  DirectML and CPU torchaudio ready"
-        pip install -r requirements.txt 2>&1 | Out-Null
     } else {
         pip install -r requirements.txt 2>&1 | Out-Null
     }
