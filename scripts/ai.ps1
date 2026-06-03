@@ -214,7 +214,7 @@ function Show-Models {
         $path = "$Root\AI_VAULT\models\diffusion\$dir"
         if (Test-Path $path) {
             $count = @(Get-ChildItem $path -ErrorAction SilentlyContinue).Count
-            Write-Host "  Diffusion/$dir: $count files"
+            Write-Host "  Diffusion/${dir}: $count files"
         }
     }
 
