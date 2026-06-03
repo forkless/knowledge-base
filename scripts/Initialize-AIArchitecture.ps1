@@ -109,6 +109,17 @@ foreach ($link in $links) {
 }
 
 # -------------------------
+# GPU DETECTION
+# -------------------------
+
+$gpuType = "unknown"
+$nvidia = Get-WmiObject -Class Win32_VideoController | Where-Object { $_.Name -match "NVIDIA" }
+if ($nvidia) { $gpuType = "nvidia" }
+$amd = Get-WmiObject -Class Win32_VideoController | Where-Object { $_.Name -match "AMD|Radeon" }
+if ($amd) { $gpuType = "amd" }
+Write-Host "Detected GPU: $gpuType"
+
+# -------------------------
 # CONFIG FILES
 # -------------------------
 
@@ -121,7 +132,7 @@ if (!(Test-Path $configPath)) {
         vault = "$BasePath\AI_VAULT"
         workspace = "$BasePath\AI_WORKSPACE"
         cache = "$BasePath\AI_CACHE"
-        gpu = "unknown"
+        gpu = $gpuType
     }
     $config | ConvertTo-Json -Depth 10 | Out-File $configPath
     Write-Host "Config created: system_config.json"
@@ -146,6 +157,6 @@ Write-Host ""
 Write-Host "Architecture initialization complete"
 Write-Host "  Root: $BasePath"
 Write-Host "  Folders: $created new, $skipped existing"
-Write-Host "  GPU: unknown (edit AI_CONFIG\system_config.json to set 'amd' or 'nvidia')"
+Write-Host "  GPU: $gpuType"
 Write-Host ""
 Write-Host "Next step: Restart PowerShell, then run Install-AIPrerequisites.ps1"

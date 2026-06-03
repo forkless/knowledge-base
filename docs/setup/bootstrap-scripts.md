@@ -149,7 +149,7 @@ Write-Host "Architecture initialization complete"
 
 - Symbolic links require admin rights or Developer Mode enabled on Windows 10/11
 - Existing folders are skipped — the script is idempotent and safe to re-run
-- The `gpu` field in system_config defaults to `"unknown"` — update it to `"amd"` or `"nvidia"` after install
+- GPU is auto-detected via WMI and written to `system_config.json`
 
 **Next:** Restart PowerShell, then run [Install-AIPrerequisites.ps1](#install-aiprerequisitesps1).
 
