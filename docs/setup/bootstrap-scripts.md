@@ -261,4 +261,6 @@ python main.py --temp-directory "D:\AI\AI_CACHE\comfyui_temp"
 
 ## Script Locations
 
-The scripts themselves live wherever you keep your tools. After architecture initialization, `AI_TOOLS\scripts\` is the natural home for them.
+The scripts live in the `scripts/` folder of this repository. After architecture initialization, copy them to `AI_TOOLS\scripts\` or run them directly from the repo.
+
+All three scripts are also mirrored in this documentation as code blocks above — inspect them before running.
