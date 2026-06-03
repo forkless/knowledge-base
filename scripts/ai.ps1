@@ -194,7 +194,7 @@ function Install-ComfyUI {
         New-Item -Path "$ComfyPath\venv\Lib\site-packages\torchaudio\_extension" -ItemType Directory -Force | Out-Null
         @"
 _IS_TORCHAUDIO_EXT_AVAILABLE = False
-def fail_if_no_align(): raise RuntimeError("torchaudio C extension not available")
+def fail_if_no_align(f): return f
 def _init_extension(): pass
 def _load_lib(*a): return False
 "@ | Set-Content -Path "$ComfyPath\venv\Lib\site-packages\torchaudio\_extension\__init__.py"
