@@ -62,7 +62,7 @@ function Show-Help {
     Write-Host ($cmd -f "models list",            "List installed models")
     Write-Host ($cmd -f "clean cache",            "Delete all temporary files")
     Write-Host ($cmd -f "setup env",              "Check and fix environment variables")
-    Write-Host ($cmd -f "setup path",             "Add AI_TOOLS to PATH for 'ai' from anywhere")
+    Write-Host ($cmd -f "setup path",             "Add AI_TOOLS to your PATH so 'ai' works from any folder")
     Write-Host ($cmd -f "setup ports",            "Configure service ports")
     Write-Host ($cmd -f "help",                   "Show this message")
     Write-Host ""
