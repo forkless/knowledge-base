@@ -101,7 +101,7 @@ ai install openwebui
 
 Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
 
-ComfyUI detected your GPU and sets up the right backend. ComfyUI-Manager adds a UI for browsing and installing custom nodes — after installing and restarting ComfyUI, **refresh the browser tab once** to see the manager toolbar. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically.
+ComfyUI detected your GPU and sets up the right backend. ComfyUI-Manager adds a UI for browsing and installing custom nodes — after installing and restarting ComfyUI, **refresh the browser tab once** to see the manager toolbar. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically. The first install takes a few minutes — it downloads FastAPI, aiohttp, and other web server dependencies.
 
 ### ai remove &lt;app&gt;
 
