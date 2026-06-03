@@ -76,20 +76,22 @@ The status dashboard only tracks tools installed through `ai install <app>`. Man
 Example output:
 
 ```
-AI Platform Status
-────────────────────────────────
-Ollama      Running   Port 11434
-ComfyUI     Running   Port 8188
-OpenWebUI   Running   Port 3000
+┌──────────┬─────────┬────────┐
+│ Service  │ Status  │ Port   │
+├──────────┼─────────┼────────┤
+│ Ollama   │ Running │ 11434  │
+│ ComfyUI  │ Running │ 8188   │
+│ OpenWebUI│ Running │ 3000   │
+└──────────┴─────────┴────────┘
+
+CPU:  8%
+RAM:  19.4/31.9 GB (61%)
+GPU:  15% | VRAM: 2.4/16.0 GB
 
   Models:
-    LLMs:        5
-    Diffusion:   12
-    VAEs:        4
-
-Root:
-  D:\AI
-  v1.1 — AMD GPU
+    LLMs:        2
+    Diffusion:   0
+    VAEs:        0
 ```
 
 ### ai install &lt;app&gt;
@@ -131,16 +133,22 @@ ai doctor
 Example output:
 
 ```
-PASS  Git — git version 2.45.0.windows.1
-PASS  Python 3.11 — Python 3.11.9
-PASS  Ollama — ollama version is 0.5.1
-PASS  FFmpeg
-PASS  Architecture v1.1 — Root: D:\AI
-PASS  ComfyUI — running on port 8188
-WARN  Open Web UI — installed but not running
-PASS  Model bindings
-PASS  Models — 5 LLM(s), 12 diffusion file(s)
-PASS  Environment variables
+┌──────────────────────┬──────────────────────────────┐
+│ Stack                │ v1.1 (AMD)                   │
+│ Path                 │ D:\AI                        │
+├──────────────────────┼──────────────────────────────┤
+│ Git                  │ 2.54.0                       │
+│ Python 3.10          │ 3.10.11                      │
+│ Python 3.11          │ 3.11.9                       │
+│ Ollama               │ 0.30.2                       │
+│ ComfyUI              │ 0.24.0                       │
+│ Open Web UI          │ 0.9.6                        │
+│ FFmpeg               │ 8.1.1                        │
+├──────────────────────┼──────────────────────────────┤
+│ Model bindings       │ OK                           │
+│ Models               │ 2 LLM(s), 0 diffusion        │
+│ Environment vars     │ OK                           │
+└──────────────────────┴──────────────────────────────┘
 ```
 
 ### ai models list
