@@ -28,7 +28,7 @@ See **[Organize Your AI Folders](organize-your-ai-folders.md)** for the full arc
 
 ## First-Time Download
 
-PowerShell blocks scripts downloaded from the internet by default. If you get a "not digitally signed" error, unblock them first:
+PowerShell blocks scripts downloaded from the internet — it adds an NTFS alternate data stream marking them as "from the web." If you get a "not digitally signed" error, unblock them first. This removes the download marker without modifying the script's content.
 
 ```powershell
 Unblock-File .\1-init.ps1
