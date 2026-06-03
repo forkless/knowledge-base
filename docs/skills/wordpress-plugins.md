@@ -1,3 +1,5 @@
+← [Skills](../)
+
 # WordPress Plugin Standards
 
 ## File Header

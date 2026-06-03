@@ -1,3 +1,5 @@
+← [Setup](../)
+
 # Python
 
 Placeholder

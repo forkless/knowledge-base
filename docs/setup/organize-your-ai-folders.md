@@ -1,3 +1,5 @@
+← [Setup](../)
+
 # Organize Your AI Folders
 
 ## Core Idea

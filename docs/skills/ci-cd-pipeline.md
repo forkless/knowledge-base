@@ -1,3 +1,5 @@
+← [Skills](../)
+
 # CI/CD Pipeline Setup
 
 Blueprint for setting up a GitHub Actions CI/CD pipeline with checks, builds, draft releases, and supply-chain provenance.

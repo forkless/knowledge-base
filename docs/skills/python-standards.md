@@ -1,3 +1,5 @@
+← [Skills](../)
+
 # Python Standards
 
 ## Version

@@ -1,3 +1,5 @@
+← [Skills](../)
+
 # Privacy & Security
 
 Privacy-first design principles and security practices.

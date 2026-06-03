@@ -1,3 +1,5 @@
+← [Skills](../)
+
 # SQL Standards
 
 ## Style

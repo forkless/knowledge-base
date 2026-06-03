@@ -1,3 +1,5 @@
+← [Skills](../)
+
 # Home Assistant Integration Development
 
 ## Structure

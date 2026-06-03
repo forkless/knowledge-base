@@ -1,3 +1,5 @@
+← [Skills](../)
+
 # Rust Standards
 
 Coding conventions and patterns for the NotAlterra project.

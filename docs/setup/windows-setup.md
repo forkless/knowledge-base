@@ -1,3 +1,5 @@
+← [Setup](../)
+
 # AI Stack Prerequisites (Windows Setup Guide)
 
 ## Overview
