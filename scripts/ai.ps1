@@ -73,7 +73,7 @@ function Manage-ComfyUI {
     switch ($Action) {
         "start" {
             if ($comfyRunning) {
-                Write-Host "ComfyUI is already running (port $comfyPort)"
+                Write-Host "ComfyUI: Running on port $comfyPort"
                 Write-Host "URL: http://127.0.0.1:8188"
                 return
             }
@@ -103,7 +103,7 @@ function Manage-ComfyUI {
         }
         "status" {
             if ($comfyRunning) {
-                Write-Host "ComfyUI: running (port $comfyPort) — http://127.0.0.1:8188"
+                Write-Host "ComfyUI: Running on port $comfyPort — http://127.0.0.1:8188"
             } else {
                 Write-Host "ComfyUI: not running"
             }
@@ -155,7 +155,7 @@ function Manage-WebUI {
     switch ($Action) {
         "start" {
             if ($webuiRunning) {
-                Write-Host "Open Web UI is already running (port $webuiPort)"
+                Write-Host "Open Web UI: Running on port $webuiPort"
                 return
             }
             if (!(Test-Path $webuiPath)) {
@@ -183,7 +183,7 @@ function Manage-WebUI {
         }
         "status" {
             if ($webuiRunning) {
-                Write-Host "Open Web UI: running (port $webuiPort) — http://127.0.0.1:$webuiPort"
+                Write-Host "Open Web UI: Running on port $webuiPort — http://127.0.0.1:$webuiPort"
             } else {
                 Write-Host "Open Web UI: not running"
             }
@@ -414,7 +414,7 @@ function Show-Status {
     $comfyRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${comfyPort} "
     if (Test-Path $comfyPath) {
         if ($comfyRunning) {
-            Write-Host "  [OK]  ComfyUI (port $comfyPort)"
+            Write-Host "  [OK]  ComfyUI (Running on port $comfyPort)"
         } else {
             Write-Host "  [OK]  ComfyUI (not running)"
         }
@@ -436,7 +436,7 @@ function Show-Status {
     $webuiRunning = netstat -an 2>$null | Select-String "LISTENING" | Select-String ":${webuiPort} "
     if (Test-Path $webuiPath) {
         if ($webuiRunning) {
-            Write-Host "  [OK]  Open Web UI (port $webuiPort)"
+            Write-Host "  [OK]  Open Web UI (Running on port $webuiPort)"
         } else {
             Write-Host "  [--]  Open Web UI (not running)"
         }
