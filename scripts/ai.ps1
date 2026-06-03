@@ -661,91 +661,71 @@ function Setup-Ports {
 }
 
 function Doctor-Check {
-    Write-Host "Ai, ai, ai! Doctor Check"
-    Write-Host ""
+    Write-Host "┌──────────────────────┬──────────────────────────────┐"
+    Write-Host "│ Check                │ Detail                       │"
+    Write-Host "├──────────────────────┼──────────────────────────────┤"
 
-    # Path and stack banner (top of output)
-    Write-Host "Path — $Root"
-    Write-Host ""
     $configPath = "$Root\AI_CONFIG\system_config.json"
     if (Test-Path $configPath) {
         $cfg = Get-Content $configPath | ConvertFrom-Json
-        Write-Host "PASS  Stack — v$($cfg.architecture_version) ($($cfg.gpu.ToUpper()))"
+        Write-Host ("│ {0,-20} │ {1,-28} │" -f "Stack", "v$($cfg.architecture_version) ($($cfg.gpu.ToUpper()))")
+        Write-Host ("│ {0,-20} │ {1,-28} │" -f "Path", $Root)
     } else {
-        Write-Host "FAIL  Stack — not initialized (run 1-init.ps1)"
+        Write-Host "│ not initialized      │ run 1-init.ps1"
         return
     }
-    Write-Host ""
+    Write-Host "├──────────────────────┼──────────────────────────────┤"
 
     # Git
-    $gitVer = git --version 2>$null
-    if ($gitVer) { $gitVer = ($gitVer -replace '^git version (\S+).*', '$1'); Write-Host "PASS  Git — $gitVer" } else { Write-Host "FAIL  Git — not found" }
+    $g = git --version 2>$null
+    if ($g) { Write-Host ("│ {0,-20} │ {1,-28} │" -f "Git", ($g -replace '^git version (\S+).*', '$1')) } else { Write-Host ("│ {0,-20} │ {1,-28} │" -f "Git", "FAIL") }
 
-    # Python versions
-    $py10 = py -3.10 --version 2>$null
-    $py11 = py -3.11 --version 2>$null
-    if ($py10) { $py10 = ($py10 -replace '^Python (\S+).*', '$1'); Write-Host "PASS  Python 3.10 — $py10" } else { Write-Host "WARN  Python 3.10 — not found (legacy fallback)" }
-    if ($py11) { $py11 = ($py11 -replace '^Python (\S+).*', '$1'); Write-Host "PASS  Python 3.11 — $py11" } else { Write-Host "FAIL  Python 3.11 — not found" }
+    # Python
+    $py10 = if (py -3.10 --version 2>$null) { (py -3.10 --version 2>$null) -replace '^Python (\S+).*', '$1' } else { "WARN" }
+    $py11 = if (py -3.11 --version 2>$null) { (py -3.11 --version 2>$null) -replace '^Python (\S+).*', '$1' } else { "FAIL" }
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "Python 3.10", $py10)
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "Python 3.11", $py11)
 
     # Ollama
-    $ollamaVer = ollama --version 2>$null
-    if ($ollamaVer) { $ollamaVer = ($ollamaVer -replace '^ollama version is (\S+).*', '$1'); Write-Host "PASS  Ollama — $ollamaVer" } else { Write-Host "FAIL  Ollama — not found" }
+    $ollamaVer = if (ollama --version 2>$null) { (ollama --version 2>$null) -replace '^ollama version is (\S+).*', '$1' } else { "FAIL" }
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "Ollama", $ollamaVer)
 
     # ComfyUI
-    $comfyPath = "$Root\AI_CORE\Apps\ComfyUI"
-    $comfyVerFile = "$comfyPath\comfyui_version.py"
-    $comfyVer = if (Test-Path $comfyVerFile) { (Select-String -Path $comfyVerFile -Pattern "__version__\s*=\s*['""]([^'""]+)['""]" | ForEach-Object { $_.Matches.Groups[1].Value }) } else { $null }
-    if (Test-Path $comfyPath) {
-        if ($comfyVer) { Write-Host "PASS  ComfyUI — $comfyVer" } else { Write-Host "PASS  ComfyUI" }
-    } else {
-        Write-Host "WARN  ComfyUI — not installed"
-    }
+    $comfyFile = "$Root\AI_CORE\Apps\ComfyUI\comfyui_version.py"
+    $comfyVer = if (Test-Path $comfyFile) { (Select-String -Path $comfyFile -Pattern "__version__\s*=\s*['""]([^'""]+)['""]" | ForEach-Object { $_.Matches.Groups[1].Value }) } else { "WARN" }
+    if ($comfyVer -eq "WARN" -and !(Test-Path "$Root\AI_CORE\Apps\ComfyUI")) { $comfyVer = "not installed" }
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "ComfyUI", $comfyVer)
 
     # Open Web UI
-    $webuiPath = "$Root\AI_CORE\Apps\open-webui"
-    $webuiVer = if (Test-Path "$webuiPath") { & "$webuiPath\venv\Scripts\pip.exe" show open-webui 2>$null | Select-String "^Version:" | ForEach-Object { $_ -replace ".*:\s*", "" } } else { $null }
-    if (Test-Path $webuiPath) {
-        if ($webuiVer) { Write-Host "PASS  Open Web UI — $webuiVer" } else { Write-Host "PASS  Open Web UI — ?" }
-    } else {
-        Write-Host "WARN  Open Web UI — not installed"
-    }
+    $webuiVer = if (Test-Path "$Root\AI_CORE\Apps\open-webui") { & "$Root\AI_CORE\Apps\open-webui\venv\Scripts\pip.exe" show open-webui 2>$null | Select-String "^Version:" | ForEach-Object { $_ -replace ".*:\s*", "" } } else { "not installed" }
+    if (-not $webuiVer) { $webuiVer = "?" }
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "Open Web UI", $webuiVer)
 
     # FFmpeg
-    $ffmpegVer = ffmpeg -version 2>$null
-    $ffmpegLine = if ($ffmpegVer) { ($ffmpegVer -split "`n")[0] -replace '^ffmpeg version (\S+).*', '$1' } else { "" }
-    if ($ffmpegVer) { Write-Host "PASS  FFmpeg — $ffmpegLine" } else { Write-Host "WARN  FFmpeg — not found (needed for audio in Open Web UI)" ; Write-Host "       Try: restart PowerShell, or run: winget install FFmpeg" }
+    $ff = ffmpeg -version 2>$null
+    if ($ff) { $ff = ($ff -split "`n")[0] -replace '^ffmpeg version (\S+).*', '$1'; Write-Host ("│ {0,-20} │ {1,-28} │" -f "FFmpeg", $ff) } else { Write-Host ("│ {0,-20} │ {1,-28} │" -f "FFmpeg", "not found") }
+    Write-Host "├──────────────────────┼──────────────────────────────┤"
 
-    # Arch config check (verifies file is readable, banner already shown above)
-    $archCheck = Get-Content "$Root\AI_CONFIG\system_config.json" -ErrorAction SilentlyContinue
-    if (-not $archCheck) { Write-Host "FAIL  Config missing — run 1-init.ps1" }
-
-    # Model bindings
-    $allLinks = $true
-    foreach ($link in @("llm","diffusion","embeddings")) {
-        $lp = "$Root\AI_CORE\_bindings\$link"
-        if (!(Test-Path $lp)) { Write-Host "FAIL  Binding $link — missing"; $allLinks = $false }
-    }
-    if ($allLinks) { Write-Host "PASS  Model bindings" }
+    # Bindings
+    $bindOk = $true
+    foreach ($link in @("llm","diffusion","embeddings")) { if (!(Test-Path "$Root\AI_CORE\_bindings\$link")) { $bindOk = $false } }
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "Model bindings", $(if ($bindOk) { "OK" } else { "MISSING" }))
 
     # Models
-    $ollamaModels = if ($ollamaVer) { @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+") } else { @() }
-    $llmCount = $ollamaModels.Count
-    $diffCount = @(Get-ChildItem "$Root\AI_VAULT\models\diffusion" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
-    if ($llmCount -gt 0) { Write-Host "PASS  Models — $llmCount LLM(s), $diffCount diffusion file(s)" }
-    elseif ($diffCount -gt 0) { Write-Host "WARN  Models — no LLMs found, $diffCount diffusion file(s)" }
-    else { Write-Host "WARN  Models — none found (pull some with 'ollama pull <name>')" }
+    $olMods = @(ollama list 2>$null | Select-String -Pattern "^(\S+)\s+")
+    $diffC = @(Get-ChildItem "$Root\AI_VAULT\models\diffusion" -Recurse -ErrorAction SilentlyContinue | Where-Object { !$_.PSIsContainer }).Count
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "Models", "$($olMods.Count) LLM(s), $diffC diffusion")
 
     # Environment variables
     $envOk = $true
     $expVault = "$Root\AI_VAULT\models\llm"
     $expCache = "$Root\AI_CACHE"
-    $ollamaEnv = [Environment]::GetEnvironmentVariable("OLLAMA_MODELS","User")
-    if ($ollamaEnv -ne $expVault) { Write-Host "WARN  OLLAMA_MODELS — should be $expVault"; $envOk = $false }
-    $hfEnv = [Environment]::GetEnvironmentVariable("HF_HOME","User")
-    if ($hfEnv -ne "${expCache}\huggingface") { Write-Host "WARN  HF_HOME — should be ${expCache}\huggingface"; $envOk = $false }
-    $torchEnv = [Environment]::GetEnvironmentVariable("TORCH_HOME","User")
-    if ($torchEnv -ne "${expCache}\torch") { Write-Host "WARN  TORCH_HOME — should be ${expCache}\torch"; $envOk = $false }
-    if ($envOk) { Write-Host "PASS  Environment variables" }
+    if (([Environment]::GetEnvironmentVariable("OLLAMA_MODELS","User")) -ne $expVault) { $envOk = $false }
+    if (([Environment]::GetEnvironmentVariable("HF_HOME","User")) -ne "${expCache}\huggingface") { $envOk = $false }
+    if (([Environment]::GetEnvironmentVariable("TORCH_HOME","User")) -ne "${expCache}\torch") { $envOk = $false }
+    Write-Host ("│ {0,-20} │ {1,-28} │" -f "Environment vars", $(if ($envOk) { "OK" } else { "MIS" }))
+
+    Write-Host "└──────────────────────┴──────────────────────────────┘"
 }
 
 # Dispatch
