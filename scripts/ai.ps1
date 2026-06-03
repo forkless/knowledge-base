@@ -662,8 +662,6 @@ function Setup-Ports {
 
 function Doctor-Check {
     Write-Host "┌──────────────────────┬──────────────────────────────┐"
-    Write-Host "│ Check                │ Detail                       │"
-    Write-Host "├──────────────────────┼──────────────────────────────┤"
 
     $configPath = "$Root\AI_CONFIG\system_config.json"
     if (Test-Path $configPath) {
