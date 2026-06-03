@@ -93,7 +93,7 @@ Each service has a default port set during initialization:
 |---------|-------------|
 | Ollama | 11434 |
 | ComfyUI | 8188 |
-| Open Web UI | 8080 |
+| Open Web UI | 3000 |
 
 Change them anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json`. Restart the service after changing.
 
