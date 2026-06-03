@@ -117,15 +117,16 @@ vault_config:
 "@
 $yaml | Out-File "${ComfyPath}\extra_model_paths.yaml" -Encoding utf8
 
-# Quick validation — check the file has a named config block, not flat pairs
+# Quick validation
 Write-Host "Validating extra_model_paths.yaml..."
-$yamlContent = Get-Content "${ComfyPath}\extra_model_paths.yaml" -Raw
-if ($yamlContent -match "^[a-zA-Z_]+:\s*$" -and $yamlContent -match "^\s{4}[a-zA-Z_]+:") {
+$yamlLines = Get-Content "${ComfyPath}\extra_model_paths.yaml"
+$firstLine = $yamlLines[0].Trim()
+if ($firstLine -match "^[a-zA-Z_]+:$" -and $yamlLines.Count -gt 1 -and $yamlLines[1] -match "^\s+[a-zA-Z_]+:") {
     Write-Host "  OK: named config block detected"
 } else {
-    Write-Host "  WARNING: format may be wrong — expected a named config block with indented entries"
+    Write-Host "  WARNING: format may be wrong — expected a named config block"
     Write-Host "  File content:"
-    Get-Content "${ComfyPath}\extra_model_paths.yaml" | ForEach-Object { Write-Host "    $_" }
+    $yamlLines | ForEach-Object { Write-Host "    $_" }
 }
 
 # Launcher with GPU flag
