@@ -25,7 +25,6 @@ Guides for setting up and running a local AI stack on Windows with AMD GPUs. Eve
 - **[Docker](docker/index.md)** — Running AI tools in containers.
 - **[ComfyUI](ai/comfyui.md)** — Image generation with ComfyUI.
 - **[Stable Diffusion](ai/stable-diffusion.md)** — Text-to-image model setup.
-- **[Krita + AI Workflow](ai/krita-ai-workflow.md)** — In-painting and editing with ComfyUI.
 
 ## Tools
 
