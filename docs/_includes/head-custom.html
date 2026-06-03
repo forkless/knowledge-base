@@ -195,4 +195,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 });
+
+// Inject footer
+document.addEventListener("DOMContentLoaded", function() {
+  var main = document.querySelector(".markdown-body");
+  if (!main) return;
+
+  var footer = document.createElement("div");
+  footer.innerHTML = '<footer class="site-footer"><span>forkless · sharing what works</span><span class="date"><em>Last updated June 2026</em></span></footer><div class="disclaimer"><strong>DISCLAIMER:</strong> These guides are provided as-is, without warranty. Always back up your data before following instructions. You are responsible for your own machine. Not affiliated with any mentioned tools or companies.</div>';
+  main.after(footer);
+});
 </script>
