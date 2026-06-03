@@ -1,8 +1,8 @@
 # Howtos for The Rest of Us
 
-This site is called **forkless**. Every guide on it starts with `git clone`. I named it before I wrote the guides. By the time I noticed, the domain was registered.
+This site is called **forkless**. Every guide on it starts with `git clone`. I see the problem.
 
-Hey there. This is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
+Anyway, this is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
 Think of it as a friendly notebook. Pick a topic, follow along, and if something breaks? You're not alone.
 
