@@ -57,7 +57,7 @@ No port forwarding needed. No firewall config. Just works.
 
 ## WireGuard (In Case Your Router Supports It)
 
-Many modern routers (Asus, Ubiquiti, MikroTik, pfSense, OpenWrt) have WireGuard built into their admin interface. If yours does, this is much simpler than running it yourself — the router generates a config file or QR code, you scan it with the WireGuard app on your phone or laptop, and you're connected. No command line needed.
+Many modern routers (Asus, Ubiquiti, MikroTik, pfSense, OpenWrt) have WireGuard built into their admin interface. If yours does, this is often preferable to Tailscale — the router becomes a single entry point instead of managing listeners on every device. The router generates a config file or QR code, you scan it with the WireGuard app on your phone or laptop, and you're connected. No command line needed.
 
 If your router doesn't support it, you can run WireGuard directly. Same secure tunnel, more control, more setup.
 
