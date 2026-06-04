@@ -112,7 +112,7 @@ openwebui.local {
 
 Run `caddy run` and those URLs resolve on any device that can reach your machine (same LAN or via Tailscale). Caddy handles TLS automatically if you use a real domain.
 
-> **Security lives entirely at the proxy layer.** The AI tools behind it have no authentication, no rate limiting, no TLS — they trust whatever hits their port. Your reverse proxy is the sole security boundary. If you expose it to the internet, make sure the proxy handles authentication (basic auth, OAuth, forward auth) and TLS. The AI services themselves should never be directly reachable from outside your network.
+> **The proxy is your only lock on the door.** The AI tools behind it don't have passwords, encryption, or any protection of their own — they trust anything that reaches their port. If you make the proxy publicly accessible, make sure it has a password or some other login, and use HTTPS. Never point a public domain directly at your AI tool's port.
 
 ## Port Forwarding (Not Recommended)
 
