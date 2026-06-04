@@ -102,7 +102,7 @@ ai install openwebui
 
 `ai install all` installs or updates everything at once.
 
-Before installing or updating, the script stops any running service first to avoid file lock errors. Once the update finishes, you start it again with `ai start <service>`.
+Before installing or updating, the script stops any running service first. This prevents file lock errors and avoids corrupting an in-use installation. Once the update finishes, you start it again with `ai start <service>`.
 
 Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
 
