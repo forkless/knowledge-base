@@ -73,7 +73,7 @@ Example output:
 ├──────────────┼─────────┼────────┤
 │ Ollama       │ Up      │ 11434  │
 │ ComfyUI      │ Up      │ 8188   │
-│ OpenWebUI    │ Up      │ 3000   │
+│ OpenWebUI    │ Up      │ 8080   │
 └──────────────┴─────────┴────────┘
 
 CPU:  8%
@@ -143,12 +143,12 @@ Example output:
 └──────────────────────┴──────────────────────────────┘
 ```
 
-### ai models list
+### ai list
 
 Lists all installed models grouped by category (LLM, Diffusion, VAE, LoRAs, etc.):
 
 ```powershell
-ai models list
+ai list
 ```
 
 ### ai clean cache
@@ -195,7 +195,7 @@ Configure which ports each service uses:
 ai setup ports
 ```
 
-Prompts for each service's port. Defaults are created during initialization: Ollama 11434, ComfyUI 8188, Open Web UI 3000. Settings save to `AI_CONFIG\ports.json`. Restart services after changing.
+Prompts for each service's port and listen address. Defaults are created during initialization: Ollama 11434 (0.0.0.0), ComfyUI 8188 (0.0.0.0), Open Web UI 8080 (0.0.0.0). Settings save to `AI_CONFIG\ports.json`. Restart services after changing.
 
 The port config is created automatically by `1-init.ps1` with the defaults. You only need `ai setup ports` if you want different ports — for example, if 8188 is already in use by another application.
 

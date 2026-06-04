@@ -53,7 +53,13 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
 │   │   │   ├── checkpoints
 │   │   │   ├── loras
 │   │   │   ├── vae
-│   │   │   └── controlnet
+│   │   │   ├── controlnet
+│   │   │   ├── unet
+│   │   │   ├── text_encoders
+│   │   │   ├── upscale_models
+│   │   │   ├── ipadapter
+│   │   │   ├── style_models
+│   │   │   └── clip_vision
 │   │   └── embeddings
 │   │
 │   └── datasets
@@ -196,7 +202,7 @@ AI_CORE is disposable — reinstall without affecting any other layer.
 Single source of truth for all models and datasets. Models are stored once and consumed by every runtime through the binding layer.
 
 - **models/llm** — GGUF, GPTQ, exl2 formats
-- **models/diffusion** — checkpoints, LoRAs, VAEs, ControlNet
+- **models/diffusion** — checkpoints, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision
 - **models/embeddings** — text embeddings, clip models
 - **datasets** — training data, reference sets
 
@@ -249,6 +255,13 @@ AI_CORE\_bindings\diffusion\checkpoints
 AI_CORE\_bindings\diffusion\loras
 AI_CORE\_bindings\diffusion\vae
 AI_CORE\_bindings\diffusion\controlnet
+AI_CORE\_bindings\diffusion\unet
+AI_CORE\_bindings\diffusion\text_encoders
+AI_CORE\_bindings\diffusion\upscale_models
+AI_CORE\_bindings\diffusion\ipadapter
+AI_CORE\_bindings\diffusion\style_models
+AI_CORE\_bindings\diffusion\clip_vision
+AI_CORE\_bindings\embeddings
 ```
 
 **Ollama model path (set via environment variable):**

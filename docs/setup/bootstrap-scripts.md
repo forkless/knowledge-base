@@ -47,7 +47,7 @@ Run that once, then you're good.
 | **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Creates all the folders, links, and config files. Detects your GPU type. Does not install anything. |
 | **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs Git, Python, Ollama, and FFmpeg. Sets up environment variables so models go to the right place. |
 | **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI, creates a Python environment, sets up model paths, and creates a launcher. |
-| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status and ports; list models; clean cache; fix settings and install/remove apps. |
+| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status and ports; list models; clean cache; fix settings, install/remove apps. |
 
 ## Run Order
 
@@ -87,15 +87,15 @@ If something seems off later, run `ai setup env` to check and fix them.
 
 ## Port Configuration
 
-Each service has a default port set during initialization:
+Each service has a default port and listen address set during initialization:
 
-| Service | Default Port |
-|---------|-------------|
-| Ollama | 11434 |
-| ComfyUI | 8188 |
-| Open Web UI | 3000 |
+| Service | Default Port | Default Listen Address |
+|---------|-------------|----------------------|
+| Ollama | 11434 | 0.0.0.0 |
+| ComfyUI | 8188 | 0.0.0.0 |
+| Open Web UI | 8080 | 0.0.0.0 |
 
-Change them anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json`. Restart the service after changing.
+Change ports anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json` with a `listen` field controlling which network interface each service binds to. Restart the service after changing.
 
 ## Install Summary
 
@@ -138,7 +138,7 @@ Open a fresh PowerShell window and try:
 | `ai restart all` | Restarts all services |
 | `ai doctor` | Full system diagnostics (Git, Python, services, env) |
 | `ai status` | Compact dashboard — running services, ports, model counts |
-| `ai models list` | Lists every model, grouped by category |
+| `ai list` | Lists every model, grouped by category |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
 | `ai install openwebui` | Installs Open Web UI for Ollama |
 | `ai setup ports` | Change service ports |
