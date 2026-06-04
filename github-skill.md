@@ -101,3 +101,20 @@ Custom domain: add `docs/CNAME` with the domain, then configure DNS CNAME.
 - `ISSUE_TEMPLATE/` — bug report, feature request
 - `PULL_REQUEST_TEMPLATE.md`
 - `.github/workflows/` — CI/CD
+
+## Upgrading Personal → Professional
+
+1. Switch to private: `gh repo edit <name> --visibility private`
+2. Add professional files: CONTRIBUTING.md, SECURITY.md, CHANGES.md, CODE_OF_CONDUCT.md
+3. Add issue/PR templates: ISSUE_TEMPLATE/, PULL_REQUEST_TEMPLATE.md
+4. Add CI/CD: .github/workflows/ci.yml, .github/dependabot.yml
+5. Enable branch protection (web UI — requires PR, requires approval)
+
+Existing issues, PRs, releases, and Pages URL are preserved.
+
+## Downgrading Professional → Personal
+
+1. Delete CI/CD files: .github/workflows/, .github/dependabot.yml
+2. Delete templates: ISSUE_TEMPLATE/, PULL_REQUEST_TEMPLATE.md
+3. Remove branch protection (web UI)
+4. Switch visibility: `gh repo edit <name> --visibility public`
