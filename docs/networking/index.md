@@ -39,22 +39,6 @@ Or add a port rule for the specific port your tool uses.
 
 If you need remote access, use a VPN instead:
 
-## Tailscale (Recommended)
-
-Tailscale creates a secure private network between your devices — like being on the same home network, but over the internet.
-
-```powershell
-# Install
-winget install Tailscale.Tailscale
-```
-
-1. Install on all devices you want to connect
-2. Sign in with Google, Microsoft, or GitHub
-3. Devices appear in your Tailscale network with `100.x.x.x` IPs
-4. Access your AI tools using the Tailscale IP instead of `localhost`
-
-No port forwarding needed. No firewall config. Just works.
-
 ## WireGuard (In Case Your Router Supports It)
 
 Many modern routers (Asus, Ubiquiti, MikroTik, pfSense, OpenWrt) have WireGuard built into their admin interface. If yours does, this is often preferable to Tailscale — the router becomes a single entry point instead of managing listeners on every device. The router generates a config file or QR code, you scan it with the WireGuard app on your phone or laptop, and you're connected. No command line needed.
@@ -89,6 +73,22 @@ PersistentKeepalive = 25
 ```
 
 Once connected, your AI tools are reachable at `10.0.0.2:11434` from the public server.
+
+## Tailscale
+
+Tailscale creates a secure private network between your devices — like being on the same home network, but over the internet.
+
+```powershell
+# Install
+winget install Tailscale.Tailscale
+```
+
+1. Install on all devices you want to connect
+2. Sign in with Google, Microsoft, or GitHub
+3. Devices appear in your Tailscale network with `100.x.x.x` IPs
+4. Access your AI tools using the Tailscale IP instead of `localhost`
+
+No port forwarding needed. No firewall config. Just works.
 
 ## Reverse Proxy (For Nice URLs)
 
