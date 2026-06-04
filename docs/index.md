@@ -35,7 +35,7 @@ Guides for setting up and running a local AI stack on Windows with AMD GPUs. Eve
 
 ## Networking
 
-- **[Networking](networking/index.md)** — Exposing services on LAN, Tailscale, port forwarding
+- **[Networking](networking/index.md)** — Exposing services on LAN, WireGuard, Tailscale, port forwarding
 
 ## Skills
 

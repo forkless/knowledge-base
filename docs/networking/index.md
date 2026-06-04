@@ -123,4 +123,4 @@ If you absolutely must open a port on your router:
 3. Find **Port Forwarding** or **Virtual Server**
 4. Add a rule mapping external port → internal IP:port
 
-**This is risky.** AI tools rarely have authentication built in. Anyone who finds your IP can use them. Use Tailscale instead.
+**This is risky.** AI tools rarely have authentication built in. Anyone who finds your IP can use them. Use [WireGuard](#wireguard-in-case-your-router-supports-it) or [Tailscale](#tailscale) instead.

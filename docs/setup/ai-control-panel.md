@@ -199,7 +199,7 @@ ai setup ports
 
 Prompts for each service's port and listen address. Defaults are created during initialization: Ollama 11434 (0.0.0.0), ComfyUI 8188 (0.0.0.0), Open Web UI 3000 (0.0.0.0). Settings save to `AI_CONFIG\ports.json`. Restart services after changing.
 
-> **`0.0.0.0` binds to all local interfaces** — services accept connections from `localhost`, `127.0.0.1`, and any device on your home network. This is not a public exposure by itself, but if you forward ports on your router or disable your firewall, these services become reachable from the internet. Use [Tailscale](../networking/index.md#tailscale-recommended) if you need remote access instead of opening ports.
+> **`0.0.0.0` binds to all local interfaces** — services accept connections from `localhost`, `127.0.0.1`, and any device on your home network. This is not a public exposure by itself, but if you forward ports on your router or disable your firewall, these services become reachable from the internet. Use [WireGuard](../networking/index.md#wireguard-in-case-your-router-supports-it) (or [Tailscale](../networking/index.md#tailscale) if your router doesn't support it) for remote access instead of opening ports.
 
 The port config is created automatically by `1-init.ps1` with the defaults. You only need `ai setup ports` if you want different ports — for example, if 8188 is already in use by another application.
 
