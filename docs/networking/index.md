@@ -59,14 +59,7 @@ No port forwarding needed. No firewall config. Just works.
 
 Many modern routers (Asus, Ubiquiti, MikroTik, pfSense, OpenWrt) have WireGuard built into their admin interface. If yours does, this is often preferable to Tailscale — the router becomes a single entry point instead of managing listeners on every device. The router generates a config file or QR code, you scan it with the WireGuard app on your phone or laptop, and you're connected. No command line needed.
 
-If your router doesn't support it, you can run WireGuard directly. Same secure tunnel, more control, more setup.
-
-**The trade-off:** Tailscale handles keys, NAT punching, and relays automatically. WireGuard direct means you manage keys by hand and need at least one device with a public IP (a cheap VPS or a friend's machine with port forwarding) if both ends are behind NAT.
-
-**When it makes sense:**
-- You already run WireGuard for other things
-- You want full control — your keys, your server, no third-party auth
-- You don't mind editing config files instead of clicking "sign in"
+If your router doesn't have it built in, you can still run WireGuard manually — same result, just more setup.
 
 **Basic example** — two machines, one with a public IP (`1.2.3.4`), one at home:
 
@@ -95,9 +88,7 @@ AllowedIPs = 10.0.0.0/24
 PersistentKeepalive = 25
 ```
 
-Once connected, your AI tools are reachable at `10.0.0.2:11434` from the public server. Same end result as Tailscale, just more steps to get there.
-
-**For most people, Tailscale is easier.** WireGuard direct is there if you want it.
+Once connected, your AI tools are reachable at `10.0.0.2:11434` from the public server.
 
 ## Reverse Proxy (For Nice URLs)
 
