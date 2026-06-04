@@ -2,7 +2,7 @@
 
 Three scripts automate the whole setup — folders, software, and ComfyUI. A fourth script (`ai`) handles daily tasks like starting services and checking what's running.
 
-You can find them in the `scripts/` folder of this repo, or grab the [latest release zip](https://github.com/forkless/knowledge-base/releases/tag/v1.1).
+Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai). Grab the [latest release zip](https://github.com/forkless/ai-ai-ai/releases) or clone the repo.
 
 ## What You'll Need
 
@@ -44,10 +44,10 @@ Run that once, then you're good.
 
 | Script | What it does |
 |--------|-------------|
-| **[1-init.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/1-init.ps1)** | Creates all the folders, links, and config files. Detects your GPU type. Does not install anything. |
-| **[2-deps.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/2-deps.ps1)** | Installs Git, Python, Ollama, and FFmpeg. Sets up environment variables so models go to the right place. |
-| **[3-comfyui.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/3-comfyui.ps1)** | Downloads ComfyUI, creates a Python environment, sets up model paths, and creates a launcher. |
-| **[ai.ps1](https://github.com/forkless/knowledge-base/blob/master/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status and ports; list models; clean cache; fix settings and install/remove apps. |
+| **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Creates all the folders, links, and config files. Detects your GPU type. Does not install anything. |
+| **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs Git, Python, Ollama, and FFmpeg. Sets up environment variables so models go to the right place. |
+| **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI, creates a Python environment, sets up model paths, and creates a launcher. |
+| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status and ports; list models; clean cache; fix settings and install/remove apps. |
 
 ## Run Order
 
