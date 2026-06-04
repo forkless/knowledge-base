@@ -59,7 +59,9 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
 │   │   │   ├── upscale_models
 │   │   │   ├── ipadapter
 │   │   │   ├── style_models
-│   │   │   └── clip_vision
+│   │   │   ├── clip_vision
+│   │   │   ├── clip
+│   │   │   └── diffusion_models
 │   │   └── embeddings
 │   │
 │   └── datasets
@@ -202,7 +204,7 @@ AI_CORE is disposable — reinstall without affecting any other layer.
 Single source of truth for all models and datasets. Models are stored once and consumed by every runtime through the binding layer.
 
 - **models/llm** — GGUF, GPTQ, exl2 formats
-- **models/diffusion** — checkpoints, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision
+- **models/diffusion** — checkpoints, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP, diffusion models
 - **models/embeddings** — text embeddings, clip models
 - **datasets** — training data, reference sets
 
@@ -222,7 +224,7 @@ Only AI_TOOLS should intentionally modify AI_VAULT.
 
 ### AI_CACHE
 
-Temporary data that is safe to delete and rebuild. Contains Hugging Face cache, PyTorch cache, ComfyUI temp files, and Ollama temp data.
+Temporary data that is safe to delete and rebuild. Contains Hugging Face cache, PyTorch cache, ComfyUI temp files, Ollama temp data, and service logs (`AI_CACHE\logs\<service>.log`). Logs older than 7 days are automatically cleaned up during log rotation.
 
 ## Model Routing with Symbolic Links
 
@@ -261,6 +263,8 @@ AI_CORE\_bindings\diffusion\upscale_models
 AI_CORE\_bindings\diffusion\ipadapter
 AI_CORE\_bindings\diffusion\style_models
 AI_CORE\_bindings\diffusion\clip_vision
+AI_CORE\_bindings\diffusion\clip
+AI_CORE\_bindings\diffusion\diffusion_models
 AI_CORE\_bindings\embeddings
 ```
 

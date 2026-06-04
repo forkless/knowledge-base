@@ -102,7 +102,7 @@ ai install openwebui
 
 `ai install all` installs or updates everything at once.
 
-Before installing or updating, the script stops any running service first. This prevents file lock errors and avoids corrupting an in-use installation. Once the update finishes, you start it again with `ai start <service>`.
+Before installing or updating, the script stops any running service first. This prevents file lock errors and avoids corrupting an in-use installation. If a service can't be stopped within 10 seconds, the script exits with an error rather than proceeding. Once the update finishes, you start it again with `ai start <service>`.
 
 Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
 
@@ -168,11 +168,13 @@ ai watch ollama
 ai watch openwebui
 ```
 
-Shows real-time log lines. Press Ctrl+C to stop.
+Shows real-time log lines from `AI_CACHE\logs\<service>.log`. Press Ctrl+C to stop.
+
+Service output is written to log files automatically on every start. Logs from previous days are zipped and archived; archives older than 7 days are cleaned up.
 
 ### ai clean cache
 
-Empties all temporary data from AI_CACHE:
+Empties all temporary data from AI_CACHE — including archived logs:
 
 ```powershell
 ai clean cache
