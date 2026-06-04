@@ -55,9 +55,11 @@ winget install Tailscale.Tailscale
 
 No port forwarding needed. No firewall config. Just works.
 
-## WireGuard (DIY Version)
+## WireGuard (In Case Your Router Supports It)
 
-Tailscale is built on WireGuard, but you can also run WireGuard directly. Same secure tunnel, more control, more setup.
+Many modern routers (Asus, Ubiquiti, MikroTik, pfSense, OpenWrt) have WireGuard built into their admin interface. If yours does, this is much simpler than running it yourself — just enter your peer info in the router's web panel and you're done. No config files, no command line.
+
+If your router doesn't support it, you can run WireGuard directly. Same secure tunnel, more control, more setup.
 
 **The trade-off:** Tailscale handles keys, NAT punching, and relays automatically. WireGuard direct means you manage keys by hand and need at least one device with a public IP (a cheap VPS or a friend's machine with port forwarding) if both ends are behind NAT.
 
