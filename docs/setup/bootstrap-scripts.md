@@ -97,7 +97,7 @@ Each service has a default port and listen address set during initialization:
 
 Change ports anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json` with a `listen` field controlling which network interface each service binds to. Restart the service after changing.
 
-> **Default is `0.0.0.0` for convenience** — accepts `http://localhost`, `http://127.0.0.1`, `http://192.168.0.x`, and any other local network address. This makes it easy to reach services from other devices on your home network. It **does not** mean your services are exposed to the public internet — no port forwarding, no cloud. But if you do open ports on your router, those services become reachable from outside. Review your firewall settings and avoid forwarding AI tool ports to the open web. For remote access, use [Tailscale](../networking/index.md#tailscale-recommended) instead.
+> **Default is `0.0.0.0` for convenience** — accepts `http://localhost`, `http://127.0.0.1`, `http://192.168.0.x`, and any other local network address. This makes it easy to reach services from other devices on your home network. It **does not** mean your services are exposed to the public internet — no port forwarding, no cloud. But if you do open ports on your router, those services become reachable from outside. Review your firewall settings and avoid forwarding AI tool ports to the open web. For remote access, use [Tailscale](../networking/index.md#tailscale-recommended) instead. For nice local URLs, see [Reverse Proxy](../networking/index.md#reverse-proxy-for-nice-urls).
 
 ## Install Summary
 

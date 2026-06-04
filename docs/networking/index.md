@@ -55,6 +55,30 @@ winget install Tailscale.Tailscale
 
 No port forwarding needed. No firewall config. Just works.
 
+## Reverse Proxy (For Nice URLs)
+
+A reverse proxy like **nginx**, **Caddy**, or **Traefik** sits in front of your AI services and routes traffic by hostname or path. This gives you clean URLs like `http://ollama.local/` or `http://comfyui.local/` instead of remembering port numbers.
+
+**Simple Caddy example** (`Caddyfile`):
+
+```
+ollama.local {
+    reverse_proxy localhost:11434
+}
+
+comfyui.local {
+    reverse_proxy localhost:8188
+}
+
+openwebui.local {
+    reverse_proxy localhost:8080
+}
+```
+
+Run `caddy run` and those URLs resolve on any device that can reach your machine (same LAN or via Tailscale). Caddy handles TLS automatically if you use a real domain.
+
+> **Security lives entirely at the proxy layer.** The AI tools behind it have no authentication, no rate limiting, no TLS — they trust whatever hits their port. Your reverse proxy is the sole security boundary. If you expose it to the internet, make sure the proxy handles authentication (basic auth, OAuth, forward auth) and TLS. The AI services themselves should never be directly reachable from outside your network.
+
 ## Port Forwarding (Not Recommended)
 
 If you absolutely must open a port on your router:
