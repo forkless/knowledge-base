@@ -163,7 +163,7 @@ Open a fresh PowerShell window and try:
 | `ai status ollama` | Check a single service (ollama, comfyui, or openwebui) |
 | `ai doctor` | Full system diagnostics (Git, Python, services, env, model bindings) |
 | `ai list` | Lists every installed model, grouped by category |
-| `ai install all` | Install or update everything at once |
+| `ai install all` | Install or update everything at once (stops services first to avoid file locks) |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
 | `ai install openwebui` | Installs Open Web UI for Ollama |
 | `ai remove comfyui` | Remove an installed app (keeps models in vault) |
