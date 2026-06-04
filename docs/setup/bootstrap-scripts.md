@@ -112,7 +112,7 @@ Each service has a default port and listen address set during initialization:
 |---------|-------------|----------------------|
 | Ollama | 11434 | 0.0.0.0 |
 | ComfyUI | 8188 | 0.0.0.0 |
-| Open Web UI | 8080 | 0.0.0.0 |
+| Open Web UI | 3000 | 0.0.0.0 |
 
 Change ports anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json` with a `listen` field controlling which network interface each service binds to. Restart the service after changing.
 

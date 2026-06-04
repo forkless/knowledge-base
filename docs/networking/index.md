@@ -113,7 +113,7 @@ comfyui.local {
 }
 
 openwebui.local {
-    reverse_proxy localhost:8080
+    reverse_proxy localhost:3000
 }
 ```
 
