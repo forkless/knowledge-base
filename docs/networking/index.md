@@ -55,6 +55,48 @@ winget install Tailscale.Tailscale
 
 No port forwarding needed. No firewall config. Just works.
 
+## WireGuard (DIY Version)
+
+Tailscale is built on WireGuard, but you can also run WireGuard directly. Same secure tunnel, more control, more setup.
+
+**The trade-off:** Tailscale handles keys, NAT punching, and relays automatically. WireGuard direct means you manage keys by hand and need at least one device with a public IP (a cheap VPS or a friend's machine with port forwarding) if both ends are behind NAT.
+
+**When it makes sense:**
+- You already run WireGuard for other things
+- You want full control — your keys, your server, no third-party auth
+- You don't mind editing config files instead of clicking "sign in"
+
+**Basic example** — two machines, one with a public IP (`1.2.3.4`), one at home:
+
+```
+# On the public server (/etc/wireguard/wg0.conf)
+[Interface]
+PrivateKey = <server-private-key>
+Address = 10.0.0.1/24
+ListenPort = 51820
+
+[Peer]
+PublicKey = <home-private-key>
+AllowedIPs = 10.0.0.2/32
+```
+
+```
+# On your home machine (wg0.conf)
+[Interface]
+PrivateKey = <home-private-key>
+Address = 10.0.0.2/24
+
+[Peer]
+PublicKey = <server-public-key>
+Endpoint = 1.2.3.4:51820
+AllowedIPs = 10.0.0.0/24
+PersistentKeepalive = 25
+```
+
+Once connected, your AI tools are reachable at `10.0.0.2:11434` from the public server. Same end result as Tailscale, just more steps to get there.
+
+**For most people, Tailscale is easier.** WireGuard direct is there if you want it.
+
 ## Reverse Proxy (For Nice URLs)
 
 A reverse proxy like **nginx**, **Caddy**, or **Traefik** sits in front of your AI services and routes traffic by hostname or path. This gives you clean URLs like `http://ollama.local/` or `http://comfyui.local/` instead of remembering port numbers.
