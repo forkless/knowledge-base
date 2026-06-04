@@ -2,7 +2,25 @@
 
 Three scripts automate the whole setup — folders, software, and ComfyUI. A fourth script (`ai`) handles daily tasks like starting services and checking what's running.
 
-Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai). Grab the [latest release zip](https://github.com/forkless/ai-ai-ai/releases) or clone the repo.
+Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai).
+
+**Download the scripts — pick one:**
+
+```powershell
+# Option A: Clone the repo (keeps auto-updating with git pull)
+git clone https://github.com/forkless/ai-ai-ai.git
+cd ai-ai-ai
+
+# Option B: Download the latest release zip, then extract
+# Visit https://github.com/forkless/ai-ai-ai/releases
+# Download Ai.ai.ai.Bootstrap.v1.1.zip, extract somewhere, cd into scripts/
+```
+
+After downloading, unblock the scripts if you used the zip:
+
+```powershell
+Get-ChildItem *.ps1 | Unblock-File
+```
 
 ## What You'll Need
 
@@ -44,10 +62,10 @@ Run that once, then you're good.
 
 | Script | What it does |
 |--------|-------------|
-| **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Creates all the folders, links, and config files. Detects your GPU type. Does not install anything. |
-| **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs Git, Python, Ollama, and FFmpeg. Sets up environment variables so models go to the right place. |
-| **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI, creates a Python environment, sets up model paths, and creates a launcher. |
-| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status and ports; list models; clean cache; fix settings, install/remove apps. |
+| **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Lays the foundation. Creates the full folder structure (37 directories across 6 layers), detects NVIDIA or AMD GPU, sets up symbolic links from `AI_CORE\_bindings` to `AI_VAULT`, and writes three config files: `system_config.json`, `model_registry.json`, `ports.json`. **Does not install anything.** Needs admin rights or Developer Mode for the symbolic links. |
+| **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs system software — Git, Python 3.10, Python 3.11, Ollama, and FFmpeg — all through winget. Then sets three environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) to keep models and caches in their proper folders. **Requires admin rights.** |
+| **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI into `AI_CORE\Apps`, creates an isolated Python 3.11 virtual environment, installs GPU-appropriate PyTorch (CUDA for NVIDIA, DirectML for AMD — with a workaround for AMD's CUDA DLL crashes), writes `extra_model_paths.yaml` mapping 11 model subdirectories to your vault, and generates a launcher script that reads the port and listen address from `ports.json`. |
+| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status with a compact dashboard; run full diagnostics (`ai doctor`); list installed models; clear cache; install or remove apps; configure ports and environment variables. |
 
 ## Run Order
 
@@ -59,13 +77,14 @@ Scripts must run in this order. Each one prepares something the next one needs.
    Restart PowerShell — lets it find newly installed tools
        ↓
 2. 2-deps.ps1         install Git, Python, Ollama, FFmpeg
+   (requires admin rights — right-click PowerShell and run as Administrator)
        ↓
-   Restart PowerShell — lets it find newly installed tools
+   Restart PowerShell — lets it find newly installed tools, loads env vars
        ↓
-3. 3-comfyui.ps1      install ComfyUI, set up model paths
+3. 3-comfyui.ps1      install ComfyUI, set up model paths, create launcher
 ```
 
-**Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works.
+**Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.
 
 ## Environment Variables (What They Are)
 
@@ -119,15 +138,17 @@ Install Summary
 
 After setup, `AI_TOOLS\` contains launcher scripts for each service:
 
-| Script | Starts |
-|--------|--------|
-| `launch_ollama.ps1` | Ollama in background |
-| `launch_comfyui.ps1` | ComfyUI with correct GPU backend |
-| `launch_openwebui.ps1` | Open Web UI |
+| Script | Created by | Starts |
+|--------|-----------|--------|
+| `launch_comfyui.ps1` | `3-comfyui.ps1` | ComfyUI with correct GPU backend, port, and listen address from `ports.json` |
+| `launch_ollama.ps1` | `ai start ollama` (auto-generated) | Ollama in background |
+| `launch_openwebui.ps1` | `ai start openwebui` (auto-generated) | Open Web UI |
 
-These are auto-generated when you run `ai start <service>` for the first time. You can also run them directly from `AI_TOOLS\`.
+The ComfyUI launcher is generated during setup. The others are created the first time you run `ai start <service>`. All three read the current port and listen address from `ports.json`, so changing ports with `ai setup ports` takes effect on the next launch without re-installing anything.
 
-**Note:** The scripts install and configure everything, but don't start the services. You need to launch them manually when you want to use them.
+You can also run any launcher directly from `AI_TOOLS\`.
+
+**Note:** The bootstrap scripts install and configure everything, but don't start the services. You need to launch them manually when you want to use them.
 
 ## After Everything Runs
 
@@ -138,11 +159,16 @@ Open a fresh PowerShell window and try:
 | `ai start all` | Starts all services |
 | `ai stop all` | Stops all services |
 | `ai restart all` | Restarts all services |
-| `ai doctor` | Full system diagnostics (Git, Python, services, env) |
 | `ai status` | Compact dashboard — running services, ports, model counts |
-| `ai list` | Lists every model, grouped by category |
+| `ai status ollama` | Check a single service (ollama, comfyui, or openwebui) |
+| `ai doctor` | Full system diagnostics (Git, Python, services, env, model bindings) |
+| `ai list` | Lists every installed model, grouped by category |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
 | `ai install openwebui` | Installs Open Web UI for Ollama |
-| `ai setup ports` | Change service ports |
-| `ai clean cache` | Free up space |
+| `ai remove comfyui` | Remove an installed app (keeps models in vault) |
+| `ai setup ports` | Change service ports and listen address |
+| `ai setup env` | Check and fix environment variables |
+| `ai setup path` | Add `ai` to your PATH so it works from any folder |
+| `ai clean cache` | Free up space by emptying AI_CACHE |
+| `ai help` | Show the full command reference |
 | `ollama pull llama3` | Downloads a model (lands in the vault) |

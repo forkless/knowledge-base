@@ -25,6 +25,8 @@ ai start openwebui
 
 Ollama runs as a hidden process. ComfyUI launches in a hidden PowerShell window. Both detach from your terminal.
 
+Each start regenerates the launcher script from the current `ports.json` settings, so changing ports with `ai setup ports` takes effect on the next start — no manual edits needed.
+
 ### ai stop &lt;service&gt;
 
 Stop a running service:

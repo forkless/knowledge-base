@@ -15,9 +15,10 @@ The scripts run in three phases. Each builds on the previous one.
 ```
 
 - Creates the D:\AI\ folder with all 6 layers (AI_CONFIG, AI_CORE, AI_VAULT, AI_WORKSPACE, AI_TOOLS, AI_CACHE)
+- Populates `AI_VAULT\models\diffusion\` with 10 subdirectories — checkpoints, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision
 - Detects your GPU type (NVIDIA or AMD) and writes it to `system_config.json`
 - Creates symbolic links so AI tools find models in the vault
-- Generates starter config files (`system_config.json`, `model_registry.json`)
+- Generates starter config files: `system_config.json`, `model_registry.json`, `ports.json` (with default ports and listen address)
 
 No software is installed in this phase.
 
@@ -46,11 +47,12 @@ Also sets environment variables so models and caches go to the right places inst
 3-comfyui.ps1
 ```
 
+- Verifies `OLLAMA_MODELS` points to the vault before proceeding (exits if wrong)
 - Downloads ComfyUI into `AI_CORE\Apps`
 - Creates a Python 3.11 virtual environment (isolated, won't conflict with other tools)
-- Installs PyTorch with the correct GPU backend — CUDA for NVIDIA, DirectML for AMD
-- Generates `extra_model_paths.yaml` so ComfyUI finds models in the vault (uses a named config block, not flat key-values)
-- Creates a launcher script at `AI_TOOLS\launch_comfyui.ps1`
+- Installs PyTorch with the correct GPU backend — CUDA for NVIDIA, DirectML for AMD. On AMD, applies a torchaudio workaround that stubs out CUDA DLLs which would crash on RDNA cards
+- Generates `extra_model_paths.yaml` mapping 11 model subdirectories to your vault (uses a named config block, not flat key-values)
+- Creates a launcher script at `AI_TOOLS\launch_comfyui.ps1` that reads the port and listen address from `ports.json`
 
 ## Running the Scripts
 
