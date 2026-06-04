@@ -93,11 +93,14 @@ GPU:  15% | VRAM: 2.4/16.0 GB
 Install or update an application:
 
 ```powershell
+ai install all
 ai install comfyui
 ai install comfyui-manager
 ai install ollama
 ai install openwebui
 ```
+
+`ai install all` installs or updates everything at once.
 
 Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
 
@@ -152,6 +155,18 @@ Lists all installed models grouped by category (LLM, Diffusion, VAE, LoRAs, etc.
 ```powershell
 ai list
 ```
+
+### ai watch &lt;service&gt;
+
+Live-tail a service's log output:
+
+```powershell
+ai watch comfyui
+ai watch ollama
+ai watch openwebui
+```
+
+Shows real-time log lines. Press Ctrl+C to stop.
 
 ### ai clean cache
 

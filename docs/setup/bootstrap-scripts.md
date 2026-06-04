@@ -163,12 +163,14 @@ Open a fresh PowerShell window and try:
 | `ai status ollama` | Check a single service (ollama, comfyui, or openwebui) |
 | `ai doctor` | Full system diagnostics (Git, Python, services, env, model bindings) |
 | `ai list` | Lists every installed model, grouped by category |
+| `ai install all` | Install or update everything at once |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
 | `ai install openwebui` | Installs Open Web UI for Ollama |
 | `ai remove comfyui` | Remove an installed app (keeps models in vault) |
 | `ai setup ports` | Change service ports and listen address |
 | `ai setup env` | Check and fix environment variables |
 | `ai setup path` | Add `ai` to your PATH so it works from any folder |
-| `ai clean cache` | Free up space by emptying AI_CACHE |
+| `ai watch comfyui` | Live-tail service logs (comfyui, ollama, openwebui) |
+| `ai clean cache` | Free up space by emptying AI_CACHE and archived logs |
 | `ai help` | Show the full command reference |
 | `ollama pull llama3` | Downloads a model (lands in the vault) |
