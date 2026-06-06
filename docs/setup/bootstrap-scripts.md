@@ -72,7 +72,7 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 Scripts must run in this order. Each one prepares something the next one needs.
 
 <div class="flow-chart" style="position: relative; margin: 16px 0; border: 1px solid #e0e0e0; border-radius: 6px; background: #fafafa;">
-  <div class="flow-fs-header" style="display: none; text-align: center; font-size: 1.5em; padding: 20px 0 0 0;"><span style="color: #999;">From zero to ai start all</span></div>
+  <div class="flow-fs-header" style="display: none; text-align: center; font-size: 1.5em; padding: 20px 0 0 0;"><span style="color: #ccc;">From zero to ai start all</span></div>
   <div class="flow-panzoom" style="display: flex; justify-content: center; align-items: center;">
     <img src="https://raw.githubusercontent.com/forkless/ai-ai-ai/main/flow/bootstrap.svg" alt="Bootstrap process flow" style="max-width: 100%; height: auto; display: block;">
   </div>
