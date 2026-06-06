@@ -161,6 +161,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible !important;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* Copy button on code blocks */
@@ -207,8 +210,12 @@ document.addEventListener("DOMContentLoaded", function() {
         else if (action === "reset") pz.reset();
         else if (action === "fullscreen") {
           var container = elem.closest(".flow-chart");
-          if (container.requestFullscreen) container.requestFullscreen();
-          else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+          var fs = container.requestFullscreen || container.webkitRequestFullscreen;
+          if (fs) {
+            var p = fs.call(container);
+            if (p && p.then) p.then(function(){ setTimeout(function(){ pz.reset(); }, 100); });
+            else setTimeout(function(){ pz.reset(); }, 100);
+          }
         }
         e.stopPropagation();
       });
