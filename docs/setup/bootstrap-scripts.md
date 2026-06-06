@@ -78,16 +78,6 @@ AI_CACHE      → temporary downloads, logs, and ComfyUI temp data
 
 The key idea: your models live in one place. Install, reinstall, or remove any AI tool without losing a single model. Want the full logic behind this? See **[Organize Your AI Folders](organize-your-ai-folders.md)**.
 
-## First-Time Download
-
-PowerShell blocks scripts from the internet by default. If you get an error, unblock them with:
-
-```powershell
-Get-ChildItem *.ps1 | Unblock-File
-```
-
-Run that once, then you're good.
-
 ## The Scripts
 
 | Script | What it does |
