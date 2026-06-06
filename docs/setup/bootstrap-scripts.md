@@ -8,6 +8,8 @@ You can skip the GPU requirement stuff and scripts because they are as easy to f
 
 The diagram below? Just treat it like a plate of pasta tricolore. Each colored pasta strand represents your GPU path (NVIDIA, AMD, or CPU fallback). You don't have to eat it or understand it to enjoy it.
 
+*This document is not approved by the Italian Ministry of Agriculture.*
+
 Let's be real though, everyone loves a nice spaghetti.
 
 *Source code lives at:* [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai).
