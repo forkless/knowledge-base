@@ -159,15 +159,27 @@
 .flow-chart:-webkit-full-screen {
   background: #1a1a1a;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: visible !important;
   width: 100vw;
   height: 100vh;
 }
 .flow-chart:fullscreen .flow-exit-btn,
 .flow-chart:-webkit-full-screen .flow-exit-btn {
   display: flex !important;
+}
+.flow-chart:fullscreen .flow-fs-header,
+.flow-chart:-webkit-full-screen .flow-fs-header {
+  display: block !important;
+}
+.flow-chart:fullscreen .flow-panzoom,
+.flow-chart:-webkit-full-screen .flow-panzoom {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 .flow-chart:fullscreen [data-action="fullscreen"],
 .flow-chart:-webkit-full-screen [data-action="fullscreen"] {
