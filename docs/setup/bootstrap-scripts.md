@@ -15,29 +15,29 @@ Let's be real though, everyone loves a nice spaghetti.
 ## What You'll Need
 
 - **Windows 10 or 11**
-- **PowerShell** — comes with Windows, no install needed
-- **Admin permissions — you can install everything manually too, but the script saves you twenty browser tabs and a potential migraine.** Not a hard requirement, but they make things smoother. Step 1 needs them for symbolic links (or enable Developer Mode — Windows Settings → For Developers). Step 2 uses winget which needs admin to install software. If you don't have admin, the scripts won't crash — they'll show a message like this and exit cleanly:
+- **PowerShell** - comes with Windows, no install needed
+- **Admin permissions - you can install everything manually too, but the script saves you twenty browser tabs and a potential migraine.** Not a hard requirement, but they make things smoother. Step 1 needs them for symbolic links (or enable Developer Mode - Windows Settings → For Developers). Step 2 uses winget which needs admin to install software. If you don't have admin, the scripts won't crash - they'll show a message like this and exit cleanly:
 
   ```
   ERROR: Administrator rights required for winget installs.
   Right-click PowerShell and select 'Run as Administrator'.
   ```
-- **One-time setting** — run this so PowerShell trusts the scripts:
+- **One-time setting** - run this so PowerShell trusts the scripts:
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-> **⚠️ AMD Radeon RX 7000/9000 users — stable driver baseline recommended.**
-> These scripts were tested primarily on **Adrenalin 26.3.1**. They will run on newer drivers too, but some users report instability with 26.5.x and 26.6.1 — system freezes during basic desktop tasks and gaming. If you hit issues, rolling back to 26.3.1 is the first thing to try. See the full breakdown in the companion repo's [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md).
+> **⚠️ AMD Radeon RX 7000/9000 users - stable driver baseline recommended.**
+> These scripts were tested primarily on **Adrenalin 26.3.1**. They will run on newer drivers too, but some users report instability with 26.5.x and 26.6.1 - system freezes during basic desktop tasks and gaming. If you hit issues, rolling back to 26.3.1 is the first thing to try. See the full breakdown in the companion repo's [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md).
 
-**Tip:** ComfyUI and its ecosystem move fast — updates roll out constantly, and sometimes an update breaks something that worked yesterday. Running `ai install comfyui` (or `ai install all`) pulls the latest versions and usually sorts it out. When in doubt, update first.
+**Tip:** ComfyUI and its ecosystem move fast - updates roll out constantly, and sometimes an update breaks something that worked yesterday. Running `ai install comfyui` (or `ai install all`) pulls the latest versions and usually sorts it out. When in doubt, update first.
 
 ## A Few Things to Know
 
-- **These scripts are safe to re-run (idempotent)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update — don't worry about breaking things.
+- **These scripts are safe to re-run (idempotent)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update - don't worry about breaking things.
 
-- **GPU detection**: The scripts check what GPU you have and auto-detect the generation. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm on RDNA2+ (RX 6000/7000/9000) or DirectML on RDNA1 (RX 5000). You don't need to pick — the script chooses for you.
+- **GPU detection**: The scripts check what GPU you have and auto-detect the generation. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm on RDNA2+ (RX 6000/7000/9000) or DirectML on RDNA1 (RX 5000). You don't need to pick - the script chooses for you.
 
 - **AMD ROCm vs DirectML**: ROCm is AMD's own GPU compute platform. The script auto-selects it on RDNA2+ hardware (RX 6000, 7000, 9000) with Python 3.12. On RDNA1 (RX 5000), it selects DirectML since ROCm isn't available for that generation. Pass `-Backend directml` to override.
 
@@ -45,18 +45,18 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
   | | ROCm (native) | DirectML (fallback) |
   |-|--------------|---------------------|
-  | **RDNA4** — RX 9000 series | ✅ auto-selected | ✅ fallback |
-  | **RDNA3** — RX 7000 series | ✅ auto-selected | ✅ fallback |
-  | **RDNA2** — RX 6000 series | ✅ auto-selected | ✅ fallback |
-  | **RDNA1** — RX 5000 series | ❌ not available | ✅ auto-selected |
+  | **RDNA4** - RX 9000 series | ✅ auto-selected | ✅ fallback |
+  | **RDNA3** - RX 7000 series | ✅ auto-selected | ✅ fallback |
+  | **RDNA2** - RX 6000 series | ✅ auto-selected | ✅ fallback |
+  | **RDNA1** - RX 5000 series | ❌ not available | ✅ auto-selected |
 
   ROCm requires driver 26.2.2+ and Python 3.12. DirectML works on any AMD driver and uses Python 3.11.
 
 - **Python 3.12**: Installed for the AMD ROCm stack. On AMD RDNA2+ cards, ComfyUI runs on Python 3.12 with ROCm. On RDNA1 or DirectML fallback, it uses Python 3.11. On NVIDIA, it uses Python 3.11 with CUDA.
 
-- **Intel CPU / no GPU**: CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow — practical for testing, not daily use.
+- **Intel CPU / no GPU**: CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow - practical for testing, not daily use.
 
-- **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` — no need to type it again.
+- **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` - no need to type it again.
 
 ## What You're Building
 
@@ -75,7 +75,7 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 
 ## May the -Force Be With You
 
-Each script builds on the one before it. Step 1 lays out your folders and config. Step 2 installs the engine (Ollama) and system tools. Step 3 installs the apps — ComfyUI (image generation) and optionally Open Web UI (LLM chat interface). Step 4 makes the `ai` command available from anywhere. Don't skip ahead — the restarts between steps are intentional.
+Each script builds on the one before it. Step 1 lays out your folders and config. Step 2 installs the engine (Ollama) and system tools. Step 3 installs the apps - ComfyUI (image generation) and optionally Open Web UI (LLM chat interface). Step 4 makes the `ai` command available from anywhere. Don't skip ahead - the restarts between steps are intentional.
 
 <div class="flow-chart" style="position: relative; margin: 16px 0; border: 1px solid #e0e0e0; border-radius: 6px; background: #fafafa;">
   <div class="flow-fs-header" style="display: none; text-align: center; font-size: 1.5em; padding: 20px 0 0 0;"><span style="color: #666;">From zero to ai start all</span></div>
@@ -92,20 +92,20 @@ Each script builds on the one before it. Step 1 lays out your folders and config
 </div>
 <em style="display: block; text-align: left; font-size: 0.9em; color: #666; margin: 3px 2px 8px 2px;">From zero to <code>ai start all</code></em>
 
-**Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.
+**Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) - without them, step 3 will fail its environment check.
 
 ## The Scripts
 
 | Script | What it does |
 |------|-------------|
 | **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Lays the foundation. Creates the folder structure (6 layers with ~38 directories), detects NVIDIA or AMD GPU, sets up symbolic links from `AI_CORE\_bindings` to `AI_VAULT`, and writes three config files: `system_config.json`, `model_registry.json`, `ports.json`. **Does not install anything.** Needs admin rights or Developer Mode for the symbolic links. |
-| **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs system software — Git, Python 3.10/3.11/3.12, FFmpeg — plus the **Ollama engine** (the backend that runs local LLMs). All installed via winget. Then sets three environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) to keep models and caches in their proper folders. **Requires admin rights.** |
-| **[3-apps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-apps.ps1)** | Installs ComfyUI (and optionally Open Web UI) into `AI_CORE\Apps`, creates an isolated Python virtual environment (3.12 on AMD RDNA2+, 3.11 otherwise), installs GPU-appropriate PyTorch (CUDA for NVIDIA, ROCm for AMD — AMD's own GPU engine), writes a config file that tells ComfyUI where your vault models live, and generates launcher scripts that read port and settings from `ports.json`. On older AMD cards or unsupported drivers, falls back to DirectML (Microsoft's GPU compute layer) automatically. |
-| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status with a compact dashboard; run full diagnostics (`ai doctor`, including ROCm check); list installed models; clear cache; install or remove apps; configure ports and environment variables; live-tail service logs. |
+| **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs system software - Git, Python 3.10/3.11/3.12, FFmpeg - plus the **Ollama engine** (the backend that runs local LLMs). All installed via winget. Then sets three environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) to keep models and caches in their proper folders. **Requires admin rights.** |
+| **[3-apps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-apps.ps1)** | Installs ComfyUI (and optionally Open Web UI) into `AI_CORE\Apps`, creates an isolated Python virtual environment (3.12 on AMD RDNA2+, 3.11 otherwise), installs GPU-appropriate PyTorch (CUDA for NVIDIA, ROCm for AMD - AMD's own GPU engine), writes a config file that tells ComfyUI where your vault models live, and generates launcher scripts that read port and settings from `ports.json`. On older AMD cards or unsupported drivers, falls back to DirectML (Microsoft's GPU compute layer) automatically. |
+| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver - start, stop, restart services; check status with a compact dashboard; run full diagnostics (`ai doctor`, including ROCm check); list installed models; clear cache; install or remove apps; configure ports and environment variables; live-tail service logs. |
 
 ## Download the Scripts
 
-**Two ways to get them — pick one:**
+**Two ways to get them - pick one:**
 
 ```powershell
 # Option A: Clone the repo (keeps auto-updating with git pull)
@@ -123,7 +123,7 @@ After downloading, unblock the scripts if you used the zip:
 Get-ChildItem *.ps1 | Unblock-File
 ```
 
-> **⚠️** These scripts are functional but still rough around the edges — incomplete error handling, uncovered edge cases. They work, but proceed with patience.
+> **⚠️** These scripts are functional but still rough around the edges - incomplete error handling, uncovered edge cases. They work, but proceed with patience.
 
 ## Environment Variables (What They Are)
 
@@ -149,11 +149,11 @@ Each service has a default port and listen address set during initialization:
 
 Change ports anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json` with a `listen` field controlling which network interface each service binds to. Restart the service after changing.
 
-> **Default is `0.0.0.0` for convenience** — accepts `http://localhost`, `http://127.0.0.1`, `http://192.168.0.x`, and any other local network address. This makes it easy to reach services from other devices on your home network. It **does not** mean your services are exposed to the public internet — no port forwarding, no cloud. But if you do open ports on your router, those services become reachable from outside. Review your firewall settings and avoid forwarding AI tool ports to the open web. For remote access, see [WireGuard](../networking/index.md#wireguard-in-case-your-router-supports-it) (or [Tailscale](../networking/index.md#tailscale) if your router doesn't support it). For nice local URLs, see [Reverse Proxy](../networking/index.md#reverse-proxy-for-nice-urls).
+> **Default is `0.0.0.0` for convenience** - accepts `http://localhost`, `http://127.0.0.1`, `http://192.168.0.x`, and any other local network address. This makes it easy to reach services from other devices on your home network. It **does not** mean your services are exposed to the public internet - no port forwarding, no cloud. But if you do open ports on your router, those services become reachable from outside. Review your firewall settings and avoid forwarding AI tool ports to the open web. For remote access, see [WireGuard](../networking/index.md#wireguard-in-case-your-router-supports-it) (or [Tailscale](../networking/index.md#tailscale) if your router doesn't support it). For nice local URLs, see [Reverse Proxy](../networking/index.md#reverse-proxy-for-nice-urls).
 
 ## ComfyUI Launch Settings
 
-The launcher script includes optimizations for speed and memory — you don't need to tweak these. Generated images go to `AI_WORKSPACE\output` and temp files to `AI_CACHE\comfyui_temp` automatically.
+The launcher script includes optimizations for speed and memory - you don't need to tweak these. Generated images go to `AI_WORKSPACE\output` and temp files to `AI_CACHE\comfyui_temp` automatically.
 
 ## Logging and Diagnostics
 
@@ -171,9 +171,9 @@ Install Summary
   FFmpeg: Skipped (already up to date)
 ```
 
-**"Skipped" is normal** — it means the tool was already installed and no newer version was available. You only see "Installed" on the very first run.
+**"Skipped" is normal** - it means the tool was already installed and no newer version was available. You only see "Installed" on the very first run.
 
-**Pip notice:** You may see `[notice] A new release of pip is available` during ComfyUI setup. That's just pip telling you a newer version exists. The version that comes with Python 3.11 works fine — you can ignore it.
+**Pip notice:** You may see `[notice] A new release of pip is available` during ComfyUI setup. That's just pip telling you a newer version exists. The version that comes with Python 3.11 works fine - you can ignore it.
 
 ## Launcher Scripts
 
@@ -200,7 +200,7 @@ Open a fresh PowerShell window and try:
 | `ai start all` | Starts all services (quiet on success; errors dump log tail) |
 | `ai stop all` | Stops all services (quiet on success) |
 | `ai restart all` | Restarts all services |
-| `ai status` | Compact dashboard — running services, ports, model counts |
+| `ai status` | Compact dashboard - running services, ports, model counts |
 | `ai status ollama` | Check a single service (ollama, comfyui, or openwebui) |
 | `ai doctor` | Full system diagnostics (Git, Python, Ollama, FFmpeg, architecture, ComfyUI, Open Web UI, ROCm, model bindings, env vars) |
 | `ai list` | Lists every installed model, grouped by category |
