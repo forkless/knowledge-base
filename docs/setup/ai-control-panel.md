@@ -110,14 +110,14 @@ Before installing or updating, the script stops any running service first. This 
 
 Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
 
-ComfyUI detects your GPU and sets up the right engine. On AMD cards it uses ROCm (AMD's native GPU compute platform) with Python 3.12. If your card or driver doesn't support ROCm, it falls back to DirectML (Microsoft's GPU compute layer), which works on any DirectX 12 capable AMD GPU:
+ComfyUI detects your GPU generation and selects the right engine automatically. On AMD RDNA2+ cards (RX 6000/7000/9000) it uses ROCm (AMD's native GPU platform) with Python 3.12. On RDNA1 (RX 5000) it uses DirectML, since ROCm isn't available for that generation. You can override the choice:
 
 ```powershell
-ai install comfyui                          # Auto-detect — ROCm on compatible AMD, DirectML fallback
-ai install comfyui -Backend directml        # Force DirectML (older cards or driver issues)
+ai install comfyui                          # Auto-detect — ROCm on RDNA2+, DirectML on RDNA1
+ai install comfyui -Backend directml        # Force DirectML
 ```
 
-Each backend gets its own Python virtual environment — `venv_rocm` for ROCm, `venv` for DirectML. Switch between them by re-running the install with the other flag; both environments coexist.
+Each backend gets its own Python virtual environment — `venv_rocm` for ROCm, `venv` for DirectML. Switch between them by re-running the install with the other flag; both environments coexist. On re-install, the script remembers your previous choice from config — no re-prompting.
 
 ComfyUI-Manager adds a UI for browsing and installing custom nodes — after installing and restarting ComfyUI, **refresh the browser tab once** to see the manager toolbar. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically. The first install takes a few minutes — it downloads FastAPI, aiohttp, and other web server dependencies.
 

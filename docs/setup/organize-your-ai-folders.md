@@ -318,13 +318,13 @@ The folder structure itself works with any GPU — it's just a way to organize f
 
 - **NVIDIA** — CUDA, any CUDA-capable card
 - **RDNA1** (RX 5000) — DirectML only
-- **RDNA2** (RX 6000) — DirectML only
+- **RDNA2** (RX 6000) — ROCm native, DirectML fallback
 - **RDNA3** (RX 7000) — ROCm native, DirectML fallback
 - **RDNA4** (RX 9000) — ROCm native, DirectML fallback
 
 Older GCN-based cards lack DirectML optimization and are not recommended for AI workloads.
 
-**Intel & CPU:** Not tested. Intel Arc *might* work through DirectML but no guarantees. CPU-only is technically possible but impractically slow — more of an academic exercise than a useful setup.
+**Intel & CPU:** CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow — fine for testing, not daily use. Intel Arc may work through DirectML but is untested.
 
 ## Prerequisites
 

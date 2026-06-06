@@ -111,22 +111,23 @@ If something seems off later, run `ai setup env` to check and fix them.
 
 ## A Few Things to Know
 
-- **GPU detection**: The scripts check what GPU you have. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm (AMD's native GPU engine) on compatible hardware, or DirectML (Microsoft's GPU compute layer) as a fallback. You don't need to pick.
-- **AMD ROCm vs DirectML**: ROCm is AMD's own GPU compute platform — it's the default for Radeon RX 7000/9000 series on Python 3.12. If your card or driver doesn't support ROCm, the script falls back to DirectML, which works on any DirectX 12 capable AMD GPU.
+- **GPU detection**: The scripts check what GPU you have and auto-detect the generation. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm on RDNA2+ (RX 6000/7000/9000) or DirectML on RDNA1 (RX 5000). You don't need to pick — the script chooses for you.
+- **AMD ROCm vs DirectML**: ROCm is AMD's own GPU compute platform. The script auto-selects it on RDNA2+ hardware (RX 6000, 7000, 9000) with Python 3.12. On RDNA1 (RX 5000), it selects DirectML since ROCm isn't available for that generation. Pass `-Backend directml` to override.
 
   Here's which cards get which backend:
 
   | | ROCm (native) | DirectML (fallback) |
   |-|--------------|---------------------|
-  | **RDNA4** — RX 9000 series | ✅ | ✅ fallback |
-  | **RDNA3** — RX 7000 series | ✅ | ✅ fallback |
-  | **RDNA2** — RX 6000 series | ❌ | ✅ |
-  | **RDNA1** — RX 5000 series | ❌ | ✅ |
+  | **RDNA4** — RX 9000 series | ✅ auto-selected | ✅ fallback |
+  | **RDNA3** — RX 7000 series | ✅ auto-selected | ✅ fallback |
+  | **RDNA2** — RX 6000 series | ✅ auto-selected | ✅ fallback |
+  | **RDNA1** — RX 5000 series | ❌ not available | ✅ auto-selected |
 
   ROCm requires driver 26.2.2+ and Python 3.12. DirectML works on any AMD driver and uses Python 3.11.
 
 - **Safe to re-run**: Running a script again won't break anything. It skips what's already there, creates what's missing.
-- **Python 3.12**: Installed for the AMD ROCm stack. On AMD cards, ComfyUI runs on Python 3.12 with ROCm. On NVIDIA, it uses Python 3.11 with CUDA.
+- **Python 3.12**: Installed for the AMD ROCm stack. On AMD RDNA2+ cards, ComfyUI runs on Python 3.12 with ROCm. On RDNA1 or DirectML fallback, it uses Python 3.11. On NVIDIA, it uses Python 3.11 with CUDA.
+- **Intel CPU / no GPU**: CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow — practical for testing, not daily use.
 - **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` — no need to type it again.
 
 ## Port Configuration
