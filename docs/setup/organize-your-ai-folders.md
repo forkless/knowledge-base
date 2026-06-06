@@ -322,7 +322,7 @@ The folder structure itself works with any GPU — it's just a way to organize f
 - **RDNA3** (RX 7000) — ROCm native, DirectML fallback
 - **RDNA4** (RX 9000) — ROCm native, DirectML fallback
 
-Older GCN-based cards (RX 400/500, Vega) may work with DirectML but performance will be limited.
+Older GCN-based cards lack DirectML optimization and are not recommended for AI workloads.
 
 ## Prerequisites
 
