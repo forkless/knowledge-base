@@ -7,7 +7,7 @@
 Instead of mixing everything into one folder, the system is split into 6 clear layers:
 
 - **AI_CONFIG** — centralized configuration and model registry
-- **AI_CORE** — AI runtimes and applications (ComfyUI, Ollama, LM Studio)
+- **AI_CORE** — the apps and engines that do the work (ComfyUI, Ollama, Open Web UI)
 - **AI_VAULT** — permanent models (LLMs, diffusion, embeddings)
 - **AI_WORKSPACE** — input, output, and workflow files
 - **AI_TOOLS** — helper scripts and utilities
@@ -187,7 +187,7 @@ AI_CONFIG
 
 ### AI_CORE
 
-Contains all AI runtimes. Split into Apps (user-facing), Services (background daemons), and Environments (Python venvs).
+Contains all the AI software. Split into Apps (programs you interact with), Services (background processes), and Environments (isolated Python setups for each app).
 
 - **Apps**: ComfyUI, Open Web UI
 - **Services**: Ollama
@@ -225,7 +225,7 @@ Temporary data that is safe to delete and rebuild. Contains Hugging Face cache, 
 
 ## Model Routing with Symbolic Links
 
-AI applications often create their own model folders, causing duplication and wasted space. The solution is a binding layer at `AI_CORE\_bindings` using symbolic links.
+AI applications often create their own model folders, causing duplication and wasted space. The solution is a binding layer at `AI_CORE\_bindings` using symbolic links — think of it as a hallway: the apps think they're finding models locally, but the hallway leads to your vault.
 
 **The flow:**
 

@@ -113,7 +113,7 @@ The variable was set after pulling models, so they're still in the old location.
 
 Some RX 7000 and 9000 series users report system-wide freezes with newer AMD drivers — even during basic desktop tasks, not just AI workloads. The RX 7000 series is the primary AMD platform for this stack, and **Adrenalin 26.3.1** is the recommended stable version for AI, gaming, and daily use.
 
-**Fix:** Roll back to 26.3.1 if you hit freezes or DX12 device removed errors.
+**Fix:** Roll back to 26.3.1 if you hit freezes or crashes, especially in games or GPU-heavy apps.
 
 See the full breakdown in [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md).
 

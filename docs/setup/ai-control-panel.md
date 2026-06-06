@@ -27,7 +27,7 @@ Ollama runs as a hidden process. ComfyUI launches in a hidden PowerShell window.
 
 Each start regenerates the launcher script from the current `ports.json` settings, so changing ports with `ai setup ports` takes effect on the next start — no manual edits needed.
 
-Start and stop commands are quiet on success — no output means it worked. If a service fails to start (port not listening after the startup wait), the last 15 lines of the service log are shown and the command exits with code 1.
+Start and stop commands are quiet on success — no output means it worked. If a service fails to start (the port isn't responding after the usual wait), the last few lines from the log are shown so you can see what went wrong.
 
 On every start, log files are rotated: the previous session's log is archived to `AI_CACHE\logs\archive\` and a fresh log file is created.
 
@@ -173,7 +173,7 @@ ai list
 
 ### ai watch &lt;service&gt;
 
-Live-tail a service's log output:
+View a service's live log output:
 
 ```powershell
 ai watch comfyui
