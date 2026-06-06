@@ -6,26 +6,6 @@ Four scripts automate the whole setup — folders, software, and ComfyUI. A four
 
 Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai).
 
-**Download the scripts — pick one:**
-
-```powershell
-# Option A: Clone the repo (keeps auto-updating with git pull)
-git clone https://github.com/forkless/ai-ai-ai.git
-cd ai-ai-ai
-
-# Option B: Download the latest release zip, then extract
-# Visit https://github.com/forkless/ai-ai-ai/releases
-# Download the latest zip, extract somewhere, cd into scripts/
-```
-
-After downloading, unblock the scripts if you used the zip:
-
-```powershell
-Get-ChildItem *.ps1 | Unblock-File
-```
-
-> **⚠️** These scripts are functional but still rough around the edges — incomplete error handling, uncovered edge cases. They work, but proceed with patience.
-
 ## What You'll Need
 
 - **Windows 10 or 11**
@@ -103,6 +83,28 @@ Scripts must run in this order. Each one prepares something the next one needs.
 </div>
 
 **Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.
+
+## Download the Scripts
+
+**Download the scripts — pick one:**
+
+```powershell
+# Option A: Clone the repo (keeps auto-updating with git pull)
+git clone https://github.com/forkless/ai-ai-ai.git
+cd ai-ai-ai
+
+# Option B: Download the latest release zip, then extract
+# Visit https://github.com/forkless/ai-ai-ai/releases
+# Download the latest zip, extract somewhere, cd into scripts/
+```
+
+After downloading, unblock the scripts if you used the zip:
+
+```powershell
+Get-ChildItem *.ps1 | Unblock-File
+```
+
+> **⚠️** These scripts are functional but still rough around the edges — incomplete error handling, uncovered edge cases. They work, but proceed with patience.
 
 ## Environment Variables (What They Are)
 
