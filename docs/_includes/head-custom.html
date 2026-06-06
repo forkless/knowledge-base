@@ -154,13 +154,13 @@
     padding: 0 16px;
   }
 
-/* Mermaid diagrams — centered, scroll on overflow */
-.language-mermaid {
+/* Mermaid diagrams — hide raw source until rendered, then center */
+pre.mermaid {
   background: transparent !important;
   text-align: center;
   overflow-x: auto;
-  padding: 10px 0 !important;
   margin: 16px 0;
+  visibility: visible;
 }
 
 /* Copy button on code blocks */
@@ -200,13 +200,13 @@ document.addEventListener("DOMContentLoaded", function() {
   mermaidScript.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
   mermaidScript.onload = function() {
     mermaid.initialize({ startOnLoad: false, theme: "neutral" });
-    mermaid.run({ nodes: document.querySelectorAll(".language-mermaid") });
+    mermaid.run({ nodes: document.querySelectorAll("pre.mermaid") });
   };
   document.head.appendChild(mermaidScript);
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll(".markdown-body pre:not(.language-mermaid)").forEach(function(pre) {
+  document.querySelectorAll(".markdown-body pre:not(.mermaid)").forEach(function(pre) {
     var wrap = document.createElement("div");
     wrap.className = "code-wrap";
     pre.parentNode.insertBefore(wrap, pre);
