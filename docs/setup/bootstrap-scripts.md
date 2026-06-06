@@ -91,16 +91,7 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 
 Scripts must run in this order. Each one prepares something the next one needs.
 
-{::nomarkdown}
-<pre class="mermaid">
-graph TD
-    Init[1-init.ps1<br>Create folders + config] --> Restart1((RESTART<br>PowerShell))
-    Restart1 --> Deps[2-deps.ps1<br>Install Git, Python, Ollama, FFmpeg]
-    Deps --> Restart2((RESTART<br>PowerShell))
-    Restart2 --> Comfy[3-comfyui.ps1<br>Install ComfyUI + backend]
-    Comfy --> Path[ai setup path<br>Make ai available everywhere]
-</pre>
-{:/nomarkdown}
+![](https://raw.githubusercontent.com/forkless/ai-ai-ai/main/flow/bootstrap.svg)
 
 **Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.
 

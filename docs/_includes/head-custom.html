@@ -154,14 +154,6 @@
     padding: 0 16px;
   }
 
-/* Mermaid diagrams — hidden until JS renders the SVG */
-pre.mermaid {
-  background: transparent !important;
-  text-align: center;
-  overflow-x: auto;
-  margin: 16px 0;
-}
-
 /* Copy button on code blocks */
 .code-wrap {
     position: relative;
@@ -192,11 +184,9 @@ pre.mermaid {
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true,theme:"neutral"});</script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll(".markdown-body pre:not(.mermaid)").forEach(function(pre) {
+  document.querySelectorAll(".markdown-body pre").forEach(function(pre) {
     var wrap = document.createElement("div");
     wrap.className = "code-wrap";
     pre.parentNode.insertBefore(wrap, pre);
