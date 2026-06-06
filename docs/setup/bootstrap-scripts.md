@@ -1,6 +1,6 @@
 ← [Setup](../)
 
-# Ai, ai, ai! Bootstrap v0.1.1
+# Bootstrap v0.1.1
 
 Ai! ai! ai! It reads like a lot, doesn't it?
 
