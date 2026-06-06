@@ -85,7 +85,7 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
 
 > This structure separates configuration, runtimes, assets, workspace, tools, and caches into independent layers.
 
-> **Reality check:** This is the ideal layout. Not every developer or tool follows it — some apps drop models in their own folders, ignore symlinks, or create caches where you least expect them. The scripts do their best to keep things tidy, but you may still find the occasional rogue `downloads` folder or stray model file. Part of the charm of this ecosystem — things don't always stay where you put them, or where you hoped they'd go.
+> **Reality check:** This is the ideal layout. Not every developer or tool follows it — some apps drop models in their own folders, ignore symlinks, or create caches where you least expect them. The scripts do their best to keep things tidy, but you may still find the occasional rogue `downloads` folder or stray model file. Part of the charm of this fast-moving ecosystem — things don't always go where you or the developers put them.
 
 ## How the Layers Connect
 
