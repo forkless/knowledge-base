@@ -113,7 +113,7 @@ The diagram below walks through each step — from an empty machine to a running
 
 ## Download the Scripts
 
-**Download the scripts — pick one:**
+**Two ways to get them — pick one:**
 
 ```powershell
 # Option A: Clone the repo (keeps auto-updating with git pull)
