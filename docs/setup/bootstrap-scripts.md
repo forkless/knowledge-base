@@ -24,7 +24,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 ## A Few Things to Know
 
-- **Idempotent (safe to re-run)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update — don't worry about breaking things.
+- **These scripts are safe to re-run (idempotent)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update — don't worry about breaking things.
 - **GPU detection**: The scripts check what GPU you have and auto-detect the generation. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm on RDNA2+ (RX 6000/7000/9000) or DirectML on RDNA1 (RX 5000). You don't need to pick — the script chooses for you.
 - **AMD ROCm vs DirectML**: ROCm is AMD's own GPU compute platform. The script auto-selects it on RDNA2+ hardware (RX 6000, 7000, 9000) with Python 3.12. On RDNA1 (RX 5000), it selects DirectML since ROCm isn't available for that generation. Pass `-Backend directml` to override.
 
