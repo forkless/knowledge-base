@@ -320,6 +320,17 @@ The scripts detect your card and install the right engine — you don't need to 
 
 Default engine is **ROCm** (AMD's own GPU compute platform) for Radeon RX 7000/9000 series cards, running on Python 3.12 with native AMD PyTorch via ROCm 7.2.1. If your card or driver doesn't support ROCm, the script automatically falls back to **DirectML** (Microsoft's GPU compute layer), which works on any DirectX 12 capable AMD GPU — Radeon RX 5000 series and newer, Radeon VII, Ryzen 7000 series iGPUs.
 
+Here's which cards get which backend:
+
+| | ROCm (native) | DirectML (fallback) |
+|-|--------------|---------------------|
+| **RDNA4** — RX 9000 series | ✅ | ✅ fallback |
+| **RDNA3** — RX 7000 series | ✅ | ✅ fallback |
+| **RDNA2** — RX 6000 series | ❌ | ✅ |
+| **RDNA1** — RX 5000 series | ❌ | ✅ |
+
+ROCm requires driver 26.2.2+ and Python 3.12. DirectML works on any AMD driver and uses Python 3.11.
+
 You can also force a specific backend:
 
 ```powershell
