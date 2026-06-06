@@ -12,7 +12,7 @@ The diagram below? Just treat it like a plate of pasta tricolore. Each colored p
 
 Let's be real though, everyone loves a nice spaghetti.
 
-*Source code lives at: [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai).*
+*Source code lives at:* [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai).
 
 ## What You'll Need
 
