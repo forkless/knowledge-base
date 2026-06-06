@@ -67,11 +67,9 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 | **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI into `AI_CORE\Apps`, creates an isolated Python 3.12 virtual environment, installs GPU-appropriate PyTorch (CUDA for NVIDIA, ROCm for AMD — AMD's own GPU engine), writes a config file that tells ComfyUI where your vault models live, and generates a launcher script that reads port and settings from `ports.json`. On older AMD cards or unsupported drivers, falls back to DirectML (Microsoft's GPU compute layer) automatically. |
 | **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status with a compact dashboard; run full diagnostics (`ai doctor`, including ROCm check); list installed models; clear cache; install or remove apps; configure ports and environment variables; live-tail service logs. |
 
-## Run Order
+## May the -Force Be With You
 
 Each script builds on the one before it. Step 1 creates the folders and config that step 2 reads. Step 2 installs the tools that step 3 and step 4 need. Step 3 installs ComfyUI. Step 4 makes the `ai` command available everywhere. Don't skip ahead — the restarts between steps are intentional.
-
-### May the -Force Be With You
 
 The diagram below walks through each step — from an empty machine to a running AI stack. The colored arrows show which GPU path applies to your hardware.
 
