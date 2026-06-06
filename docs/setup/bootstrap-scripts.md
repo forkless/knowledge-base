@@ -2,17 +2,15 @@
 
 # Bootstrap v0.1.1
 
-Ai! ai! ai! It reads like a lot, doesn't it?
+Ai! ai! ai! This page looks like a a lot doesn't it? No worries, it is not as bad as it looks.
 
-It's not as bad as it looks.
+It's mostly a summary of what you need to get things running and how folders are structured.
 
-Script one: folders and config
+You can skip the GPU requirement stuff and scripts because they are as easy to follow as 1, 2 and 3.
 
-Script two: system tools (Git, Python, Ollama, FFmpeg)
+With regards to the diagram below, just treat it like a plate of pasta tricolore. Each colored pasta strand represents your GPU path (NVIDIA, AMD, or CPU fallback). You don't have to eat it or understand it to enjoy it.
 
-Script three: apps (ComfyUI and Open Web UI)
-
-Script four: your daily driver (`ai`)
+...and let's be real, everyone loves a nice spaghetti.
 
 Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai).
 
@@ -80,10 +78,6 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 ## May the -Force Be With You
 
 Each script builds on the one before it. Step 1 lays out your folders and config. Step 2 installs the engine (Ollama) and system tools. Step 3 installs the apps — ComfyUI (image generation) and optionally Open Web UI (LLM chat interface). Step 4 makes the `ai` command available from anywhere. Don't skip ahead — the restarts between steps are intentional.
-
-The diagram below is just a bowl of spaghetti. Each colored strand is your GPU path (NVIDIA, AMD, or CPU fallback). Follow the one that matches your hardware.
-
-Let's be real. Everyone loves spaghetti.
 
 <div class="flow-chart" style="position: relative; margin: 16px 0; border: 1px solid #e0e0e0; border-radius: 6px; background: #fafafa;">
   <div class="flow-fs-header" style="display: none; text-align: center; font-size: 1.5em; padding: 20px 0 0 0;"><span style="color: #666;">From zero to ai start all</span></div>
