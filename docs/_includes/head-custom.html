@@ -154,6 +154,15 @@
     padding: 0 16px;
   }
 
+/* Flow chart in fullscreen */
+.flow-chart:fullscreen,
+.flow-chart:-webkit-full-screen {
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Copy button on code blocks */
 .code-wrap {
     position: relative;
@@ -196,6 +205,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (action === "zoom-in") pz.zoomIn();
         else if (action === "zoom-out") pz.zoomOut();
         else if (action === "reset") pz.reset();
+        else if (action === "fullscreen") {
+          var container = elem.closest(".flow-chart");
+          if (container.requestFullscreen) container.requestFullscreen();
+          else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+        }
         e.stopPropagation();
       });
     });

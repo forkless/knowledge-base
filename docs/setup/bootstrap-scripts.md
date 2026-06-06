@@ -79,6 +79,7 @@ Scripts must run in this order. Each one prepares something the next one needs.
     <button class="flow-btn" data-action="zoom-in" title="Zoom in" style="width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center;">＋</button>
     <button class="flow-btn" data-action="zoom-out" title="Zoom out" style="width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center;">−</button>
     <button class="flow-btn" data-action="reset" title="Reset" style="width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;">⟲</button>
+    <button class="flow-btn" data-action="fullscreen" title="Fullscreen" style="width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;">⛶</button>
   </div>
 </div>
 
