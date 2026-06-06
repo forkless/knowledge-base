@@ -24,6 +24,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 ## A Few Things to Know
 
+- **Idempotent (safe to re-run)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update — don't worry about breaking things.
 - **GPU detection**: The scripts check what GPU you have and auto-detect the generation. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm on RDNA2+ (RX 6000/7000/9000) or DirectML on RDNA1 (RX 5000). You don't need to pick — the script chooses for you.
 - **AMD ROCm vs DirectML**: ROCm is AMD's own GPU compute platform. The script auto-selects it on RDNA2+ hardware (RX 6000, 7000, 9000) with Python 3.12. On RDNA1 (RX 5000), it selects DirectML since ROCm isn't available for that generation. Pass `-Backend directml` to override.
 
@@ -37,8 +38,6 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
   | **RDNA1** — RX 5000 series | ❌ not available | ✅ auto-selected |
 
   ROCm requires driver 26.2.2+ and Python 3.12. DirectML works on any AMD driver and uses Python 3.11.
-
-- **Idempotent (safe to re-run)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update — don't worry about breaking things.
 - **Python 3.12**: Installed for the AMD ROCm stack. On AMD RDNA2+ cards, ComfyUI runs on Python 3.12 with ROCm. On RDNA1 or DirectML fallback, it uses Python 3.11. On NVIDIA, it uses Python 3.11 with CUDA.
 - **Intel CPU / no GPU**: CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow — practical for testing, not daily use.
 - **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` — no need to type it again.
