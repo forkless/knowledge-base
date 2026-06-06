@@ -23,22 +23,18 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
 ├── AI_CONFIG
 │   ├── system_config.json
 │   ├── model_registry.json
-│   └── app_configs
-│       ├── comfyui
-│       └── ollama
+│   └── ports.json
 │
 ├── AI_CORE
 │   │
 │   ├── Apps
 │   │   ├── ComfyUI
-│   │   └── LM Studio
+│   │   └── Open Web UI
 │   │
 │   ├── Services
 │   │   └── Ollama
 │   │
 │   ├── Environments
-│   │   ├── python311_base
-│   │   └── python310_legacy
 │   │
 │   └── _bindings
 │       ├── llm        → AI_VAULT\models\llm
@@ -51,6 +47,7 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
 │   │   ├── llm
 │   │   ├── diffusion
 │   │   │   ├── checkpoints
+│   │   │   ├── diffusion_models
 │   │   │   ├── loras
 │   │   │   ├── vae
 │   │   │   ├── controlnet
@@ -61,7 +58,6 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
 │   │   │   ├── style_models
 │   │   │   ├── clip_vision
 │   │   │   ├── clip
-│   │   │   └── diffusion_models
 │   │   └── embeddings
 │   │
 │   └── datasets
@@ -84,7 +80,7 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
     ├── huggingface
     ├── torch
     ├── comfyui_temp
-    └── ollama
+    └── logs
 ```
 
 > This structure separates configuration, runtimes, assets, workspace, tools, and caches into independent layers.
@@ -157,18 +153,19 @@ Centralized configuration layer. No models, no executables, no cache — just me
 AI_CONFIG
 ├── system_config.json       ← architecture version, root path, GPU type
 ├── model_registry.json      ← installed models with paths and formats
-└── app_configs
-    ├── comfyui
-    └── ollama
+└── ports.json               ← service ports and listen address
 ```
 
 **system_config.json:**
 
 ```json
 {
-  "architecture_version": "1.1",
+  "architecture_version": "0.1.1",
   "platform": "windows",
   "root": "D:\\AI",
+  "vault": "D:\\AI\\AI_VAULT",
+  "workspace": "D:\\AI\\AI_WORKSPACE",
+  "cache": "D:\\AI\\AI_CACHE",
   "gpu": "amd"
 }
 ```
@@ -192,7 +189,7 @@ AI_CONFIG
 
 Contains all AI runtimes. Split into Apps (user-facing), Services (background daemons), and Environments (Python venvs).
 
-- **Apps**: ComfyUI, LM Studio
+- **Apps**: ComfyUI, Open Web UI
 - **Services**: Ollama
 - **Environments**: isolated Python venvs per runtime
 - **_bindings**: symbolic links to AI_VAULT
@@ -204,7 +201,7 @@ AI_CORE is disposable — reinstall without affecting any other layer.
 Single source of truth for all models and datasets. Models are stored once and consumed by every runtime through the binding layer.
 
 - **models/llm** — GGUF, GPTQ, exl2 formats
-- **models/diffusion** — checkpoints, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP, diffusion models
+- **models/diffusion** — checkpoints, diffusion_models, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP
 - **models/embeddings** — text embeddings, clip models
 - **datasets** — training data, reference sets
 
@@ -224,7 +221,7 @@ Only AI_TOOLS should intentionally modify AI_VAULT.
 
 ### AI_CACHE
 
-Temporary data that is safe to delete and rebuild. Contains Hugging Face cache, PyTorch cache, ComfyUI temp files, Ollama temp data, and service logs (`AI_CACHE\logs\<service>.log`). Logs older than 7 days are automatically cleaned up during log rotation.
+Temporary data that is safe to delete and rebuild. Contains Hugging Face cache, PyTorch cache, ComfyUI temp files, and service logs (`AI_CACHE\logs\<service>.log`). Logs older than 7 days are automatically cleaned up during log rotation.
 
 ## Model Routing with Symbolic Links
 
@@ -270,8 +267,10 @@ AI_CORE\_bindings\embeddings
 
 **Ollama model path (set via environment variable):**
 
+The script sets `OLLAMA_MODELS` to point directly to the vault — not to the bindings layer. This keeps Ollama's own model management clean while runtimes like ComfyUI continue to use the symlink binding layer.
+
 ```powershell
-setx OLLAMA_MODELS "D:\AI\AI_CORE\_bindings\llm"
+setx OLLAMA_MODELS "D:\AI\AI_VAULT\models\llm"
 ```
 
 ## Cache Isolation
@@ -319,7 +318,13 @@ The architecture and scripts are GPU-agnostic — they detect your card and inst
 
 **AMD on Windows (DirectML):**
 
-Works with any DirectX 12 capable AMD GPU — Radeon RX 5000 series and newer, Radeon VII, Ryzen 7000 series iGPUs. Performance scales with VRAM:
+Works with any DirectX 12 capable AMD GPU — Radeon RX 5000 series and newer, Radeon VII, Ryzen 7000 series iGPUs. Default backend selected by the bootstrap scripts. Performance scales with VRAM:
+
+**AMD on Windows (ROCm):**
+
+Native AMD PyTorch via ROCm 7.2.1, available as an optional backend for compatible Radeon RX 7000/9000 series cards. Pass `-Backend rocm` to `3-comfyui.ps1` or `ai install comfyui` to set it up. Creates a separate Python 3.12 venv (`venv_rocm`) alongside the DirectML venv — you can switch between backends. Faster inference than DirectML on supported hardware.
+
+Driver recommendation: **Adrenalin 26.3.1** for best stability across ROCm, desktop, and gaming. Some users report instability with 26.5.x and newer drivers. See [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md) for details.
 
 - 8GB VRAM — good for SD 1.5, small LLMs
 - 16GB VRAM — good for SDXL, medium LLMs (7B-13B)
@@ -340,7 +345,7 @@ Before setting up this structure, see the **[Windows Setup Guide](windows-setup.
 Three numbered scripts automate the deployment. See the **[Bootstrap Scripts Guide](bootstrap-scripts.md)** for full details, prerequisites, and deployment order.
 
 - **1-init.ps1** — folders, bindings, config files
-- **2-deps.ps1** — Git, Python 3.10, Python 3.11, Ollama
+- **2-deps.ps1** — Git, Python 3.10/3.11/3.12, Ollama, FFmpeg
 - **3-comfyui.ps1** — clone, venv, model paths, launcher
 
 ## Roadmap
@@ -351,6 +356,6 @@ Three numbered scripts automate the deployment. See the **[Bootstrap Scripts Gui
 | 2 | Bootstrap installer | Complete |
 | 3 | ComfyUI deployment script (clone, venv, extra model paths, launchers) | Complete |
 | 4 | Model management (register, verify hashes, track versions) | Planned |
-| 5 | Application expansion (LM Studio, Open WebUI) | Planned |
+| 5 | Application expansion (Open Web UI) | Complete |
 
 No architectural changes required for future phases — new apps slot into AI_CORE without restructuring.

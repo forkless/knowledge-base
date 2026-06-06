@@ -15,7 +15,7 @@ The scripts run in three phases. Each builds on the previous one.
 ```
 
 - Creates the D:\AI\ folder with all 6 layers (AI_CONFIG, AI_CORE, AI_VAULT, AI_WORKSPACE, AI_TOOLS, AI_CACHE)
-- Populates `AI_VAULT\models\diffusion\` with 10 subdirectories — checkpoints, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision
+- Populates `AI_VAULT\models\diffusion\` with 12 subdirectories — checkpoints, diffusion_models, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP
 - Detects your GPU type (NVIDIA or AMD) and writes it to `system_config.json`
 - Creates symbolic links so AI tools find models in the vault
 - Generates starter config files: `system_config.json`, `model_registry.json`, `ports.json` (with default ports and listen address)
@@ -35,7 +35,9 @@ Installs everything needed to run AI tools:
 | Git | Required to download ComfyUI and custom nodes |
 | Python 3.11 | Main runtime for ComfyUI and most AI tools |
 | Python 3.10 | Fallback for tools that haven't updated to 3.11 |
+| Python 3.12 | Required for ROCm ComfyUI backend (optional — AMD only) |
 | Ollama | Runs local LLMs as a background service |
+| FFmpeg | Video processing for AI workflows |
 
 Also sets environment variables so models and caches go to the right places instead of scattering across your drive.
 
@@ -51,19 +53,21 @@ Also sets environment variables so models and caches go to the right places inst
 - Downloads ComfyUI into `AI_CORE\Apps`
 - Creates a Python 3.11 virtual environment (isolated, won't conflict with other tools)
 - Installs PyTorch with the correct GPU backend — CUDA for NVIDIA, DirectML for AMD. On AMD, applies a torchaudio workaround that stubs out CUDA DLLs which would crash on RDNA cards
-- Generates `extra_model_paths.yaml` mapping 11 model subdirectories to your vault (uses a named config block, not flat key-values)
-- Creates a launcher script at `AI_TOOLS\launch_comfyui.ps1` that reads the port and listen address from `ports.json`
+- **ROCm option (AMD only):** Pass `-Backend rocm` to create a separate Python 3.12 venv (`venv_rocm`) using native AMD ROCm 7.2.1 PyTorch for faster inference. Coexists with the DirectML venv — switch backends by re-running with `-Backend directml`
+- Generates `extra_model_paths.yaml` mapping 12 model subdirectories to your vault (uses a named config block `vault_config:`, not flat key-values)
+- Creates a launcher script at `AI_TOOLS\launch_comfyui.ps1` that reads the port and listen address from `ports.json`, and includes launch flags: `--use-pytorch-cross-attention --disable-smart-memory --bf16-unet --output-directory AI_WORKSPACE\output --temp-directory AI_CACHE\comfyui_temp`
 
 ## Running the Scripts
 
 ```powershell
 Unblock-File *.ps1          # only needed once after download
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser   # only needed once
-.\1-init.ps1                # step 1: folders + config
+.\scripts\1-init.ps1        # step 1: folders + config
 # restart PowerShell
-.\2-deps.ps1                # step 2: Git, Python, Ollama
+.\scripts\2-deps.ps1        # step 2: Git, Python, Ollama, FFmpeg
 # restart PowerShell
-.\3-comfyui.ps1             # step 3: ComfyUI
+.\scripts\3-comfyui.ps1     # step 3: ComfyUI
+.\scripts\ai.ps1 setup path # make ai available everywhere
 ```
 
 ## Installing Manually Without Scripts
@@ -74,6 +78,7 @@ If you prefer not to use the scripts:
 winget install Git.Git
 winget install Python.Python.3.10
 winget install Python.Python.3.11
+winget install Python.Python.3.12
 winget install Ollama.Ollama
 ```
 

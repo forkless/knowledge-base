@@ -1,6 +1,6 @@
 ← [Setup](../)
 
-# Ai, ai, ai! Control Panel v1.1
+# Ai, ai, ai! Control Panel v0.1.1
 
 The `ai` command is your daily driver for managing services, checking status, and keeping things clean.
 
@@ -26,6 +26,10 @@ ai start openwebui
 Ollama runs as a hidden process. ComfyUI launches in a hidden PowerShell window. Both detach from your terminal.
 
 Each start regenerates the launcher script from the current `ports.json` settings, so changing ports with `ai setup ports` takes effect on the next start — no manual edits needed.
+
+Start and stop commands are quiet on success — no output means it worked. If a service fails to start (port not listening after the startup wait), the last 15 lines of the service log are shown and the command exits with code 1.
+
+On every start, log files are rotated: the previous session's log is archived to `AI_CACHE\logs\archive\` and a fresh log file is created.
 
 ### ai stop &lt;service&gt;
 
@@ -106,7 +110,16 @@ Before installing or updating, the script stops any running service first. This 
 
 Re-running is safe — it pulls updates, preserves the venv, and regenerates config files.
 
-ComfyUI detected your GPU and sets up the right backend. ComfyUI-Manager adds a UI for browsing and installing custom nodes — after installing and restarting ComfyUI, **refresh the browser tab once** to see the manager toolbar. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically. The first install takes a few minutes — it downloads FastAPI, aiohttp, and other web server dependencies.
+ComfyUI detected your GPU and sets up the right backend. On AMD GPUs you can choose between DirectML (default) and ROCm:
+
+```powershell
+ai install comfyui                # DirectML (default)
+ai install comfyui -Backend rocm  # ROCm — native AMD PyTorch, Python 3.12
+```
+
+Each backend gets its own venv (`venv` for DirectML, `venv_rocm` for ROCm). Switch between them by re-running the install with the other backend flag — both venvs coexist.
+
+ComfyUI-Manager adds a UI for browsing and installing custom nodes — after installing and restarting ComfyUI, **refresh the browser tab once** to see the manager toolbar. Open Web UI installs in `AI_CORE\Apps\open-webui` and connects to your local Ollama instance automatically. The first install takes a few minutes — it downloads FastAPI, aiohttp, and other web server dependencies.
 
 ### ai remove &lt;app&gt;
 
@@ -123,7 +136,7 @@ This removes the application folder, its venv, and config. Models in AI_VAULT ar
 
 ### ai doctor
 
-Full system diagnostics — checks Git, Python versions, Ollama, FFmpeg, architecture, ComfyUI, Open Web UI, model bindings, installed models, and environment variables.
+Full system diagnostics — checks Git, Python versions, Ollama, FFmpeg, architecture, ComfyUI, Open Web UI, ROCm availability (when `venv_rocm` is present), model bindings, installed models, and environment variables.
 
 ```powershell
 ai doctor
@@ -133,7 +146,7 @@ Example output:
 
 ```
 ┌──────────────────────┬──────────────────────────────┐
-│ Stack                │ v1.1 (AMD)                   │
+│ Stack                │ v0.1.1 (AMD)                   │
 │ Path                 │ D:\AI                        │
 ├──────────────────────┼──────────────────────────────┤
 │ Git                  │ 2.54.0                       │

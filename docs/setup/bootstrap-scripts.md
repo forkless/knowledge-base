@@ -1,6 +1,8 @@
-# Ai, ai, ai! Bootstrap v1.1
+← [Setup](../)
 
-Three scripts automate the whole setup — folders, software, and ComfyUI. A fourth script (`ai`) handles daily tasks like starting services and checking what's running.
+# Ai, ai, ai! Bootstrap v0.1.1
+
+Four scripts automate the whole setup — folders, software, and ComfyUI. A fourth script (`ai`) handles daily tasks like starting services and checking what's running.
 
 Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/ai-ai-ai).
 
@@ -13,7 +15,7 @@ cd ai-ai-ai
 
 # Option B: Download the latest release zip, then extract
 # Visit https://github.com/forkless/ai-ai-ai/releases
-# Download Ai.ai.ai.Bootstrap.v1.1.zip, extract somewhere, cd into scripts/
+# Download the latest zip, extract somewhere, cd into scripts/
 ```
 
 After downloading, unblock the scripts if you used the zip:
@@ -26,7 +28,7 @@ Get-ChildItem *.ps1 | Unblock-File
 
 - **Windows 10 or 11**
 - **PowerShell** — comes with Windows, no install needed
-- **Admin rights** — the script installs software, so it needs permission to do that
+- **Admin rights** — the dependency installer (`2-deps.ps1`) needs permission for winget installs
 - **One-time setting** — run this so PowerShell trusts the scripts:
 
 ```powershell
@@ -38,12 +40,12 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 The scripts set up a clean folder structure with 6 sections, each with its own job:
 
 ```
-AI_CONFIG     → settings, which models you have
-AI_CORE       → the apps that do the work (ComfyUI, Ollama)
+AI_CONFIG     → settings, which models you have, port configuration
+AI_CORE       → the apps that do the work (ComfyUI, Ollama, Open Web UI)
 AI_VAULT      → your models, stored once, shared by everything
 AI_WORKSPACE  → your images, prompts, generated files
-AI_TOOLS      → helper scripts and utilities
-AI_CACHE      → temporary downloads (can delete anytime)
+AI_TOOLS      → helper scripts and launchers
+AI_CACHE      → temporary downloads, logs, and ComfyUI temp data
 ```
 
 The key idea: your models live in one place. Install, reinstall, or remove any AI tool without losing a single model. Want the full logic behind this? See **[Organize Your AI Folders](organize-your-ai-folders.md)**.
@@ -62,10 +64,10 @@ Run that once, then you're good.
 
 | Script | What it does |
 |--------|-------------|
-| **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Lays the foundation. Creates the full folder structure (37 directories across 6 layers), detects NVIDIA or AMD GPU, sets up symbolic links from `AI_CORE\_bindings` to `AI_VAULT`, and writes three config files: `system_config.json`, `model_registry.json`, `ports.json`. **Does not install anything.** Needs admin rights or Developer Mode for the symbolic links. |
-| **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs system software — Git, Python 3.10, Python 3.11, Ollama, and FFmpeg — all through winget. Then sets three environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) to keep models and caches in their proper folders. **Requires admin rights.** |
-| **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI into `AI_CORE\Apps`, creates an isolated Python 3.11 virtual environment, installs GPU-appropriate PyTorch (CUDA for NVIDIA, DirectML for AMD — with a workaround for AMD's CUDA DLL crashes), writes `extra_model_paths.yaml` mapping 11 model subdirectories to your vault, and generates a launcher script that reads the port and listen address from `ports.json`. |
-| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status with a compact dashboard; run full diagnostics (`ai doctor`); list installed models; clear cache; install or remove apps; configure ports and environment variables. |
+| **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Lays the foundation. Creates the folder structure (6 layers with ~38 directories), detects NVIDIA or AMD GPU, sets up symbolic links from `AI_CORE\_bindings` to `AI_VAULT`, and writes three config files: `system_config.json`, `model_registry.json`, `ports.json`. **Does not install anything.** Needs admin rights or Developer Mode for the symbolic links. |
+| **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs system software — Git, Python 3.10, Python 3.11, Python 3.12 (for ROCm), Ollama, and FFmpeg — all through winget. Then sets three environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) to keep models and caches in their proper folders. **Requires admin rights.** |
+| **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI into `AI_CORE\Apps`, creates an isolated Python 3.11 virtual environment, installs GPU-appropriate PyTorch (CUDA for NVIDIA, DirectML for AMD — with a workaround for AMD's CUDA DLL crashes), writes `extra_model_paths.yaml` mapping 12 model subdirectories to your vault using a named config block (`vault_config:`), and generates a launcher script that reads the port, listen address, and launch flags from `ports.json`. **AMD ROCm option:** pass `-Backend rocm` for a separate Python 3.12 venv (`venv_rocm`) with native AMD PyTorch via ROCm 7.2.1. Coexists with the DirectML venv. |
+| **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status with a compact dashboard; run full diagnostics (`ai doctor`, including ROCm check); list installed models; clear cache; install or remove apps; configure ports and environment variables; live-tail service logs. |
 
 ## Run Order
 
@@ -82,6 +84,8 @@ Scripts must run in this order. Each one prepares something the next one needs.
    Restart PowerShell — lets it find newly installed tools, loads env vars
        ↓
 3. 3-comfyui.ps1      install ComfyUI, set up model paths, create launcher
+       ↓
+4. ai setup path      make `ai` available from any folder
 ```
 
 **Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.
@@ -101,8 +105,10 @@ If something seems off later, run `ai setup env` to check and fix them.
 ## A Few Things to Know
 
 - **GPU detection**: The scripts check what GPU you have. NVIDIA cards get CUDA, AMD cards get DirectML. You don't need to pick.
+- **AMD ROCm option**: For AMD Radeon RX 7000/9000 series cards, pass `-Backend rocm` to install a separate Python 3.12 venv with native AMD PyTorch. Faster than DirectML on supported hardware.
 - **Safe to re-run**: Running a script again won't break anything. It skips what's already there, creates what's missing.
-- **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from a config file — no need to type it again.
+- **Python 3.12**: Installed by `2-deps.ps1` but only used for the optional ROCm ComfyUI backend. Default stack uses Python 3.11.
+- **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` — no need to type it again.
 
 ## Port Configuration
 
@@ -117,6 +123,22 @@ Each service has a default port and listen address set during initialization:
 Change ports anytime with `ai setup ports`. Settings save to `AI_CONFIG\ports.json` with a `listen` field controlling which network interface each service binds to. Restart the service after changing.
 
 > **Default is `0.0.0.0` for convenience** — accepts `http://localhost`, `http://127.0.0.1`, `http://192.168.0.x`, and any other local network address. This makes it easy to reach services from other devices on your home network. It **does not** mean your services are exposed to the public internet — no port forwarding, no cloud. But if you do open ports on your router, those services become reachable from outside. Review your firewall settings and avoid forwarding AI tool ports to the open web. For remote access, see [WireGuard](../networking/index.md#wireguard-in-case-your-router-supports-it) (or [Tailscale](../networking/index.md#tailscale) if your router doesn't support it). For nice local URLs, see [Reverse Proxy](../networking/index.md#reverse-proxy-for-nice-urls).
+
+## ComfyUI Launch Flags
+
+The launcher generated by `3-comfyui.ps1` runs ComfyUI with these flags by default:
+
+- `--use-pytorch-cross-attention` — optimized cross-attention via PyTorch
+- `--disable-smart-memory` — prevents memory management conflicts
+- `--bf16-unet` — bfloat16 UNet for reduced VRAM usage
+- `--output-directory AI_WORKSPACE\output` — generated images land in the workspace layer
+- `--temp-directory AI_CACHE\comfyui_temp` — temp files land in the cache layer
+
+On AMD (DirectML), the launcher also appends `--directml`. On AMD (ROCm), no GPU flag is added — PyTorch picks up ROCm natively.
+
+## Logging and Diagnostics
+
+All three services write stdout+stderr to `AI_CACHE\logs\<service>.log` on every start. View live logs with `ai watch <service>`. Logs from previous days are automatically zipped to `AI_CACHE\logs\archive\`; archives older than 7 days are cleaned up.
 
 ## Install Summary
 
@@ -140,7 +162,7 @@ After setup, `AI_TOOLS\` contains launcher scripts for each service:
 
 | Script | Created by | Starts |
 |--------|-----------|--------|
-| `launch_comfyui.ps1` | `3-comfyui.ps1` | ComfyUI with correct GPU backend, port, and listen address from `ports.json` |
+| `launch_comfyui.ps1` | `3-comfyui.ps1` | ComfyUI with correct GPU backend, port, listen address, and launch flags from `ports.json` |
 | `launch_ollama.ps1` | `ai start ollama` (auto-generated) | Ollama in background |
 | `launch_openwebui.ps1` | `ai start openwebui` (auto-generated) | Open Web UI |
 
@@ -156,14 +178,15 @@ Open a fresh PowerShell window and try:
 
 | Command | What it does |
 |---------|-------------|
-| `ai start all` | Starts all services |
-| `ai stop all` | Stops all services |
+| `ai start all` | Starts all services (quiet on success; errors dump log tail) |
+| `ai stop all` | Stops all services (quiet on success) |
 | `ai restart all` | Restarts all services |
 | `ai status` | Compact dashboard — running services, ports, model counts |
 | `ai status ollama` | Check a single service (ollama, comfyui, or openwebui) |
-| `ai doctor` | Full system diagnostics (Git, Python, services, env, model bindings) |
+| `ai doctor` | Full system diagnostics (Git, Python, Ollama, FFmpeg, architecture, ComfyUI, Open Web UI, ROCm, model bindings, env vars) |
 | `ai list` | Lists every installed model, grouped by category |
 | `ai install all` | Install or update everything at once (stops services first; exits if a service can't be stopped within 10 seconds) |
+| `ai install comfyui -Backend rocm` | Install ComfyUI with ROCm backend (AMD only) |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
 | `ai install openwebui` | Installs Open Web UI for Ollama |
 | `ai remove comfyui` | Remove an installed app (keeps models in vault) |
@@ -173,4 +196,4 @@ Open a fresh PowerShell window and try:
 | `ai watch comfyui` | Live-tail service logs from `AI_CACHE\logs` (comfyui, ollama, openwebui) |
 | `ai clean cache` | Free up space by emptying AI_CACHE and archived logs |
 | `ai help` | Show the full command reference |
-| `ollama pull llama3` | Downloads a model (lands in the vault) |
+| `ollama pull llama3` | Downloads a model (lands in the vault via OLLAMA_MODELS) |
