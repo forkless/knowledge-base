@@ -314,31 +314,15 @@ Only AI_TOOLS may intentionally modify AI_VAULT. Runtimes should consume models,
 
 ## GPU Support Notes
 
-The scripts detect your card and install the right engine — you don't need to choose.
+The folder structure itself works with any GPU — it's just a way to organize files. The bootstrap scripts handle the rest:
 
-**AMD on Windows:**
+- **NVIDIA** — CUDA, any CUDA-capable card
+- **RDNA1** (RX 5000) — DirectML only
+- **RDNA2** (RX 6000) — DirectML only
+- **RDNA3** (RX 7000) — ROCm native, DirectML fallback
+- **RDNA4** (RX 9000) — ROCm native, DirectML fallback
 
-Default engine is **ROCm** (AMD's own GPU compute platform) for Radeon RX 7000/9000 series cards, running on Python 3.12 with native AMD PyTorch via ROCm 7.2.1. If your card or driver doesn't support ROCm, the script automatically falls back to **DirectML** (Microsoft's GPU compute layer), which works on any DirectX 12 capable AMD GPU — Radeon RX 5000 series and newer, Radeon VII, Ryzen 7000 series iGPUs.
-
-You can also force a specific backend:
-
-```powershell
-ai install comfyui -Backend directml   # Force DirectML
-```
-
-Performance scales with VRAM:
-
-- 8GB VRAM — good for SD 1.5, small LLMs
-- 16GB VRAM — good for SDXL, medium LLMs (7B-13B)
-- 24GB VRAM — good for Flux, larger LLMs
-
-Older GCN-based cards (Radeon RX 400/500 series, Vega 56/64) may work but have limited DirectML optimization. Expect slower performance.
-
-Driver recommendation for ROCm: **Adrenalin 26.3.1** for best stability across AI, desktop, and gaming. Some users report instability with 26.5.x and newer drivers. See [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md) for details.
-
-**NVIDIA on Windows (CUDA):**
-
-Works with any CUDA-capable NVIDIA GPU. Same VRAM guidelines apply.
+Older GCN-based cards (RX 400/500, Vega) may work with DirectML but performance will be limited.
 
 ## Prerequisites
 
