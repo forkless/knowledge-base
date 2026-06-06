@@ -51,9 +51,9 @@ Also sets environment variables so models and caches go to the right places inst
 
 - Verifies `OLLAMA_MODELS` points to the vault before proceeding (exits if wrong)
 - Downloads ComfyUI into `AI_CORE\Apps`
-- Creates a Python 3.11 virtual environment (isolated, won't conflict with other tools)
-- Installs PyTorch with the correct GPU backend — CUDA for NVIDIA, DirectML for AMD. On AMD, applies a torchaudio workaround that stubs out CUDA DLLs which would crash on RDNA cards
-- **ROCm option (AMD only):** Pass `-Backend rocm` to create a separate Python 3.12 venv (`venv_rocm`) using native AMD ROCm 7.2.1 PyTorch for faster inference. Coexists with the DirectML venv — switch backends by re-running with `-Backend directml`
+- Creates an isolated Python virtual environment — Python 3.12 on AMD (for ROCm), Python 3.11 on NVIDIA
+- Installs PyTorch with the correct GPU engine — CUDA for NVIDIA, ROCm for AMD (AMD's own GPU platform). On AMD, falls back to DirectML (Microsoft's GPU compute layer) when the card or driver doesn't support ROCm
+- To force DirectML on AMD, pass `-Backend directml`
 - Generates `extra_model_paths.yaml` mapping 12 model subdirectories to your vault (uses a named config block `vault_config:`, not flat key-values)
 - Creates a launcher script at `AI_TOOLS\launch_comfyui.ps1` that reads the port and listen address from `ports.json`, and includes launch flags: `--use-pytorch-cross-attention --disable-smart-memory --bf16-unet --output-directory AI_WORKSPACE\output --temp-directory AI_CACHE\comfyui_temp`
 

@@ -314,23 +314,27 @@ Only AI_TOOLS may intentionally modify AI_VAULT. Runtimes should consume models,
 
 ## GPU Support Notes
 
-The architecture and scripts are GPU-agnostic — they detect your card and install the correct backend (CUDA for NVIDIA, DirectML for AMD).
+The scripts detect your card and install the right engine — you don't need to choose.
 
-**AMD on Windows (DirectML):**
+**AMD on Windows:**
 
-Works with any DirectX 12 capable AMD GPU — Radeon RX 5000 series and newer, Radeon VII, Ryzen 7000 series iGPUs. Default backend selected by the bootstrap scripts. Performance scales with VRAM:
+Default engine is **ROCm** (AMD's own GPU compute platform) for Radeon RX 7000/9000 series cards, running on Python 3.12 with native AMD PyTorch via ROCm 7.2.1. If your card or driver doesn't support ROCm, the script automatically falls back to **DirectML** (Microsoft's GPU compute layer), which works on any DirectX 12 capable AMD GPU — Radeon RX 5000 series and newer, Radeon VII, Ryzen 7000 series iGPUs.
 
-**AMD on Windows (ROCm):**
+You can also force a specific backend:
 
-Native AMD PyTorch via ROCm 7.2.1, available as an optional backend for compatible Radeon RX 7000/9000 series cards. Pass `-Backend rocm` to `3-comfyui.ps1` or `ai install comfyui` to set it up. Creates a separate Python 3.12 venv (`venv_rocm`) alongside the DirectML venv — you can switch between backends. Faster inference than DirectML on supported hardware.
+```powershell
+ai install comfyui -Backend directml   # Force DirectML
+```
 
-Driver recommendation: **Adrenalin 26.3.1** for best stability across ROCm, desktop, and gaming. Some users report instability with 26.5.x and newer drivers. See [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md) for details.
+Performance scales with VRAM:
 
 - 8GB VRAM — good for SD 1.5, small LLMs
 - 16GB VRAM — good for SDXL, medium LLMs (7B-13B)
 - 24GB VRAM — good for Flux, larger LLMs
 
 Older GCN-based cards (Radeon RX 400/500 series, Vega 56/64) may work but have limited DirectML optimization. Expect slower performance.
+
+Driver recommendation for ROCm: **Adrenalin 26.3.1** for best stability across AI, desktop, and gaming. Some users report instability with 26.5.x and newer drivers. See [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md) for details.
 
 **NVIDIA on Windows (CUDA):**
 
