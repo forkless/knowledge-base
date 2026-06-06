@@ -17,7 +17,7 @@ Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/
   Right-click PowerShell and select 'Run as Administrator'.
   ```
 
-  You can install everything manually too — the script just saves you twenty browser tabs, a headache, and a possible migraine.
+  You can install everything manually too — the script just saves you twenty browser tabs and a potential migraine.
 - **One-time setting** — run this so PowerShell trusts the scripts:
 
 ```powershell
