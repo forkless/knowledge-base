@@ -244,6 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
           var container = elem.closest(".flow-chart");
           var fs = container.requestFullscreen || container.webkitRequestFullscreen;
           if (fs) fs.call(container);
+          setTimeout(function(){ window.dispatchEvent(new Event("resize")); }, 300);
         }
         else if (action === "exit-fullscreen") {
           var xfs = document.exitFullscreen || document.webkitExitFullscreen;
@@ -254,11 +255,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     elem.addEventListener("wheel", pz.zoomWithWheel);
   });
+  function fitPanzooms() {
+    Object.keys(panzooms).forEach(function(k) {
+      panzooms[k].reset();
+      window.dispatchEvent(new Event("resize"));
+    });
+  }
   document.addEventListener("fullscreenchange", function() {
-    if (!document.fullscreenElement) Object.keys(panzooms).forEach(function(k) { panzooms[k].reset(); });
+    if (!document.fullscreenElement) setTimeout(fitPanzooms, 100);
   });
   document.addEventListener("webkitfullscreenchange", function() {
-    if (!document.webkitFullscreenElement) Object.keys(panzooms).forEach(function(k) { panzooms[k].reset(); });
+    if (!document.webkitFullscreenElement) setTimeout(fitPanzooms, 100);
   });
   document.querySelectorAll(".markdown-body pre").forEach(function(pre) {
     var wrap = document.createElement("div");
