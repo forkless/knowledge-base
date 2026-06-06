@@ -324,7 +324,7 @@ The folder structure itself works with any GPU — it's just a way to organize f
 
 Older GCN-based cards lack DirectML optimization and are not recommended for AI workloads.
 
-**Intel & CPU fallback:** Intel Arc GPUs may work through DirectML but are not tested. Running on CPU alone is possible (via DirectML's software fallback) but will be very slow — not useful for daily driving.
+**Intel & CPU:** Not tested. Intel Arc *might* work through DirectML but no guarantees. CPU-only is technically possible but impractically slow — more of an academic exercise than a useful setup.
 
 ## Prerequisites
 
