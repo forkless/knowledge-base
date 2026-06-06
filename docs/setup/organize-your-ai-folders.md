@@ -336,7 +336,7 @@ Three numbered scripts automate the deployment. See the **[Bootstrap Scripts Gui
 
 - **1-init.ps1** — folders, bindings, config files
 - **2-deps.ps1** — Git, Python 3.10/3.11/3.12, Ollama, FFmpeg
-- **3-comfyui.ps1** — clone, venv, model paths, launcher
+- **3-apps.ps1** — ComfyUI + Open Web UI install, venv, model paths, launchers
 
 ## Roadmap
 

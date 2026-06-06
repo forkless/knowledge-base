@@ -43,19 +43,19 @@ Also sets environment variables so models and caches go to the right places inst
 
 **After this phase, restart PowerShell** — newly installed tools won't be found otherwise.
 
-### Phase 3: ComfyUI
+### Phase 3: Applications
 
 ```
-3-comfyui.ps1
+3-apps.ps1
 ```
 
 - Verifies `OLLAMA_MODELS` points to the vault before proceeding (exits if wrong)
-- Downloads ComfyUI into `AI_CORE\Apps`
+- Installs ComfyUI into `AI_CORE\Apps` (and optionally Open Web UI)
 - Creates an isolated Python virtual environment — Python 3.12 on AMD RDNA2+ (for ROCm), Python 3.11 on RDNA1 or NVIDIA
 - Installs PyTorch with the correct GPU engine — CUDA for NVIDIA, ROCm for AMD RDNA2+ (RX 6000/7000/9000), DirectML for AMD RDNA1 (RX 5000). Auto-detects your GPU generation and selects the appropriate backend
 - To override, pass `-Backend directml` on AMD
 - Generates `extra_model_paths.yaml` mapping 12 model subdirectories to your vault (uses a named config block `vault_config:`, not flat key-values)
-- Creates a launcher script at `AI_TOOLS\launch_comfyui.ps1` that reads the port and listen address from `ports.json`, and includes launch flags: `--use-pytorch-cross-attention --disable-smart-memory --bf16-unet --output-directory AI_WORKSPACE\output --temp-directory AI_CACHE\comfyui_temp`
+- Creates launcher scripts at `AI_TOOLS\launch_comfyui.ps1` and `AI_TOOLS\launch_openwebui.ps1` that read port and listen address from `ports.json`
 
 ## Running the Scripts
 
@@ -66,7 +66,7 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser   # only needed once
 # restart PowerShell
 .\scripts\2-deps.ps1        # step 2: Git, Python, Ollama, FFmpeg
 # restart PowerShell
-.\scripts\3-comfyui.ps1     # step 3: ComfyUI
+.\scripts\3-apps.ps1     # step 3: ComfyUI
 .\scripts\ai.ps1 setup path # make ai available everywhere
 ```
 

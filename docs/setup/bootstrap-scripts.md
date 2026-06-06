@@ -87,7 +87,7 @@ The diagram below walks through each step — from an empty machine to a running
 |--------|-------------|
 | **[1-init.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/1-init.ps1)** | Lays the foundation. Creates the folder structure (6 layers with ~38 directories), detects NVIDIA or AMD GPU, sets up symbolic links from `AI_CORE\_bindings` to `AI_VAULT`, and writes three config files: `system_config.json`, `model_registry.json`, `ports.json`. **Does not install anything.** Needs admin rights or Developer Mode for the symbolic links. |
 | **[2-deps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/2-deps.ps1)** | Installs system software — Git, Python 3.10, Python 3.11, Python 3.12 (for the AMD stack), Ollama, and FFmpeg — all through winget. Then sets three environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) to keep models and caches in their proper folders. **Requires admin rights.** |
-| **[3-comfyui.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-comfyui.ps1)** | Downloads ComfyUI into `AI_CORE\Apps`, creates an isolated Python 3.12 virtual environment, installs GPU-appropriate PyTorch (CUDA for NVIDIA, ROCm for AMD — AMD's own GPU engine), writes a config file that tells ComfyUI where your vault models live, and generates a launcher script that reads port and settings from `ports.json`. On older AMD cards or unsupported drivers, falls back to DirectML (Microsoft's GPU compute layer) automatically. |
+| **[3-apps.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/3-apps.ps1)** | Installs ComfyUI (and optionally Open Web UI) into `AI_CORE\Apps`, creates an isolated Python virtual environment (3.12 on AMD RDNA2+, 3.11 otherwise), installs GPU-appropriate PyTorch (CUDA for NVIDIA, ROCm for AMD — AMD's own GPU engine), writes a config file that tells ComfyUI where your vault models live, and generates launcher scripts that read port and settings from `ports.json`. On older AMD cards or unsupported drivers, falls back to DirectML (Microsoft's GPU compute layer) automatically. |
 | **[ai.ps1](https://github.com/forkless/ai-ai-ai/blob/main/scripts/ai.ps1)** | Your daily driver — start, stop, restart services; check status with a compact dashboard; run full diagnostics (`ai doctor`, including ROCm check); list installed models; clear cache; install or remove apps; configure ports and environment variables; live-tail service logs. |
 
 ## Download the Scripts
@@ -168,7 +168,7 @@ After setup, `AI_TOOLS\` contains launcher scripts for each service:
 
 | Script | Created by | Starts |
 |--------|-----------|--------|
-| `launch_comfyui.ps1` | `3-comfyui.ps1` | ComfyUI with correct GPU backend, port, listen address, and launch flags from `ports.json` |
+| `launch_comfyui.ps1` | `3-apps.ps1` | ComfyUI with correct GPU backend, port, listen address, and launch flags from `ports.json` |
 | `launch_ollama.ps1` | `ai start ollama` (auto-generated) | Ollama in background |
 | `launch_openwebui.ps1` | `ai start openwebui` (auto-generated) | Open Web UI |
 
