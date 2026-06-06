@@ -6,7 +6,7 @@ Ai! ai! ai! This page looks like a lot, doesn't it? No worries, it's mostly a su
 
 You can skip the GPU requirement stuff and scripts because they are as easy to follow as 1, 2, 3... okay 4.
 
-The diagram below? Just treat it like a plate of pasta tricolore. Each colored pasta strand represents your GPU path (NVIDIA, AMD, or CPU fallback). You don't have to eat it or understand it to enjoy it.
+The diagram below? Just treat it like a plate of pasta tricolore(1). Each colored pasta strand represents your GPU path (NVIDIA, AMD, or CPU fallback). You don't have to eat it or understand it to enjoy it.
 
 Let's be real though, everyone loves a nice spaghetti.
 
@@ -219,4 +219,4 @@ Open a fresh PowerShell window and try:
 
 ---
 
-*This document is not approved by the Italian Ministry of Agriculture.*
+(1) *This document is not approved by the Italian Ministry of Agriculture.*
