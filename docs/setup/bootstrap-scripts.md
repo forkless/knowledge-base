@@ -38,7 +38,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
   ROCm requires driver 26.2.2+ and Python 3.12. DirectML works on any AMD driver and uses Python 3.11.
 
-- **Safe to re-run**: Running a script again won't break anything. It skips what's already there, creates what's missing.
+- **Idempotent (safe to re-run)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update — don't worry about breaking things.
 - **Python 3.12**: Installed for the AMD ROCm stack. On AMD RDNA2+ cards, ComfyUI runs on Python 3.12 with ROCm. On RDNA1 or DirectML fallback, it uses Python 3.11. On NVIDIA, it uses Python 3.11 with CUDA.
 - **Intel CPU / no GPU**: CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow — practical for testing, not daily use.
 - **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` — no need to type it again.
