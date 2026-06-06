@@ -2,7 +2,7 @@
 
 # Bootstrap v0.1.1
 
-Ai! ai! ai! This page looks like a a lot doesn't it? No worries, it is not as bad as it looks.
+Ai! ai! ai! This page looks like a lot, doesn't it? No worries, it is not as bad as it looks.
 
 It's mostly a summary of what you need to get things running and how folders are structured.
 
