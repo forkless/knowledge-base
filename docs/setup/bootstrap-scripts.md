@@ -83,7 +83,6 @@ Scripts must run in this order. Each one prepares something the next one needs.
     <button class="flow-btn flow-exit-btn" data-action="exit-fullscreen" title="Exit fullscreen" style="display: none; width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 14px; line-height: 1; align-items: center; justify-content: center;">✕</button>
   </div>
 </div>
-
 <em style="display: block; text-align: left; font-size: 0.9em; color: #666; margin: 3px 2px 8px 2px;">From zero to <code>ai start all</code></em>
 
 **Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.
