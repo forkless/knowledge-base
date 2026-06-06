@@ -69,7 +69,11 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 
 ## Run Order
 
-Scripts must run in this order. Each one prepares something the next one needs.
+Each script builds on the one before it. Step 1 creates the folders and config that step 2 reads. Step 2 installs the tools that step 3 and step 4 need. Step 3 installs ComfyUI. Step 4 makes the `ai` command available everywhere. Don't skip ahead — the restarts between steps are intentional.
+
+### Bootstrap Diagram
+
+The diagram below walks through each step — from an empty machine to a running AI stack. The colored arrows show which GPU path applies to your hardware.
 
 <div class="flow-chart" style="position: relative; margin: 16px 0; border: 1px solid #e0e0e0; border-radius: 6px; background: #fafafa;">
   <div class="flow-fs-header" style="display: none; text-align: center; font-size: 1.5em; padding: 20px 0 0 0;"><span style="color: #ccc;">From zero to ai start all</span></div>
