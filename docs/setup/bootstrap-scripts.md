@@ -35,7 +35,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 ## A Few Things to Know
 
-- **These scripts are safe to re-run (idempotent)**: These scripts are designed to be run multiple times. Already done? It skips it. Something missing? It adds it. Nothing gets duplicated or broken. Re-running is the standard way to update - don't worry about breaking things.
+- **Safe to re-run (idempotent).** Already done? Skips. Something missing? Adds. Nothing breaks.
 
 - **GPU detection**: The scripts check what GPU you have and auto-detect the generation. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm on RDNA2+ (RX 6000/7000/9000) or DirectML on RDNA1 (RX 5000). You don't need to pick - the script chooses for you.
 
@@ -56,8 +56,6 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 - **Intel CPU / no GPU**: CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow - practical for testing, not daily use.
 
-- **Root path**: You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` - no need to type it again.
-
 ## What You're Building
 
 The scripts set up a clean folder structure with 6 sections, each with its own job:
@@ -72,6 +70,8 @@ AI_CACHE      → temporary downloads, logs, and ComfyUI temp data
 ```
 
 The key idea: your models live in one place. Install, reinstall, or remove any AI tool without losing a single model. Want the full logic behind this? See **[Organize Your AI Folders](organize-your-ai-folders.md)**.
+
+**Root path:** You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` - no need to type it again.
 
 ## May the -Force Be With You
 
