@@ -217,6 +217,7 @@ Open a fresh PowerShell window and try:
 | `ai help` | Show the full command reference |
 | `ollama pull llama3` | Downloads a model (lands in the vault via OLLAMA_MODELS) |
 
+
 ---
 
 (1) *This document is not approved by the Italian Ministry of Agriculture.*
