@@ -220,4 +220,4 @@ Open a fresh PowerShell window and try:
 
 ---
 
-(1) *This document is not approved by the Italian Ministry of Agriculture.*
+<em style="font-size: 0.85em;">(1) This document is not approved by the Italian Ministry of Agriculture.</em>
