@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function() {
         else if (action === "zoom-out") pz.zoomOut();
         else if (action === "reset") pz.reset();
         else if (action === "fullscreen") {
-          elem.style.transform = "none";
+          pz.reset();
           var container = elem.closest(".flow-chart");
           var fs = container.requestFullscreen || container.webkitRequestFullscreen;
           if (fs) fs.call(container);
@@ -255,17 +255,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     elem.addEventListener("wheel", pz.zoomWithWheel);
   });
-  function fitPanzooms() {
+  function refitPanzooms() {
     Object.keys(panzooms).forEach(function(k) {
-      panzooms[k].reset();
       window.dispatchEvent(new Event("resize"));
+      panzooms[k].reset();
     });
   }
   document.addEventListener("fullscreenchange", function() {
-    if (!document.fullscreenElement) setTimeout(fitPanzooms, 100);
+    setTimeout(refitPanzooms, 200);
   });
   document.addEventListener("webkitfullscreenchange", function() {
-    if (!document.webkitFullscreenElement) setTimeout(fitPanzooms, 100);
+    setTimeout(refitPanzooms, 200);
   });
   document.querySelectorAll(".markdown-body pre").forEach(function(pre) {
     var wrap = document.createElement("div");
