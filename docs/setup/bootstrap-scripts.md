@@ -92,10 +92,7 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 Scripts must run in this order. Each one prepares something the next one needs.
 
 <div style="overflow-x: auto; margin: 16px 0;">
-  <a href="https://raw.githubusercontent.com/forkless/ai-ai-ai/main/flow/bootstrap.svg" target="_blank">
-    <img src="https://raw.githubusercontent.com/forkless/ai-ai-ai/main/flow/bootstrap.svg" alt="Bootstrap process flow" style="max-width: 100%; height: auto;">
-  </a>
-  <em style="display: block; text-align: center; font-size: 0.85em; margin-top: 4px;">Click to view full size</em>
+  <img src="https://raw.githubusercontent.com/forkless/ai-ai-ai/main/flow/bootstrap.svg" alt="Bootstrap process flow" class="flow-zoom" style="max-width: 100%; height: auto; cursor: zoom-in;">
 </div>
 
 **Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.
