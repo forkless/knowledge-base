@@ -17,7 +17,7 @@ Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/
   Right-click PowerShell and select 'Run as Administrator'.
   ```
 
-  You can still follow the manual install steps and use the AI tools once they're set up.
+  You can still install things manually if you prefer — though that kind of defeats the point of having a script that does it for you.
 - **One-time setting** — run this so PowerShell trusts the scripts:
 
 ```powershell
