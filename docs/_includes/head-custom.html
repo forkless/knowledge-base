@@ -207,9 +207,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4/dist/panzoom.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  var panzooms = {};
   var panzoomElements = document.querySelectorAll(".flow-panzoom");
   panzoomElements.forEach(function(elem) {
     var pz = Panzoom(elem, { maxScale: 5, minScale: 1, contain: "outside" });
+    panzooms[elem.className] = pz;
     elem.parentElement.querySelectorAll(".flow-btn").forEach(function(btn) {
       btn.addEventListener("click", function(e) {
         var action = btn.getAttribute("data-action");
@@ -217,13 +219,10 @@ document.addEventListener("DOMContentLoaded", function() {
         else if (action === "zoom-out") pz.zoomOut();
         else if (action === "reset") pz.reset();
         else if (action === "fullscreen") {
+          elem.style.transform = "none";
           var container = elem.closest(".flow-chart");
           var fs = container.requestFullscreen || container.webkitRequestFullscreen;
-          if (fs) {
-            var p = fs.call(container);
-            if (p && p.then) p.then(function(){ setTimeout(function(){ pz.reset(); }, 100); });
-            else setTimeout(function(){ pz.reset(); }, 100);
-          }
+          if (fs) fs.call(container);
         }
         else if (action === "exit-fullscreen") {
           var xfs = document.exitFullscreen || document.webkitExitFullscreen;
@@ -233,6 +232,12 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     });
     elem.addEventListener("wheel", pz.zoomWithWheel);
+  });
+  document.addEventListener("fullscreenchange", function() {
+    if (!document.fullscreenElement) Object.keys(panzooms).forEach(function(k) { panzooms[k].reset(); });
+  });
+  document.addEventListener("webkitfullscreenchange", function() {
+    if (!document.webkitFullscreenElement) Object.keys(panzooms).forEach(function(k) { panzooms[k].reset(); });
   });
   document.querySelectorAll(".markdown-body pre").forEach(function(pre) {
     var wrap = document.createElement("div");
