@@ -7,7 +7,7 @@
 Instead of mixing everything into one folder, the system is split into 6 clear layers:
 
 - **AI_CONFIG** — centralized configuration and model registry
-- **AI_CORE** — the apps and engines that do the work (ComfyUI, Ollama, Open Web UI)
+- **AI_CORE** — frontend apps (ComfyUI, Open Web UI) and the backend engine (Ollama) that powers them
 - **AI_VAULT** — permanent models (LLMs, diffusion, embeddings)
 - **AI_WORKSPACE** — input, output, and workflow files
 - **AI_TOOLS** — helper scripts and utilities

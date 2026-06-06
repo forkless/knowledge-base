@@ -28,7 +28,7 @@ No software is installed in this phase.
 2-deps.ps1
 ```
 
-Installs everything needed to run AI tools:
+Installs the backend engine (Ollama) and all system tools the frontend apps need:
 
 | Tool | Why |
 |------|-----|
@@ -36,7 +36,7 @@ Installs everything needed to run AI tools:
 | Python 3.11 | Main runtime for ComfyUI and most AI tools |
 | Python 3.10 | Fallback for tools that haven't updated to 3.11 |
 | Python 3.12 | Required for ROCm ComfyUI backend (optional — AMD only) |
-| Ollama | Runs local LLMs as a background service |
+| Ollama | The backend LLM engine — runs as a service. Frontend apps (ComfyUI, Open Web UI) talk to it |
 | FFmpeg | Video processing for AI workflows |
 
 Also sets environment variables so models and caches go to the right places instead of scattering across your drive.
