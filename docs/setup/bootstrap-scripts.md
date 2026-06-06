@@ -2,9 +2,7 @@
 
 # Bootstrap v0.1.1
 
-Ai! ai! ai! This page looks like a lot, doesn't it? No worries, it is not as bad as it looks.
-
-It's mostly a summary of what you need to get things running and how folders are structured.
+Ai! ai! ai! This page looks like a lot, doesn't it? No worries, it's mostly a summary of what you need to get things running and how folders are structured.
 
 You can skip the GPU requirement stuff and scripts because they are as easy to follow as 1, 2, 3... okay 4.
 
