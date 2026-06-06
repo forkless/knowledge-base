@@ -10,7 +10,7 @@ Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/
 
 - **Windows 10 or 11**
 - **PowerShell** — comes with Windows, no install needed
-- **Admin rights** — step 1 (`1-init.ps1`) needs them for symbolic links (or enable Developer Mode — Windows Settings → For Developers). Step 2 (`2-deps.ps1`) needs them for winget installs
+- **Admin permissions** — step 1 (`1-init.ps1`) needs them for symbolic links (or enable Developer Mode — Windows Settings → For Developers). Step 2 (`2-deps.ps1`) needs them for winget installs
 - **One-time setting** — run this so PowerShell trusts the scripts:
 
 ```powershell
