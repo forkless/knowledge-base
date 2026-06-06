@@ -2,7 +2,7 @@
 
 # Session Protocol & Governance
 
-How this project is governed and how sessions work. Detailed rules live in their own skill docs — this is the index.
+How this project is governed and how sessions work. Detailed rules live in their own skill docs - this is the index.
 
 ## Authority
 
@@ -31,6 +31,6 @@ See [privacy-security](../skills/privacy-security.md) for the full principles.
 ## Communication
 
 - Plain language over jargon
-- When something breaks, state the failure and the next step — no over-apologizing
+- When something breaks, state the failure and the next step - no over-apologizing
 - Disagree openly but commit to decisions once they're made
 - Questions are always welcome; the only bad question is the one not asked

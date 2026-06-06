@@ -55,7 +55,7 @@ Add a file at `docs/_includes/head-custom.html` with `<style>` blocks to overrid
 </style>
 ```
 
-No rebuild needed — push and Pages applies it.
+No rebuild needed - push and Pages applies it.
 
 ## Custom Domain
 
@@ -69,6 +69,6 @@ After pushing, Pages takes about 30–60 seconds to rebuild. If changes don't ap
 
 ## Limitations
 
-- Static sites only — no PHP, no databases, no server-side code
+- Static sites only - no PHP, no databases, no server-side code
 - 1 GB repository limit, 100 GB monthly bandwidth
 - Jekyll builds time out after 10 minutes

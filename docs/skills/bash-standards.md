@@ -19,10 +19,10 @@ set -euo pipefail
 IFS=$'\n\t'
 ```
 
-- `-e` — exit on error
-- `-u` — error on unset variables
-- `-o pipefail` — fail if any command in a pipeline fails
-- `IFS` — only split on newlines and tabs, avoids word-splitting surprises
+- `-e` - exit on error
+- `-u` - error on unset variables
+- `-o pipefail` - fail if any command in a pipeline fails
+- `IFS` - only split on newlines and tabs, avoids word-splitting surprises
 
 ## Style
 
@@ -43,13 +43,13 @@ done
 
 ## Conditionals
 
-- Use `[[ ]]` over `[ ]` — fewer quoting issues, more features (regex, pattern matching)
+- Use `[[ ]]` over `[ ]` - fewer quoting issues, more features (regex, pattern matching)
 - Quote all variable expansions: `"$var"`, not `$var`
 - Quote command substitutions: `"$(command)"`
 
 ## Functions
 
-- Declare with `name()` { ... } — no `function` keyword (POSIX-compatible)
+- Declare with `name()` { ... } - no `function` keyword (POSIX-compatible)
 - Keep functions small, one task each
 - Use `local` for all function-scoped variables:
 
@@ -126,5 +126,5 @@ main "$@"
 ```
 
 - Constants at the top, then helpers, then the main function
-- `main "$@"` at the bottom — keeps the global scope clean
+- `main "$@"` at the bottom - keeps the global scope clean
 - Section comments with dividers for longer scripts

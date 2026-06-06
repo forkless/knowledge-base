@@ -2,7 +2,7 @@
 
 # Prompts
 
-A collection of prompts for various use cases — generating images, working with LLMs, and automating tasks.
+A collection of prompts for various use cases - generating images, working with LLMs, and automating tasks.
 
 ## Image Generation
 
@@ -56,7 +56,7 @@ I'm getting [error message] when running [command]. What causes this and how do 
 
 Good prompts share a few traits:
 
-- **Be specific** — "a dog" vs "a golden retriever sitting on a red couch"
-- **Set constraints** — "one paragraph" / "no jargon" / "500 tokens max"
-- **Give examples** — show what you want, not just describe it
-- **Iterate** — the first prompt rarely gives the perfect result
+- **Be specific** - "a dog" vs "a golden retriever sitting on a red couch"
+- **Set constraints** - "one paragraph" / "no jargon" / "500 tokens max"
+- **Give examples** - show what you want, not just describe it
+- **Iterate** - the first prompt rarely gives the perfect result

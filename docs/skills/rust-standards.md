@@ -6,7 +6,7 @@ Coding conventions and patterns for the NotAlterra project.
 
 ## Error Handling
 
-- Use `anyhow::Result` for fallible functions — no custom error types
+- Use `anyhow::Result` for fallible functions - no custom error types
 - `anyhow::bail!` for early returns with context
 - `.with_context(|| format!(...))` on `Result` from external crates
 - Avoid `unwrap()` and `expect()` outside of tests and examples
@@ -29,7 +29,7 @@ Coding conventions and patterns for the NotAlterra project.
 
 - Prefer `Vec` over linked lists or custom containers
 - Use `HashSet` for deduplication
-- Use `Option<T>` for nullable values — never `null` or sentinel values
+- Use `Option<T>` for nullable values - never `null` or sentinel values
 - Use `struct` with named fields for complex return types
 - Derive `Debug, Clone` on all data structures, `Default` where meaningful
 
@@ -40,7 +40,7 @@ All four extractors follow the same pattern:
 2. Validate the FName header (length dword + null terminator)
 3. Skip past the property type name
 4. Validate bounds before every index access
-5. Return `Option` or `Result` — never panic
+5. Return `Option` or `Result` - never panic
 
 When adding a new property type, follow this exact pattern and add a bounds check on every array access.
 
@@ -65,13 +65,13 @@ All menu actions:
 
 ## Clippy
 
-- `-D warnings` enforced in CI — no exceptions
+- `-D warnings` enforced in CI - no exceptions
 - Fix lints immediately when CI catches new ones
 - Common lints that have fired: `collapsible_match`, `manual_is_multiple_of`, `empty_line_after_doc_comments`, `needless_borrows_for_generic_args`
 
 ## Dependencies
 
 - Prefer crates with 50M+ downloads for core functionality
-- Avoid platform-specific FFI — prefer pure Rust where possible
-- Keep dependency count minimal — each new crate is a review point
+- Avoid platform-specific FFI - prefer pure Rust where possible
+- Keep dependency count minimal - each new crate is a review point
 - Run `cargo audit` and `cargo deny` before each release

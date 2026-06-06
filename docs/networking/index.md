@@ -2,7 +2,7 @@
 
 # Networking
 
-Running AI tools locally is simple — they're on `localhost`. But once you want to access them from another device on your network or remotely, you need a bit of networking.
+Running AI tools locally is simple - they're on `localhost`. But once you want to access them from another device on your network or remotely, you need a bit of networking.
 
 ## Local Network Access
 
@@ -14,7 +14,7 @@ AI tools listen on `localhost` (127.0.0.1) by default, which means only your own
 ipconfig
 ```
 
-Look for the IPv4 address under your active connection — typically something like `192.168.1.50` or `10.0.0.25`.
+Look for the IPv4 address under your active connection - typically something like `192.168.1.50` or `10.0.0.25`.
 
 **Then access from another device:**
 
@@ -41,11 +41,11 @@ If you need remote access, use a VPN instead:
 
 ## WireGuard (In Case Your Router Supports It)
 
-Many modern routers (Asus, Ubiquiti, MikroTik, pfSense, OpenWrt) have WireGuard built into their admin interface. If yours does, this is often preferable to Tailscale — the router becomes a single entry point instead of managing listeners on every device. The router generates a config file or QR code, you scan it with the WireGuard app on your phone or laptop, and you're connected. No command line needed.
+Many modern routers (Asus, Ubiquiti, MikroTik, pfSense, OpenWrt) have WireGuard built into their admin interface. If yours does, this is often preferable to Tailscale - the router becomes a single entry point instead of managing listeners on every device. The router generates a config file or QR code, you scan it with the WireGuard app on your phone or laptop, and you're connected. No command line needed.
 
-If your router doesn't have it built in, you can still run WireGuard manually — same result, just more setup.
+If your router doesn't have it built in, you can still run WireGuard manually - same result, just more setup.
 
-**Basic example** — two machines, one with a public IP (`1.2.3.4`), one at home:
+**Basic example** - two machines, one with a public IP (`1.2.3.4`), one at home:
 
 ```
 # On the public server (/etc/wireguard/wg0.conf)
@@ -76,7 +76,7 @@ Once connected, your AI tools are reachable at `10.0.0.2:11434` from the public 
 
 ## Tailscale
 
-Tailscale creates a secure private network between your devices — like being on the same home network, but over the internet.
+Tailscale creates a secure private network between your devices - like being on the same home network, but over the internet.
 
 ```powershell
 # Install
@@ -112,7 +112,7 @@ openwebui.local {
 
 Run `caddy run` and those URLs resolve on any device that can reach your machine (same LAN or via Tailscale). Caddy handles TLS automatically if you use a real domain.
 
-> **The proxy is your only lock on the door.** The AI tools behind it don't have passwords, encryption, or any protection of their own — they trust anything that reaches their port. If you make the proxy publicly accessible, make sure it has a password or some other login, and use HTTPS. Never point a public domain directly at your AI tool's port.
+> **The proxy is your only lock on the door.** The AI tools behind it don't have passwords, encryption, or any protection of their own - they trust anything that reaches their port. If you make the proxy publicly accessible, make sure it has a password or some other login, and use HTTPS. Never point a public domain directly at your AI tool's port.
 
 ## Port Forwarding (Not Recommended)
 

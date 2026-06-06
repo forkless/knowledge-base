@@ -13,9 +13,9 @@ Testing conventions and fuzzing strategy.
 - Test edge cases: empty inputs, truncated data, missing files
 
 **Where tests live:**
-- `tests/` — cross-module integration tests
-- `src/` — unit tests in language-standard test modules
-- `fuzz/fuzz_targets/` — fuzz targets
+- `tests/` - cross-module integration tests
+- `src/` - unit tests in language-standard test modules
+- `fuzz/fuzz_targets/` - fuzz targets
 
 ## Fuzz Targets
 

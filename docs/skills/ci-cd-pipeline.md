@@ -17,27 +17,27 @@ check (every push)
   ├── dependency audit
   └── documentation
           │
-pages (master only) — deploy API docs
+pages (master only) - deploy API docs
           │
 build (tags only)
   ├── compile for all targets
   ├── package into archives
   └── upload as workflow artifacts
           │
-provenance (tags only) — SLSA attestation
+provenance (tags only) - SLSA attestation
           │
-release (tags only) — create draft release with all artifacts
+release (tags only) - create draft release with all artifacts
 ```
 
 ## Check Job
 
 Runs on every push and pull request. Should include:
 
-- **Check** — verify the project compiles
-- **Tests** — run the full test suite
-- **Linter** — enforce zero warnings
-- **Dependency audit** — check for known vulnerabilities
-- **Documentation** — generate and upload API docs (master only)
+- **Check** - verify the project compiles
+- **Tests** - run the full test suite
+- **Linter** - enforce zero warnings
+- **Dependency audit** - check for known vulnerabilities
+- **Documentation** - generate and upload API docs (master only)
 
 ```yaml
 check:
@@ -111,9 +111,9 @@ release:
 
 ## Guardrails
 
-- Releases are always **drafts** — the maintainer tests before publishing
+- Releases are always **drafts** - the maintainer tests before publishing
 - Provenance runs as a separate job to avoid interfering with the release
-- `upload-assets: false` on the SLSA generator — let the release job handle all uploads
+- `upload-assets: false` on the SLSA generator - let the release job handle all uploads
 - SHA256 hashes are generated in the build job and passed to provenance
 
 ## Key Actions

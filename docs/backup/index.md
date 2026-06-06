@@ -2,19 +2,19 @@
 
 # Backup
 
-AI models are large — often 2–15 GB each — and re-downloading them is slow. A solid backup plan saves hours.
+AI models are large - often 2–15 GB each - and re-downloading them is slow. A solid backup plan saves hours.
 
 ## What to Back Up
 
-- **Model files** (`.safetensors`, `.bin`, `.pt`) — irreplaceable or time-consuming to re-download
-- **Config files** — workflow settings, custom node configs, environment variables
-- **Outputs** — generated images, prompts, results (if you want to keep them)
+- **Model files** (`.safetensors`, `.bin`, `.pt`) - irreplaceable or time-consuming to re-download
+- **Config files** - workflow settings, custom node configs, environment variables
+- **Outputs** - generated images, prompts, results (if you want to keep them)
 
 ## What Not to Back Up
 
-- **Virtual environments** (`venv/`) — recreate with `pip install -r requirements.txt`
-- **Git repos** — re-clone instead
-- **Cache folders** — HuggingFace cache, pip cache, etc.
+- **Virtual environments** (`venv/`) - recreate with `pip install -r requirements.txt`
+- **Git repos** - re-clone instead
+- **Cache folders** - HuggingFace cache, pip cache, etc.
 
 ## Storage Tips
 
@@ -27,7 +27,7 @@ D:\AI_VAULT\models\
 └── embeddings\       ← smaller
 ```
 
-**Avoid syncing AI_VAULT with OneDrive, Dropbox, or Google Drive** — they'll choke on multi-GB model files and may corrupt them.
+**Avoid syncing AI_VAULT with OneDrive, Dropbox, or Google Drive** - they'll choke on multi-GB model files and may corrupt them.
 
 ## Backup Strategy
 

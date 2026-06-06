@@ -2,7 +2,7 @@
 
 # Git
 
-Git is the version control system used to clone and update most AI tools. You don't need to be a Git expert — just a few commands cover most of what you'll do.
+Git is the version control system used to clone and update most AI tools. You don't need to be a Git expert - just a few commands cover most of what you'll do.
 
 ## Cloning a Repository
 
@@ -49,7 +49,7 @@ git merge my-feature
 
 ## .gitignore
 
-A `.gitignore` file tells Git which files to ignore — venvs, caches, API keys, OS junk.
+A `.gitignore` file tells Git which files to ignore - venvs, caches, API keys, OS junk.
 
 ```gitignore
 # Python virtual environments
@@ -70,7 +70,7 @@ Thumbs.db
 ## Useful for AI Work
 
 ```powershell
-# Shallow clone — faster, no full history
+# Shallow clone - faster, no full history
 git clone --depth 1 https://github.com/owner/repo.git
 
 # Check tags (for stable versions)

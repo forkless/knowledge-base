@@ -6,12 +6,12 @@
 
 Instead of mixing everything into one folder, the system is split into 6 clear layers:
 
-- **AI_CONFIG** — centralized configuration and model registry
-- **AI_CORE** — frontend apps (ComfyUI, Open Web UI) and the backend engine (Ollama) that powers them
-- **AI_VAULT** — permanent models (LLMs, diffusion, embeddings)
-- **AI_WORKSPACE** — input, output, and workflow files
-- **AI_TOOLS** — helper scripts and utilities
-- **AI_CACHE** — temporary downloads and caches
+- **AI_CONFIG** - centralized configuration and model registry
+- **AI_CORE** - frontend apps (ComfyUI, Open Web UI) and the backend engine (Ollama) that powers them
+- **AI_VAULT** - permanent models (LLMs, diffusion, embeddings)
+- **AI_WORKSPACE** - input, output, and workflow files
+- **AI_TOOLS** - helper scripts and utilities
+- **AI_CACHE** - temporary downloads and caches
 
 > This avoids duplication, keeps models stable, and makes tools interchangeable. Architecture evolves but the principles stay the same.
 
@@ -85,7 +85,7 @@ Instead of mixing everything into one folder, the system is split into 6 clear l
 
 > This structure separates configuration, runtimes, assets, workspace, tools, and caches into independent layers.
 
-> **Reality check:** This is the ideal layout. Not every developer or tool follows it — some apps drop models in their own folders, ignore symlinks, or create caches where you least expect them. The scripts do their best to keep things tidy, but you may still find the occasional rogue `downloads` folder or stray model file. Part of the charm of this fast-moving ecosystem — things don't always stay where you or the developers put them.
+> **Reality check:** This is the ideal layout. Not every developer or tool follows it - some apps drop models in their own folders, ignore symlinks, or create caches where you least expect them. The scripts do their best to keep things tidy, but you may still find the occasional rogue `downloads` folder or stray model file. Part of the charm of this fast-moving ecosystem - things don't always stay where you or the developers put them.
 
 ## How the Layers Connect
 
@@ -149,7 +149,7 @@ The architecture separates execution from storage. Applications consume resource
 
 ### AI_CONFIG
 
-Centralized configuration layer. No models, no executables, no cache — just metadata.
+Centralized configuration layer. No models, no executables, no cache - just metadata.
 
 ```
 AI_CONFIG
@@ -196,16 +196,16 @@ Contains all the AI software. Split into Apps (programs you interact with), Serv
 - **Environments**: isolated Python venvs per runtime
 - **_bindings**: symbolic links to AI_VAULT
 
-AI_CORE is disposable — reinstall without affecting any other layer.
+AI_CORE is disposable - reinstall without affecting any other layer.
 
 ### AI_VAULT
 
 Single source of truth for all models and datasets. Models are stored once and consumed by every runtime through the binding layer.
 
-- **models/llm** — GGUF, GPTQ, exl2 formats
-- **models/diffusion** — checkpoints, diffusion_models, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP
-- **models/embeddings** — text embeddings, clip models
-- **datasets** — training data, reference sets
+- **models/llm** - GGUF, GPTQ, exl2 formats
+- **models/diffusion** - checkpoints, diffusion_models, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP
+- **models/embeddings** - text embeddings, clip models
+- **datasets** - training data, reference sets
 
 Never sync AI_VAULT with OneDrive or cloud folders. Back it up separately.
 
@@ -227,7 +227,7 @@ Temporary data that is safe to delete and rebuild. Contains Hugging Face cache, 
 
 ## Model Routing with Symbolic Links
 
-AI applications often create their own model folders, causing duplication and wasted space. The solution is a binding layer at `AI_CORE\_bindings` using symbolic links — think of it as a hallway: the apps think they're finding models locally, but the hallway leads to your vault.
+AI applications often create their own model folders, causing duplication and wasted space. The solution is a binding layer at `AI_CORE\_bindings` using symbolic links - think of it as a hallway: the apps think they're finding models locally, but the hallway leads to your vault.
 
 **The flow:**
 
@@ -269,7 +269,7 @@ AI_CORE\_bindings\embeddings
 
 **Ollama model path (set via environment variable):**
 
-The script sets `OLLAMA_MODELS` to point directly to the vault — not to the bindings layer. This keeps Ollama's own model management clean while runtimes like ComfyUI continue to use the symlink binding layer.
+The script sets `OLLAMA_MODELS` to point directly to the vault - not to the bindings layer. This keeps Ollama's own model management clean while runtimes like ComfyUI continue to use the symlink binding layer.
 
 ```powershell
 setx OLLAMA_MODELS "D:\AI\AI_VAULT\models\llm"
@@ -286,7 +286,7 @@ setx TORCH_HOME "D:\AI\AI_CACHE\torch"
 
 Benefits:
 
-- Easy cleanup — delete the entire cache folder
+- Easy cleanup - delete the entire cache folder
 - Predictable storage usage
 - Prevents pollution of permanent assets
 
@@ -312,21 +312,21 @@ Only AI_TOOLS may intentionally modify AI_VAULT. Runtimes should consume models,
 - Do not mix caches with VAULT
 - Avoid syncing AI_VAULT with OneDrive or cloud folders
 - AI_CACHE is safe to delete entirely at any time
-- AI_CORE is disposable — reinstall without affecting data
+- AI_CORE is disposable - reinstall without affecting data
 
 ## GPU Support Notes
 
-The folder structure itself works with any GPU — it's just a way to organize files. The bootstrap scripts handle the rest:
+The folder structure itself works with any GPU - it's just a way to organize files. The bootstrap scripts handle the rest:
 
-- **NVIDIA** — CUDA, any CUDA-capable card
-- **RDNA1** (RX 5000) — DirectML only
-- **RDNA2** (RX 6000) — ROCm native, DirectML fallback
-- **RDNA3** (RX 7000) — ROCm native, DirectML fallback
-- **RDNA4** (RX 9000) — ROCm native, DirectML fallback
+- **NVIDIA** - CUDA, any CUDA-capable card
+- **RDNA1** (RX 5000) - DirectML only
+- **RDNA2** (RX 6000) - ROCm native, DirectML fallback
+- **RDNA3** (RX 7000) - ROCm native, DirectML fallback
+- **RDNA4** (RX 9000) - ROCm native, DirectML fallback
 
 Older GCN-based cards lack DirectML optimization and are not recommended for AI workloads.
 
-**Intel & CPU:** CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow — fine for testing, not daily use. Intel Arc may work through DirectML but is untested.
+**Intel & CPU:** CPU-only fallback is possible (PyTorch without GPU acceleration) but very slow - fine for testing, not daily use. Intel Arc may work through DirectML but is untested.
 
 ## Prerequisites
 
@@ -336,9 +336,9 @@ Before setting up this structure, see the **[Windows Setup Guide](windows-setup.
 
 Three numbered scripts automate the deployment. See the **[Bootstrap Scripts Guide](bootstrap-scripts.md)** for full details, prerequisites, and deployment order.
 
-- **1-init.ps1** — folders, bindings, config files
-- **2-deps.ps1** — Git, Python 3.10/3.11/3.12, Ollama, FFmpeg
-- **3-apps.ps1** — ComfyUI + Open Web UI install, venv, model paths, launchers
+- **1-init.ps1** - folders, bindings, config files
+- **2-deps.ps1** - Git, Python 3.10/3.11/3.12, Ollama, FFmpeg
+- **3-apps.ps1** - ComfyUI + Open Web UI install, venv, model paths, launchers
 
 ## Roadmap
 
@@ -350,4 +350,4 @@ Three numbered scripts automate the deployment. See the **[Bootstrap Scripts Gui
 | 4 | Model management (register, verify hashes, track versions) | Planned |
 | 5 | Application expansion (Open Web UI) | Complete |
 
-No architectural changes required for future phases — new apps slot into AI_CORE without restructuring.
+No architectural changes required for future phases - new apps slot into AI_CORE without restructuring.

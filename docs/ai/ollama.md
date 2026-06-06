@@ -52,15 +52,15 @@ When a model doesn't fit entirely in VRAM:
 - As many layers as possible are loaded into GPU memory
 - Remaining layers overflow into system RAM
 - Inference is slower (CPU fallback for overflowed layers)
-- **The model runs at all** — other runtimes would refuse or crash
+- **The model runs at all** - other runtimes would refuse or crash
 
 **Example:** a 20GB model on a 16GB AMD card.
 
 16GB of layers run at full GPU speed. ~4GB of layers fall back to system RAM. The model works. Response times are a bit slower for the overflowed layers, but usable.
 
-This makes Ollama the best option for pushing above your VRAM budget — especially on mid-range AMD cards where VRAM is often the bottleneck.
+This makes Ollama the best option for pushing above your VRAM budget - especially on mid-range AMD cards where VRAM is often the bottleneck.
 
-## Model Storage — Set Before Pulling
+## Model Storage - Set Before Pulling
 
 Ollama stores models wherever `OLLAMA_MODELS` points. **This must be set before you pull any models.** If you change it after pulling, existing models stay in the old location and the new path sees nothing.
 
@@ -71,10 +71,10 @@ setx OLLAMA_MODELS "D:\AI\AI_VAULT\models\llm"
 ```
 
 Then:
-1. **Close and reopen PowerShell** — `setx` updates the registry, not the current window
-2. **Restart the Ollama service** — or restart your computer
-3. **Verify** — `echo $env:OLLAMA_MODELS` should show `D:\AI\AI_VAULT\models\llm`
-4. **Now pull models** — `ollama pull llama3`
+1. **Close and reopen PowerShell** - `setx` updates the registry, not the current window
+2. **Restart the Ollama service** - or restart your computer
+3. **Verify** - `echo $env:OLLAMA_MODELS` should show `D:\AI\AI_VAULT\models\llm`
+4. **Now pull models** - `ollama pull llama3`
 
 Models pulled before setting this are in `C:\Users\<you>\.ollama\models\blobs` and won't be found by the new path.
 

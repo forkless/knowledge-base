@@ -2,7 +2,7 @@
 
 This site is called **forkless**. Every guide on it starts with `git clone`. I see the problem.
 
-Anyway, this is a collection of guides for hobbyists and tinkerers — people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
+Anyway, this is a collection of guides for hobbyists and tinkerers - people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
 Think of it as a friendly notebook. Pick a topic, follow along, and if something breaks? You're not alone.
 
@@ -14,28 +14,28 @@ Guides for setting up and running a local AI stack on Windows with AMD GPUs. Eve
 
 **Start here:**
 
-- **[Ai, ai, ai! Bootstrap Guide](setup/bootstrap-scripts.md)** — Four scripts that set up the entire stack in minutes.
-- **[Ai Control Panel](setup/ai-control-panel.md)** — Daily management: start services, check status, clean cache.
-- **[FAQ](faq.md)** — Common problems and solutions
+- **[Ai, ai, ai! Bootstrap Guide](setup/bootstrap-scripts.md)** - Four scripts that set up the entire stack in minutes.
+- **[Ai Control Panel](setup/ai-control-panel.md)** - Daily management: start services, check status, clean cache.
+- **[FAQ](faq.md)** - Common problems and solutions
 
 **Reference:**
 
-- **[Organize Your AI Folders](setup/organize-your-ai-folders.md)** — How the folder structure works and why.
-- **[Windows Setup Guide](setup/windows-setup.md)** — Manual install steps (what the scripts automate).
-- **[Ollama](ai/ollama.md)** — Running local LLMs with Ollama.
+- **[Organize Your AI Folders](setup/organize-your-ai-folders.md)** - How the folder structure works and why.
+- **[Windows Setup Guide](setup/windows-setup.md)** - Manual install steps (what the scripts automate).
+- **[Ollama](ai/ollama.md)** - Running local LLMs with Ollama.
 
 ## Tools
 
-- **[Git](tools/git.md)** — Source management
-- **[GitHub Pages](tools/github-pages.md)** — Hosting this documentation
+- **[Git](tools/git.md)** - Source management
+- **[GitHub Pages](tools/github-pages.md)** - Hosting this documentation
 
 ## Backup
 
-- **[Backup](backup/index.md)** — Model storage, drive management, sync tips
+- **[Backup](backup/index.md)** - Model storage, drive management, sync tips
 
 ## Networking
 
-- **[Networking](networking/index.md)** — Exposing services on LAN, WireGuard, Tailscale, port forwarding
+- **[Networking](networking/index.md)** - Exposing services on LAN, WireGuard, Tailscale, port forwarding
 
 ## Skills
 
@@ -58,6 +58,6 @@ Reference docs for development practices and standards.
 
 ## Prompts
 
-- **[Prompts](prompts/index.md)** — Prompt collections and templates
+- **[Prompts](prompts/index.md)** - Prompt collections and templates
 
 

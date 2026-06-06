@@ -95,7 +95,7 @@ Install Summary
   Git: Skipped (already up to date)
 ```
 
-Normal — means the tool was already installed with no newer version available.
+Normal - means the tool was already installed with no newer version available.
 
 ## FFmpeg shows "not found" in doctor
 
@@ -111,7 +111,7 @@ The variable was set after pulling models, so they're still in the old location.
 
 ## AMD driver instability (Adrenalin 26.5.x / 26.6.1)
 
-Some RX 7000 and 9000 series users report system-wide freezes with newer AMD drivers — even during basic desktop tasks, not just AI workloads. The RX 7000 series is the primary AMD platform for this stack, and **Adrenalin 26.3.1** is the recommended stable version for AI, gaming, and daily use.
+Some RX 7000 and 9000 series users report system-wide freezes with newer AMD drivers - even during basic desktop tasks, not just AI workloads. The RX 7000 series is the primary AMD platform for this stack, and **Adrenalin 26.3.1** is the recommended stable version for AI, gaming, and daily use.
 
 **Fix:** Roll back to 26.3.1 if you hit freezes or crashes, especially in games or GPU-heavy apps.
 
@@ -119,7 +119,7 @@ See the full breakdown in [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai
 
 ## Venv keeps getting recreated
 
-The script detected an AMD GPU with CUDA torch installed and recreates the venv. Intentional — prevents the "Torch not compiled with CUDA" crash.
+The script detected an AMD GPU with CUDA torch installed and recreates the venv. Intentional - prevents the "Torch not compiled with CUDA" crash.
 
 ## Can I move the AI root after setup?
 

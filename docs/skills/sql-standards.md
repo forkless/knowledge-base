@@ -46,5 +46,5 @@ ORDER BY
 
 ## Security
 - `pgcrypto` or equivalent for db-side hashing
-- Least privilege — never use owner account in application code
+- Least privilege - never use owner account in application code
 - Row-level security for multi-tenant tables

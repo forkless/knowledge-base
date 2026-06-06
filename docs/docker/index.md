@@ -2,7 +2,7 @@
 
 # Docker
 
-Docker runs applications in isolated containers — useful for packaging AI tools with all their dependencies so they work without environment conflicts.
+Docker runs applications in isolated containers - useful for packaging AI tools with all their dependencies so they work without environment conflicts.
 
 ## Basic Commands
 
@@ -26,9 +26,9 @@ docker images
 docker run -d --name my-app -p 8080:80 image-name
 ```
 
-- `-d` — run in background (detached)
-- `--name` — give it a friendly name
-- `-p 8080:80` — map container port 80 to your machine's port 8080
+- `-d` - run in background (detached)
+- `--name` - give it a friendly name
+- `-p 8080:80` - map container port 80 to your machine's port 8080
 
 ## Common AI Use Cases
 

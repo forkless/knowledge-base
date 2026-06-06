@@ -15,7 +15,7 @@ The scripts run in three phases. Each builds on the previous one.
 ```
 
 - Creates the D:\AI\ folder with all 6 layers (AI_CONFIG, AI_CORE, AI_VAULT, AI_WORKSPACE, AI_TOOLS, AI_CACHE)
-- Populates `AI_VAULT\models\diffusion\` with 12 subdirectories — checkpoints, diffusion_models, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP
+- Populates `AI_VAULT\models\diffusion\` with 12 subdirectories - checkpoints, diffusion_models, LoRAs, VAEs, ControlNet, UNet, text encoders, upscale models, IPAdapter, style models, CLIP vision, CLIP
 - Detects your GPU type (NVIDIA or AMD) and writes it to `system_config.json`
 - Creates symbolic links so AI tools find models in the vault
 - Generates starter config files: `system_config.json`, `model_registry.json`, `ports.json` (with default ports and listen address)
@@ -35,13 +35,13 @@ Installs the backend engine (Ollama) and all system tools the frontend apps need
 | Git | Required to download ComfyUI and custom nodes |
 | Python 3.11 | Main runtime for ComfyUI and most AI tools |
 | Python 3.10 | Fallback for tools that haven't updated to 3.11 |
-| Python 3.12 | Required for ROCm ComfyUI backend (optional — AMD only) |
-| Ollama | The backend LLM engine — runs as a service. Frontend apps (ComfyUI, Open Web UI) talk to it |
+| Python 3.12 | Required for ROCm ComfyUI backend (optional - AMD only) |
+| Ollama | The backend LLM engine - runs as a service. Frontend apps (ComfyUI, Open Web UI) talk to it |
 | FFmpeg | Video processing for AI workflows |
 
 Also sets environment variables so models and caches go to the right places instead of scattering across your drive.
 
-**After this phase, restart PowerShell** — newly installed tools won't be found otherwise.
+**After this phase, restart PowerShell** - newly installed tools won't be found otherwise.
 
 ### Phase 3: Applications
 
@@ -51,8 +51,8 @@ Also sets environment variables so models and caches go to the right places inst
 
 - Verifies `OLLAMA_MODELS` points to the vault before proceeding (exits if wrong)
 - Installs ComfyUI into `AI_CORE\Apps` (and optionally Open Web UI)
-- Creates an isolated Python virtual environment — Python 3.12 on AMD RDNA2+ (for ROCm), Python 3.11 on RDNA1 or NVIDIA
-- Installs PyTorch with the correct GPU engine — CUDA for NVIDIA, ROCm for AMD RDNA2+ (RX 6000/7000/9000), DirectML for AMD RDNA1 (RX 5000). Auto-detects your GPU generation and selects the appropriate backend
+- Creates an isolated Python virtual environment - Python 3.12 on AMD RDNA2+ (for ROCm), Python 3.11 on RDNA1 or NVIDIA
+- Installs PyTorch with the correct GPU engine - CUDA for NVIDIA, ROCm for AMD RDNA2+ (RX 6000/7000/9000), DirectML for AMD RDNA1 (RX 5000). Auto-detects your GPU generation and selects the appropriate backend
 - To override, pass `-Backend directml` on AMD
 - Generates `extra_model_paths.yaml` mapping 12 model subdirectories to your vault (uses a named config block `vault_config:`, not flat key-values)
 - Creates launcher scripts at `AI_TOOLS\launch_comfyui.ps1` and `AI_TOOLS\launch_openwebui.ps1` that read port and listen address from `ports.json`
@@ -96,7 +96,7 @@ Install Summary
   FFmpeg: Skipped (already up to date)
 ```
 
-**"Skipped (already up to date)" is not an error.** It means the tool was already installed and no newer version was available. Only the first install shows "Installed" — re-runs will always show "Skipped."
+**"Skipped (already up to date)" is not an error.** It means the tool was already installed and no newer version was available. Only the first install shows "Installed" - re-runs will always show "Skipped."
 
 ## After Deps Install: Restart PowerShell
 

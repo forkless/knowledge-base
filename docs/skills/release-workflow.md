@@ -28,18 +28,18 @@ No release goes live without the user testing the draft first.
 
 Before signing a release tag:
 
-- [ ] Impact analysis completed — all call sites for new/changed functions
+- [ ] Impact analysis completed - all call sites for new/changed functions
 - [ ] All tests pass
 - [ ] Linter passes with zero warnings
 - [ ] CHANGELOG.md has an entry
 - [ ] SECURITY.md Supported Versions updated for the new version
-- [ ] Working tree is clean — no uncommitted changes
+- [ ] Working tree is clean - no uncommitted changes
 - [ ] Release notes file is updated for the new version
 
 After CI completes:
 
 - [ ] Download draft binaries from the releases page
-- [ ] Test on target platform — basic workflow, key features
+- [ ] Test on target platform - basic workflow, key features
 - [ ] Click **Publish release** on the hosting platform when satisfied
 
 ## Signing & Push

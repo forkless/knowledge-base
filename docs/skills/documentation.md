@@ -6,7 +6,7 @@
 
 | File | Location | Purpose |
 |------|----------|--------|
-| `README.md` | Root | Entry point — features, install, quick start |
+| `README.md` | Root | Entry point - features, install, quick start |
 | `LICENSE.md` | Root | Project license (MIT, Apache, etc.) |
 | `CHANGELOG.md` | Root | Release history, version per entry |
 | `CONTRIBUTING.md` | Root | How to contribute, run locally, submit PRs |
@@ -29,7 +29,7 @@
 ## Changelog Format
 
 ```
-## [v0.x.y] — YYYY-MM-DD
+## [v0.x.y] - YYYY-MM-DD
 
 ### Added
 - New features

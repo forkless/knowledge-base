@@ -43,7 +43,7 @@ my-plugin/
 - Prefix everything: functions `myplugin_do_thing()`, hooks `myplugin_saved_data`
 - Constants: `MYPLUGIN_VERSION`
 - Options: `myplugin_settings`
-- Avoid generic names like `slug` or `settings` — prefix them
+- Avoid generic names like `slug` or `settings` - prefix them
 
 ## Hooks
 - Use `add_action()` / `add_filter()` in a dedicated bootstrapper method, not globally
