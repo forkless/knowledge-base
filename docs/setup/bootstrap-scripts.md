@@ -71,7 +71,7 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 
 Each script builds on the one before it. Step 1 creates the folders and config that step 2 reads. Step 2 installs the tools that step 3 and step 4 need. Step 3 installs ComfyUI. Step 4 makes the `ai` command available everywhere. Don't skip ahead — the restarts between steps are intentional.
 
-### Bootstrap Diagram
+### May the -Force Be With You
 
 The diagram below walks through each step — from an empty machine to a running AI stack. The colored arrows show which GPU path applies to your hardware.
 
