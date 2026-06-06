@@ -6,9 +6,9 @@ Ai! ai! ai! This page looks like a lot, doesn't it? No worries, it is not as bad
 
 It's mostly a summary of what you need to get things running and how folders are structured.
 
-You can skip the GPU requirement stuff and scripts because they are as easy to follow as 1, 2 and 3.
+You can skip the GPU requirement stuff and scripts because they are as easy to follow as 1, 2, 3 — well, 4.
 
-With regards to the diagram below, just treat it like a plate of pasta tricolore. Each colored pasta strand represents your GPU path (NVIDIA, AMD, or CPU fallback). You don't have to eat it or understand it to enjoy it.
+The diagram below? Just treat it like a plate of pasta tricolore. Each colored pasta strand represents your GPU path (NVIDIA, AMD, or CPU fallback). You don't have to eat it or understand it to enjoy it.
 
 ...and let's be real, everyone loves a nice spaghetti.
 
