@@ -40,7 +40,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 > **⚠️ AMD Radeon RX 7000/9000 users — stable driver baseline recommended.**
 > These scripts were tested primarily on **Adrenalin 26.3.1**. They will run on newer drivers too, but some users report instability with 26.5.x and 26.6.1 — system freezes during basic desktop tasks and gaming. If you hit issues, rolling back to 26.3.1 is the first thing to try. See the full breakdown in the companion repo's [KNOWN_ISSUES.md](https://github.com/forkless/ai-ai-ai/blob/main/KNOWN_ISSUES.md).
 
-**Tip:** ComfyUI ships updates frequently. If something stops working, running `ai install comfyui` (or `ai install all`) pulls the latest version and usually resolves it. Most issues fix themselves with an update.
+**Tip:** ComfyUI and its ecosystem move fast — updates roll out constantly, and sometimes an update breaks something that worked yesterday. Running `ai install comfyui` (or `ai install all`) pulls the latest versions and usually sorts it out. When in doubt, update first.
 
 ## What You're Building
 
