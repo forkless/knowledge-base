@@ -165,6 +165,14 @@
   width: 100vw;
   height: 100vh;
 }
+.flow-chart:fullscreen .flow-exit-btn,
+.flow-chart:-webkit-full-screen .flow-exit-btn {
+  display: flex !important;
+}
+.flow-chart:fullscreen [data-action="fullscreen"],
+.flow-chart:-webkit-full-screen [data-action="fullscreen"] {
+  display: none !important;
+}
 
 /* Copy button on code blocks */
 .code-wrap {
@@ -216,6 +224,10 @@ document.addEventListener("DOMContentLoaded", function() {
             if (p && p.then) p.then(function(){ setTimeout(function(){ pz.reset(); }, 100); });
             else setTimeout(function(){ pz.reset(); }, 100);
           }
+        }
+        else if (action === "exit-fullscreen") {
+          var xfs = document.exitFullscreen || document.webkitExitFullscreen;
+          if (xfs) xfs.call(document);
         }
         e.stopPropagation();
       });
