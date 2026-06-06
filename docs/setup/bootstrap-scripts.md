@@ -10,14 +10,12 @@ Source code lives at [github.com/forkless/ai-ai-ai](https://github.com/forkless/
 
 - **Windows 10 or 11**
 - **PowerShell** — comes with Windows, no install needed
-- **Admin permissions** — not a hard requirement, but they make things smoother. Step 1 needs them for symbolic links (or enable Developer Mode — Windows Settings → For Developers). Step 2 uses winget which needs admin to install software. If you don't have admin, the scripts won't crash — they'll show a message like this and exit cleanly:
+- **Admin permissions — you can install everything manually too, but the script saves you twenty browser tabs and a potential migraine.** Not a hard requirement, but they make things smoother. Step 1 needs them for symbolic links (or enable Developer Mode — Windows Settings → For Developers). Step 2 uses winget which needs admin to install software. If you don't have admin, the scripts won't crash — they'll show a message like this and exit cleanly:
 
   ```
   ERROR: Administrator rights required for winget installs.
   Right-click PowerShell and select 'Run as Administrator'.
   ```
-
-  You can install everything manually too — the script just saves you twenty browser tabs and a potential migraine.
 - **One-time setting** — run this so PowerShell trusts the scripts:
 
 ```powershell
