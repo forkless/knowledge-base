@@ -218,6 +218,7 @@ Open a fresh PowerShell window and try:
 | `ollama pull llama3` | Downloads a model (lands in the vault via OLLAMA_MODELS) |
 
 
+
 ---
 
 <em style="font-size: 0.85em;" id="fn1">1. This document is not approved by the Italian Ministry of Agriculture. <a href="#fnref1" style="font-size: 0.8em; color: inherit; text-decoration: none;">&#x1F517;</a></em>
