@@ -91,8 +91,15 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 
 Scripts must run in this order. Each one prepares something the next one needs.
 
-<div style="overflow-x: auto; margin: 16px 0;">
-  <img src="https://raw.githubusercontent.com/forkless/ai-ai-ai/main/flow/bootstrap.svg" alt="Bootstrap process flow" class="flow-zoom" style="max-width: 100%; height: auto; cursor: zoom-in;">
+<div class="flow-chart" style="position: relative; margin: 16px 0; border: 1px solid #e0e0e0; border-radius: 6px; background: #fafafa; overflow: hidden;">
+  <div class="flow-panzoom" style="display: flex; justify-content: center; align-items: center;">
+    <img src="https://raw.githubusercontent.com/forkless/ai-ai-ai/main/flow/bootstrap.svg" alt="Bootstrap process flow" style="max-width: 100%; height: auto; display: block;">
+  </div>
+  <div style="position: absolute; bottom: 8px; right: 8px; display: flex; gap: 4px;">
+    <button class="flow-btn" data-action="zoom-in" title="Zoom in" style="width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center;">＋</button>
+    <button class="flow-btn" data-action="zoom-out" title="Zoom out" style="width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center;">−</button>
+    <button class="flow-btn" data-action="reset" title="Reset" style="width: 32px; height: 32px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;">⟲</button>
+  </div>
 </div>
 
 **Why restart?** When you install software, Windows adds it to your system PATH so you can run it from anywhere. But currently open windows don't see the change. Close and reopen, and everything works. The restart after step 2 also loads the new environment variables (`OLLAMA_MODELS`, `HF_HOME`, `TORCH_HOME`) — without them, step 3 will fail its environment check.

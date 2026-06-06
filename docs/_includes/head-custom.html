@@ -184,10 +184,23 @@
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4/dist/panzoom.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  mediumZoom(".flow-zoom", { background: "rgba(0,0,0,0.85)", margin: 24 });
+  var panzoomElements = document.querySelectorAll(".flow-panzoom");
+  panzoomElements.forEach(function(elem) {
+    var pz = Panzoom(elem, { maxScale: 5, minScale: 1, contain: "outside" });
+    elem.parentElement.querySelectorAll(".flow-btn").forEach(function(btn) {
+      btn.addEventListener("click", function(e) {
+        var action = btn.getAttribute("data-action");
+        if (action === "zoom-in") pz.zoomIn();
+        else if (action === "zoom-out") pz.zoomOut();
+        else if (action === "reset") pz.reset();
+        e.stopPropagation();
+      });
+    });
+    elem.addEventListener("wheel", pz.zoomWithWheel);
+  });
   document.querySelectorAll(".markdown-body pre").forEach(function(pre) {
     var wrap = document.createElement("div");
     wrap.className = "code-wrap";
