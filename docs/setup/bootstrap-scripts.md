@@ -73,7 +73,7 @@ The key idea: your models live in one place. Install, reinstall, or remove any A
 
 **Root path:** You set your install location once in `1-init.ps1`. The other scripts read it from `system_config.json` - no need to type it again.
 
-## May the --force Be With You
+## May the \-\-force Be With You
 
 Each script builds on the one before it. Step 1 lays out your folders and config. Step 2 installs the engine (Ollama) and system tools. Step 3 installs the apps - ComfyUI (image generation) and optionally Open Web UI (LLM chat interface). Step 4 makes the `ai` command available from anywhere. Don't skip ahead - the restarts between steps are intentional.
 
