@@ -39,7 +39,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 - **GPU detection**: The scripts check what GPU you have and auto-detect the generation. NVIDIA cards get CUDA (NVIDIA's GPU engine). AMD cards get ROCm on RDNA2+ (RX 6000/7000/9000) or DirectML on RDNA1 (RX 5000). You don't need to pick - the script chooses for you.
 
-- **AMD ROCm vs DirectML**: ROCm is AMD's own GPU compute platform. The script auto-selects it on RDNA2+ hardware (RX 6000, 7000, 9000) with Python 3.12. On RDNA1 (RX 5000), it selects DirectML since ROCm isn't available for that generation. Pass `-Backend directml` to override.
+- **AMD ROCm vs DirectML**: ROCm is AMD's own GPU compute platform. The script auto-selects it on RDNA2+ hardware (RX 6000, 7000, 9000) with Python 3.12. On RDNA1 (RX 5000), it selects DirectML since ROCm isn't available for that generation. Pass `--switch directml` to override.
 
   Here's which cards get which backend:
 
@@ -205,7 +205,7 @@ Open a fresh PowerShell window and try:
 | `ai doctor` | Full system diagnostics (Git, Python, Ollama, FFmpeg, architecture, ComfyUI, Open Web UI, ROCm, model bindings, env vars) |
 | `ai list` | Lists every installed model, grouped by category |
 | `ai install all` | Install or update everything at once (stops services first; exits if a service can't be stopped within 10 seconds) |
-| `ai install comfyui -Backend directml` | Force DirectML backend on AMD (fallback for older cards or drivers) |
+| `ai install comfyui --switch directml` | Force DirectML backend on AMD (fallback for older cards or drivers) |
 | `ai install comfyui-manager` | Adds custom node browser to ComfyUI |
 | `ai install openwebui` | Installs Open Web UI for Ollama |
 | `ai remove comfyui` | Remove an installed app (keeps models in vault) |

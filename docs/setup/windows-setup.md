@@ -53,7 +53,7 @@ Also sets environment variables so models and caches go to the right places inst
 - Installs ComfyUI into `AI_CORE\Apps` (and optionally Open Web UI)
 - Creates an isolated Python virtual environment - Python 3.12 on AMD RDNA2+ (for ROCm), Python 3.11 on RDNA1 or NVIDIA
 - Installs PyTorch with the correct GPU engine - CUDA for NVIDIA, ROCm for AMD RDNA2+ (RX 6000/7000/9000), DirectML for AMD RDNA1 (RX 5000). Auto-detects your GPU generation and selects the appropriate backend
-- To override, pass `-Backend directml` on AMD
+- To override, pass `--switch directml` on AMD
 - Generates `extra_model_paths.yaml` mapping 12 model subdirectories to your vault (uses a named config block `vault_config:`, not flat key-values)
 - Creates launcher scripts at `AI_TOOLS\launch_comfyui.ps1` and `AI_TOOLS\launch_openwebui.ps1` that read port and listen address from `ports.json`
 

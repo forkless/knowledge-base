@@ -114,7 +114,7 @@ ComfyUI detects your GPU generation and selects the right engine automatically. 
 
 ```powershell
 ai install comfyui                          # Auto-detect - ROCm on RDNA2+, DirectML on RDNA1
-ai install comfyui -Backend directml        # Force DirectML
+ai install comfyui --switch directml        # Force DirectML
 ```
 
 Each backend gets its own Python virtual environment - `venv_rocm` for ROCm, `venv` for DirectML. Switch between them by re-running the install with the other flag; both environments coexist. On re-install, the script remembers your previous choice from config - no re-prompting.
