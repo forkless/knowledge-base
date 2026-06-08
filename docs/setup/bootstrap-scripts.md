@@ -1,6 +1,6 @@
 ← [Setup](../)
 
-# Bootstrap v0.1.1
+# Bootstrap v0.1.2
 
 Ai! ai! ai! This page looks like a lot, doesn't it? No worries, it's mostly a summary of what you need to get things running and how folders are structured.
 
@@ -187,7 +187,7 @@ After setup, `AI_TOOLS\` contains launcher scripts for each service:
 
 The ComfyUI launcher is generated during setup. The others are created the first time you run `ai start <service>`. All three read the current port and listen address from `ports.json`, so changing ports with `ai setup ports` takes effect on the next launch without re-installing anything.
 
-You can also run any launcher directly from `AI_TOOLS\`.
+You can also run any launcher directly from `AI_TOOLS\`. If a service doesn't appear to start, run its launcher in a visible PowerShell window to see real-time output - this often reveals issues that are hidden when running in the background.
 
 **Note:** The bootstrap scripts install and configure everything, but don't start the services. You need to launch them manually when you want to use them.
 

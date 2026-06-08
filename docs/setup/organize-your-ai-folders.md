@@ -162,7 +162,7 @@ AI_CONFIG
 
 ```json
 {
-  "architecture_version": "0.1.1",
+  "architecture_version": "0.1.2",
   "platform": "windows",
   "root": "D:\\AI",
   "vault": "D:\\AI\\AI_VAULT",

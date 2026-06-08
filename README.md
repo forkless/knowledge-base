@@ -1,6 +1,6 @@
 # forkless - knowledge base
 
-Documentation site for the **Ai, ai, ai! Bootstrap v0.1.1** - four scripts that set up a full local AI stack on Windows (Ollama, ComfyUI, Open Web UI), with a daily driver control panel.
+Documentation site for the **Ai, ai, ai! Bootstrap v0.1.2** - four scripts that set up a full local AI stack on Windows (Ollama, ComfyUI, Open Web UI), with a daily driver control panel.
 
 Published at [forkless.github.io/knowledge-base](https://forkless.github.io/knowledge-base/).
 

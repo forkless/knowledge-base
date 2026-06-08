@@ -1,6 +1,6 @@
 ← [Setup](../)
 
-# Ai, ai, ai! Control Panel v0.1.1
+# Ai, ai, ai! Control Panel v0.1.2
 
 The `ai` command is your daily driver for managing services, checking status, and keeping things clean.
 
@@ -27,7 +27,7 @@ Ollama runs as a hidden process. ComfyUI launches in a hidden PowerShell window.
 
 Each start regenerates the launcher script from the current `ports.json` settings, so changing ports with `ai setup ports` takes effect on the next start - no manual edits needed.
 
-Start and stop commands are quiet on success - no output means it worked. If a service fails to start (the port isn't responding after the usual wait), the last few lines from the log are shown so you can see what went wrong.
+Start and stop commands are quiet on success - no output means it worked. If a service doesn't start, check its status with `ai status` or watch the logs with `ai watch <service>` to see what happened.
 
 On every start, log files are rotated: the previous session's log is archived to `AI_CACHE\logs\archive\` and a fresh log file is created.
 
@@ -146,7 +146,7 @@ Example output:
 
 ```
 ┌──────────────────────┬──────────────────────────────┐
-│ Stack                │ v0.1.1 (AMD)                   │
+│ Stack                │ v0.1.2 (AMD)                   │
 │ Path                 │ D:\AI                        │
 ├──────────────────────┼──────────────────────────────┤
 │ Git                  │ 2.54.0                       │
