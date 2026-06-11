@@ -11,6 +11,8 @@ Anyway, this is a collection of guides for hobbyists and tinkerers - people who 
 
 Think of it as a friendly notebook. Pick a topic, follow along, and if something breaks? You're not alone.
 
+---
+
 ## Windows AMD AI Stack
 
 Guides for setting up and running a local AI stack on Windows with AMD GPUs. Everything from scratch to daily use.
