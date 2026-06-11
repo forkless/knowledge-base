@@ -166,10 +166,10 @@
 /* Hero header */
 .hero {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   min-height: 320px;
-  padding: 6rem 1rem 7rem;
+  padding: 1rem;
   background: url('https://forkless.com/user/pages/01.home/_hero/header8.png') center/cover;
   color: #fff;
   text-align: center;
@@ -178,11 +178,15 @@
   margin-bottom: 2rem;
   position: relative;
 }
+.hero > div {
+  margin-bottom: 20vh;
+}
 .hero h1 {
   color: #fff;
   font-size: 2.8rem;
   margin: 0 0 0.5rem;
   font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5);
 }
 .hero p {
   color: rgba(255,255,255,.8);
