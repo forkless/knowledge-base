@@ -5,7 +5,7 @@
   </div>
 </div>
 
-I go by **forkless**. Every guide on it starts with `git clone`. I see the problem.
+I go by **forkless**. Most of the guides on here start with `git clone`. I see the problem.
 
 Anyway, this is a collection of guides for hobbyists and tinkerers - people who want to set things up on their own machines without wading through a dozen forum posts. Written in plain language, for real setups.
 
