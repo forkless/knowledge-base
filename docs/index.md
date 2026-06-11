@@ -1,3 +1,10 @@
+<div class="hero">
+  <div>
+    <h1>Howtos for The Rest of Us</h1>
+    <p>A friendly notebook for hobbyists and tinkerers. Pick a topic, follow along, and if something breaks? You're not alone.</p>
+  </div>
+</div>
+
 # Howtos for The Rest of Us
 
 This site is called **forkless**. Every guide on it starts with `git clone`. I see the problem.
