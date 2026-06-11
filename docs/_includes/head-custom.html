@@ -158,28 +158,26 @@
     padding: 0 16px;
   }
 
-/* Hide theme site title when hero is present */
-.hero ~ h1 {
-  display: none;
-}
+
 
 /* Hero header */
 .hero {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  position: relative;
   min-height: 320px;
-  padding: 1rem;
   background: url('https://forkless.com/user/pages/01.home/_hero/header8.png') center/cover;
   color: #fff;
   text-align: center;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   margin-bottom: 2rem;
-  position: relative;
 }
 .hero > div {
-  margin-bottom: 20vh;
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  padding: 0 1rem;
 }
 .hero h1 {
   color: #fff;
@@ -279,6 +277,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4/dist/panzoom.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  var siteH1 = document.querySelector("h1 a[href*='knowledge-base']");
+  if (siteH1 && document.querySelector(".hero")) siteH1.closest("h1").style.display = "none";
   var panzooms = {};
   var panzoomElements = document.querySelectorAll(".flow-panzoom");
   panzoomElements.forEach(function(elem) {
