@@ -1,4 +1,4 @@
-← [Home](..)
+← [Home](/knowledge-base/)
 
 # FAQ
 
