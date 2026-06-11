@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var d = new Date();
   var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var dateStr = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-  footer.innerHTML = '<footer class="site-footer"><div class="footer-inner"><span>forkless // sharing what works</span><span class="date"><em>Last updated ' + dateStr + '</em></span></div></footer><div class="disclaimer"><div class="footer-inner"><strong>DISCLAIMER:</strong> These guides are provided as-is, without warranty. Always back up your data before following instructions. You are responsible for your own machine. Not affiliated with any mentioned tools or companies.</div></div>';
+  footer.innerHTML = '<footer class="site-footer"><div class="footer-inner"><span><a href="https://forkless.com" style="color: #f7f7f7; text-decoration: none;">forkless // open source tools for real-world problems</a></span><span class="date"><em>Last updated ' + dateStr + '</em></span></div></footer><div class="disclaimer"><div class="footer-inner"><strong>DISCLAIMER:</strong> These guides are provided as-is, without warranty. Always back up your data before following instructions. You are responsible for your own machine. Not affiliated with any mentioned tools or companies.</div></div>';
   main.after(footer);
 });
 </script>
